@@ -18,5 +18,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        // Add Kantin
+        $this->call(DataKantinSeeders::class);
+
+        // Add Menu
+        $this->call(DataMenuSeeders::class);
     }
 }
