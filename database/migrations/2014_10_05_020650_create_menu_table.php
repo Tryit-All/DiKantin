@@ -10,17 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
-            $table->id('id_user')->autoIncrement();
-            $table->string('username', 100);
-            $table->string('email', 100);
-            $table->string('password', 100);
-            $table->integer('id_kantin');
-            $table->integer('id_role');
+        Schema::create('menu', function (Blueprint $table) {
+            $table->integer('id_menu')->primary();
+            $table->string('nama', 100);
+            $table->integer('harga');
             $table->string('foto', 255);
+            $table->enum('status_stok', ['ada', 'tidak ada']);
+            $table->integer('id_kantin');
+            $table->double('diskon', 8, 2)->nullable();
             $table->foreign('id_kantin')->references('id_kantin')->on('kantin')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign('id_role')->references('id_role')->on('role')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('menu');
     }
 };
