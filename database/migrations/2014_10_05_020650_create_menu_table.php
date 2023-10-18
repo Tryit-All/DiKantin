@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->integer('harga');
             $table->string('foto', 255);
             $table->enum('status_stok', ['ada', 'tidak ada']);
+            $table->enum('kategori', ['makanan', 'minuman']);
             $table->integer('id_kantin');
             $table->double('diskon', 8, 2)->nullable();
             $table->foreign('id_kantin')->references('id_kantin')->on('kantin')->cascadeOnDelete()->cascadeOnUpdate();

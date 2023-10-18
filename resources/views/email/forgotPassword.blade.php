@@ -55,7 +55,7 @@
                                             <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>
                                             <td>
                                                 <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">
-                                                    Halo {{ $dataUser['email'] }}
+                                                    Halo {{ $dataForgot['email'] }}
                                                     ,</p>
                                                 <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Selamat
                                                     telah
@@ -67,34 +67,19 @@
                                         </tr>
                                         <tr>
                                             <td height="20" style="line-height:20px">&nbsp;</td>
+                                            <td height="20" style="line-height:20px">
+                                                <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Gunakan
+                                                    kode di bawah untuk verifikasi perubahan password anda.
+                                                </p>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>
-                                            <td><a href="http://127.0.0.1:8000/api/validate/verified/{{ $dataUser['email'] }}"
-                                                    style="color:#1b74e4;text-decoration:none;display:block;width:370px"
-                                                    target="_blank"
-                                                    data-saferedirecturl="https://www.google.com/url?q=https://www.instagram.com/_n/emaillogin?uid%3Dhjizt14%26token%3Dcsi7jk%26auto_send%3D0&amp;source=gmail&amp;ust=1697094208467000&amp;usg=AOvVaw3knwqubET7eWn7p-h8TaQr">
-                                                    <table border="0" width="390" cellspacing="0" cellpadding="0"
-                                                        style="border-collapse:collapse">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td
-                                                                    style="border-collapse:collapse;border-radius:3px;text-align:center;display:block;border:solid 1px #009fdf;padding:10px 16px 14px 16px;margin:0 2px 0 auto;min-width:80px;background-color:#47a2ea">
-                                                                    <a style="color:#1b74e4;text-decoration:none;display:block"
-                                                                        target="_blank"
-                                                                        data-saferedirecturl="https://www.google.com/url?q=https://www.instagram.com/_n/emaillogin?uid%3Dhjizt14%26token%3Dcsi7jk%26auto_send%3D0&amp;source=gmail&amp;ust=1697094208467000&amp;usg=AOvVaw3knwqubET7eWn7p-h8TaQr">
-                                                                        <center>
-                                                                            <font size="3"><a
-                                                                                    style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;white-space:nowrap;font-weight:bold;vertical-align:middle;color:#fdfdfd;font-size:16px;line-height:16px">Aktifasi
-                                                                                    Akun Disini</a>
-                                                                            </font>
-                                                                        </center>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </a></td>
+                                            <td>
+                                                <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">
+                                                    <font size="6">{{ $dataForgot['kode'] }}</font>
+                                                </p>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
