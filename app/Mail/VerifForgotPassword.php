@@ -9,36 +9,33 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class VerifMail extends Mailable
+class VerifForgotPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public $dataUser;
+    public $dataForgot;
     /**
      * Create a new message instance.
      */
     public function __construct()
     {
-        // $this->dataEmail = $dataEmail;
-        // $this->dataKode = $dataKode;
+        //
     }
 
     public function build()
     {
-        return $this->subject('Email Verified')
-            ->view('email.emails');
+        return $this->subject('Forgot Password Verified')
+            ->view('email.forgotPassword');
 
     }
+
     /**
      * Get the message envelope.
      */
     // public function envelope(): Envelope
     // {
     //     return new Envelope(
-    //         subject: 'Verif Mail',
+    //         subject: 'Verif Forgot Password',
     //     );
     // }
 
@@ -48,11 +45,7 @@ class VerifMail extends Mailable
     // public function content(): Content
     // {
     //     return new Content(
-    //         view: 'email.emails',
-    //         with: [
-    //             'dataEmail' => $this->dataEmail,
-    //             'dataKode' => $this->dataKode
-    //         ]
+    //         view: 'view.name',
     //     );
     // }
 

@@ -24,7 +24,7 @@ class ApiKeyMiddleware
         return response()->json(
             [
                 'code' => 401,
-                'message' => 'please insert api key',
+                'message' => 'Please insert api key',
                 'status' => false
             ],
             401

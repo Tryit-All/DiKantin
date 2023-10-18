@@ -19,12 +19,17 @@ Route::prefix('validate')->group(function () {
     Route::post('/login', [ApiController::class, 'loginUser']);
     Route::post('/register', [ApiController::class, 'registerUser']);
     Route::post('/forgotPassword', [ApiController::class, 'forgotPassword']);
-    Route::post('/verified/{id}', [ApiController::class, 'verified']);
+    Route::post('/verifKode', [ApiController::class, 'verifKode']);
+    Route::post('/confirmPassword', [ApiController::class, 'verifPasswordNew']);
+    Route::get('/confirmRegister', [ApiController::class, 'confirmRegister']);
+    Route::get('/verified/{id}', [ApiController::class, 'verified']);
 });
 
 // Route Product
-Route::prefix('product')->group(function () {
-    Route::get('/', [ApiController::class, 'product']);
+Route::prefix('menu')->group(function () {
+    Route::get('/productAll/{searchAll?}', [ApiController::class, 'product'])->where('searchAll', '.*');
+    Route::get('/food/{searchAll?}', [ApiController::class, 'product_food'])->where('searchAll', '.*');
+    Route::get('/drink/{searchAll?}', [ApiController::class, 'product_drink'])->where('searchAll', '.*');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -13,5 +13,5 @@ class Menu extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $quarded = [];
+    protected $fillable = array('id_menu', 'nama', 'harga', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at');
 }
