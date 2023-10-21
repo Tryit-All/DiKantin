@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('subtotal_bayar');
             $table->integer('kode_menu');
             $table->foreign('kode_tr')->references('kode_tr')->on('transaksi')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign('subtotal_bayar')->references('id_menu')->on('menu')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('kode_menu')->references('id_menu')->on('menu')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
