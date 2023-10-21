@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('no_telepon', 13);
             $table->boolean('email_verified')->default(false);
             $table->string('kode_verified', 7)->nullable();
+            $table->string('token')->nullable(true);
             $table->string('alamat', 100);
             $table->string('email', 100);
             $table->string('password', 100);
