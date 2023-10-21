@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Customer;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,21 +14,27 @@ class ApiKeyMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+    public $dataToken;
+
     public function handle(Request $request, Closure $next): Response
     {
 
-        $rawToken = "DWuqUHWDUhDQUDadaq";
         $token = $request->bearerToken();
-        if ($rawToken == $token) {
+
+        $user = Customer::where('token', $token)->first();
+
+        if (isset($user)) {
             return $next($request);
+        } else {
+            return response()->json(
+                [
+                    'code' => 401,
+                    'message' => 'Please insert api key',
+                    'status' => false
+                ],
+                401
+            );
         }
-        return response()->json(
-            [
-                'code' => 401,
-                'message' => 'Please insert api key',
-                'status' => false
-            ],
-            401
-        );
+
     }
 }

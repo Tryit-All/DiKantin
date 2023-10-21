@@ -24,5 +24,8 @@ class DatabaseSeeder extends Seeder
 
         // Add Menu
         $this->call(DataMenuSeeders::class);
+
+        // Add Menu
+        $this->call(DataUserSeeder::class);
     }
 }

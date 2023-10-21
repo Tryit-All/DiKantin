@@ -26,13 +26,6 @@
                             <td style="line-height:0px;max-width:600px;padding:0 0 15px 0">
                                 <table border="0" width="100%" cellspacing="0" cellpadding="0"
                                     style="border-collapse:collapse">
-                                    <tbody>
-                                        <tr>
-                                            <td style="width:100%;text-align:left;height:33px"><img height="33"
-                                                    src="{{ asset('assets/images/DIKANTIN.png') }}" style="border:0"
-                                                    class="CToWUd" data-bit="iit"></td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </td>
                             <td width="15px" style="width:15px"></td>
@@ -101,12 +94,6 @@
                             <td width="15px" style="width:15px"></td>
                             <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>
                             <td style="text-align:center">
-                                <div style="padding-top:10px;display:flex">
-                                    <div style="margin:auto"><img
-                                            src="https://ci4.googleusercontent.com/proxy/EJZbh4o__ilxW-Qeu9CLvNAN7DS93sdYd0ZWHbRbsuZTMeA01I_dPjJ8ksrB2zX5CDoDyOrShH2RhVZy5cghftAAEMZI0T10gEk20cA2OA=s0-d-e1-ft#https://static.xx.fbcdn.net/rsrc.php/v3/y3/r/Bqo9-L659wB.png"
-                                            height="26" width="52" alt="" class="CToWUd" data-bit="iit">
-                                    </div><br>
-                                </div>
                                 <div style="height:10px"></div>
                             </td>
                             <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>

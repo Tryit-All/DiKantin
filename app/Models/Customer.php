@@ -18,6 +18,7 @@ class Customer extends Model
         'alamat',
         'email',
         'password',
+        'token',
         'email_verified',
         'remember_token',
         'created_at',
