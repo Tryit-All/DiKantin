@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('detail_transaski', function (Blueprint $table) {
-            $table->integer('kode_tr')->primary();
+            $table->integer('kode_tr');
             $table->integer('QTY');
             $table->integer('subtotal_bayar');
             $table->integer('kode_menu');
