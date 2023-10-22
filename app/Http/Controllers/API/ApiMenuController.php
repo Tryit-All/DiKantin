@@ -4,8 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiKeyMiddleware;
+use App\Models\DetailTransaksi;
 use App\Models\Menu;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ApiMenuController extends Controller
 {
@@ -15,6 +19,45 @@ class ApiMenuController extends Controller
     }
 
     // Controller Product
+
+    public function productBestToday(Request $request)
+    {
+        // Mendapatkan tanggal hari ini
+        $today = Carbon::now()->format('Y-m-d');
+
+        $topSellingMenus = DB::table('menu')
+            ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'))
+            ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+            ->whereDate('transaksi.created_at', $today)
+            // ->where('menu.kategori', 'makanan')
+            ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon')
+            ->orderBy('penjualan_hari_ini', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $this->sendMassage($topSellingMenus, 200, true);
+    }
+
+    public function productWithDiscount(Request $request)
+    {
+        // Mendapatkan tanggal hari ini
+        $today = Carbon::now()->format('Y-m-d');
+
+        $productDiscount = DB::table('menu')
+            ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'))
+            ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+            ->whereDate('transaksi.created_at', $today)
+            ->whereNotNull('menu.diskon') // Filter menu dengan diskon tidak null
+            ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon')
+            ->orderBy('penjualan_hari_ini', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $this->sendMassage($productDiscount, 200, true);
+    }
+
     public function product(Request $request)
     {
         if ($request->segment(4)) {

@@ -21,7 +21,6 @@ class DataMenuSeeders extends Seeder
                 "foto" => "menu/koQRkMxm5x4SB2JAqhDVg4rLgAES0wg00Ih0uKgi.png",
                 "status_stok" => "tidak ada",
                 "kategori" => "minuman",
-                "kategori" => "makanan",
                 "id_kantin" => 6,
                 "diskon" => null,
                 "created_at" => "2023-04-14 08:43:12",

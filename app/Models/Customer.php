@@ -33,4 +33,9 @@ class Customer extends Model
     protected $hidden = [
         'password',
     ];
+
+    public function Transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'id_customer', 'id_customer');
+    }
 }
