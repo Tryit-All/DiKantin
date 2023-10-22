@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('kurir', function (Blueprint $table) {
             $table->integer('id_kurir')->primary();
             $table->string('nama', 100);
+            $table->boolean('status')->default(false);
             $table->string('telepon', 13);
         });
     }

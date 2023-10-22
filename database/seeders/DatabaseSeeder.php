@@ -25,7 +25,16 @@ class DatabaseSeeder extends Seeder
         // Add Menu
         $this->call(DataMenuSeeders::class);
 
-        // Add Menu
+        // Add User
         $this->call(DataUserSeeder::class);
+
+        // Add Kurir
+        $this->call(DataKurirSeeder::class);
+
+        // Add Transaksi
+        $this->call(DataTransaksiSeeder::class);
+
+        // Add Detail Transaksi
+        $this->call(DataDetailTransaksiSeeder::class);
     }
 }

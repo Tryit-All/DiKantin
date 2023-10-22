@@ -4,6 +4,7 @@ use App\Http\Controllers\API\ApiAuth;
 use App\Http\Controllers\API\ApiController;
 use App\Http\Controllers\API\ApiMenuController;
 
+use App\Http\Controllers\API\ApiTransaction;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,9 +31,15 @@ Route::prefix('validate')->group(function () {
 
 // Route Product
 Route::prefix('menu')->group(function () {
+    Route::get('/productBestToday', [ApiMenuController::class, 'productBestToday']);
+    Route::get('/productWithDiscount', [ApiMenuController::class, 'productWithDiscount']);
     Route::get('/productAll/{searchAll?}', [ApiMenuController::class, 'product'])->where('searchAll', '.*');
     Route::get('/food/{searchAll?}', [ApiMenuController::class, 'product_food'])->where('searchAll', '.*');
     Route::get('/drink/{searchAll?}', [ApiMenuController::class, 'product_drink'])->where('searchAll', '.*');
+});
+
+Route::prefix('transaction')->group(function () {
+    Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
