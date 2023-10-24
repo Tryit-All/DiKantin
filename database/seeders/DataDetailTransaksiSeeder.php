@@ -19,32 +19,24 @@ class DataDetailTransaksiSeeder extends Seeder
                 "QTY" => "1",
                 "subtotal_bayar" => "10000",
                 "kode_menu" => "16",
-                "created_at" => "2023-10-22 14:35:35",
-                "updated_at" => "2023-10-22 14:35:35"
             ),
             array(
                 "kode_tr" => "4234232",
                 "QTY" => "2",
                 "subtotal_bayar" => "20000",
                 "kode_menu" => "20",
-                "created_at" => "2023-10-22 14:35:35",
-                "updated_at" => "2023-10-22 14:35:35"
             ),
             array(
                 "kode_tr" => "8383838",
                 "QTY" => "1",
                 "subtotal_bayar" => "10000",
                 "kode_menu" => "16",
-                "created_at" => "2023-10-22 14:35:35",
-                "updated_at" => "2023-10-22 14:35:35"
             ),
             array(
                 "kode_tr" => "8383838",
                 "QTY" => "4",
                 "subtotal_bayar" => "40000",
                 "kode_menu" => "20",
-                "created_at" => "2023-10-22 14:35:35",
-                "updated_at" => "2023-10-22 14:35:35"
             ),
         ];
 

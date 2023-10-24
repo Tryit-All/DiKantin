@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiKeyMiddleware;
 use App\Mail\VerifMail;
 use App\Models\Customer;
+use App\Models\Kurir;
 use Hash;
 use Http;
 use Illuminate\Http\Request;
@@ -32,7 +33,6 @@ class ApiController extends Controller
         ]);
 
         $dataEmail = $request->email;
-        $dataEmailVerif = $request->email_verified;
 
         if ($validadte->fails()) {
             return $this->sendMassage($validadte->errors()->first(), 400, false);
@@ -124,6 +124,57 @@ class ApiController extends Controller
                 'code' => 400,
                 'status' => false
             ], 400);
+        }
+    }
+
+    //Controller Kurir
+    public function loginKurir(Request $request)
+    {
+        $validadte = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $dataEmail = $request->email;
+
+        if ($validadte->fails()) {
+            return $this->sendMassage($validadte->errors()->first(), 400, false);
+        } else {
+            $kurir = Kurir::where('email', $dataEmail)->first();
+            if ($kurir) {
+                if (Hash::check($request->password, $kurir->password)) {
+                    $token = Str::random(200);
+                    Kurir::where('email', $dataEmail)->update([
+                        'token' => $token
+                    ]);
+                    return $this->sendMassage($token, 200, true);
+                }
+                return $this->sendMassage('Password salah', 400, false);
+            }
+            return $this->sendMassage('Username tidak ditemukan', 400, false);
+        }
+    }
+
+    public function editProfile(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        $kurir = Kurir::where('token', $token)->first();
+
+        $dataEmail = $kurir->email;
+
+        if (isset($kurir)) {
+            if ($kurir->status == true) {
+                Kurir::where('email', $dataEmail)->update([
+                    'status' => false
+                ]);
+                return $this->sendMassage($kurir->status, 200, true);
+            } else {
+                Kurir::where('email', $dataEmail)->update([
+                    'status' => true
+                ]);
+                return $this->sendMassage($kurir->status, 200, true);
+            }
         }
     }
 

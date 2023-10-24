@@ -21,25 +21,30 @@ use Illuminate\Support\Facades\Route;
 */
 // Route Login, Register, Forgot
 Route::prefix('validate')->group(function () {
+    //Customer
     Route::post('/login', [ApiController::class, 'loginUser']);
     Route::post('/register', [ApiController::class, 'registerUser']);
     Route::post('/forgotPassword', [ApiAuth::class, 'forgotPassword']);
     Route::post('/verifKode', [ApiAuth::class, 'verifKode']);
     Route::post('/confirmPassword', [ApiAuth::class, 'verifPasswordNew']);
     Route::get('/verified/{id}', [ApiController::class, 'verified']);
+
+    //Kurir
+    Route::post('/loginKurir', [ApiController::class, 'loginKurir']);
+    Route::post('/editProfile', [ApiController::class, 'editProfile']);
 });
 
 // Route Product
 Route::prefix('menu')->group(function () {
-    Route::get('/productBestToday', [ApiMenuController::class, 'productBestToday']);
-    Route::get('/productWithDiscount', [ApiMenuController::class, 'productWithDiscount']);
+    Route::get('/productBestToday/{searchAll?}', [ApiMenuController::class, 'productBestToday'])->where('searchAll', '.*');
+    Route::get('/productWithDiscount/{searchAll?}', [ApiMenuController::class, 'productWithDiscount'])->where('searchAll', '.*');
     Route::get('/productAll/{searchAll?}', [ApiMenuController::class, 'product'])->where('searchAll', '.*');
     Route::get('/food/{searchAll?}', [ApiMenuController::class, 'product_food'])->where('searchAll', '.*');
     Route::get('/drink/{searchAll?}', [ApiMenuController::class, 'product_drink'])->where('searchAll', '.*');
 });
 
 Route::prefix('transaction')->group(function () {
-    Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
+    Route::get('/riwayatTransaction/{searchAll?}', [ApiTransaction::class, 'riwayatCustomer'])->where('searchAll', '.*');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
