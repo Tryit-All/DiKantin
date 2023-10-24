@@ -10,11 +10,19 @@ class Kurir extends Model
     protected $table = 'kurir';
     protected $primaryKey = 'id_kurir';
     public $incrementing = false;
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
+        'email',
+        'password',
         'nama',
         'telepon',
         'status',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 
     public function Transaksi()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiKeyMiddleware;
 use App\Models\Customer;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,12 +24,12 @@ class ApiTransaction extends Controller
 
         if (isset($user)) {
             $customer = $user->id_customer;
-            $riwayatCutomer = DB::table('menu')
-                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+            $riwayatCutomer = Menu::select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
                 ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
                 ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                 ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                 ->where('customer.id_customer', $customer)
+                ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
                 ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
                 ->orderBy('penjualan_hari_ini', 'desc')
                 ->limit(10)

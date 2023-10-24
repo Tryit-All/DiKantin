@@ -10,7 +10,7 @@ class DetailTransaksi extends Model
     use HasFactory;
     protected $table = 'detail_transaksi';
     public $incrementing = false;
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = array('kode_tr', 'QTY', 'subtotal_bayar', 'kode_menu', 'created_at', 'updated_at');
 
