@@ -50,3 +50,6 @@ Route::prefix('transaction')->group(function () {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/transaction/{id_customer}', [ApiTransaction::class, 'tampilTransaksi']);
+Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTransaction::class, 'tampilStatus']);

@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Middleware\ApiKeyMiddleware;
+use Http;
+use App\Models\Kurir;
 use App\Mail\VerifMail;
 use App\Models\Customer;
-use App\Models\Kurir;
-use Hash;
-use Http;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Validator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Middleware\ApiKeyMiddleware;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -91,7 +92,7 @@ class ApiController extends Controller
 
                     $this->verifMail->dataUser = $dataUser;
 
-                    \Mail::to($request->input('email'))->send($this->verifMail);
+                    Mail::to($request->input('email'))->send($this->verifMail);
                     return response()->json([
                         'data' => "Selamat anda berhasil registrasi",
                         'code' => 200,
