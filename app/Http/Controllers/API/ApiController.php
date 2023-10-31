@@ -29,10 +29,12 @@ class ApiController extends Controller
     {
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'token_fcm' => 'required',
         ]);
 
         $dataEmail = $request->email;
+        $dataTokenFcm = $request->token_fcm;
 
         if ($validadte->fails()) {
             return $this->sendMassage($validadte->errors()->first(), 400, false);
@@ -43,7 +45,8 @@ class ApiController extends Controller
                     if (Hash::check($request->password, $customer->password)) {
                         $token = Str::random(200);
                         Customer::where('email', $dataEmail)->update([
-                            'token' => $token
+                            'token' => $token,
+                            'token_fcm' => $dataTokenFcm,
                         ]);
                         return $this->sendMassage($token, 200, true);
                     }
