@@ -114,13 +114,15 @@ class ApiTransaction extends Controller
                 if($status_konfirm == '6')
                     {
                         $kurir->status_konfirm = '6';
+                        $kurir->status_pengiriman = 'Proses';
                         $kurir->save();
-                        return response()->json('Menunggu');
+                        return response()->json($kurir->status_pengiriman);
                 }elseif($status_konfirm == '7')
                     {
                         $kurir->status_konfirm = '7';
+                        $kurir->status_pengiriman = 'Kirim';
                         $kurir->save();
-                        return response()->json('Selesai');
+                        return response()->json($kurir->status_pengiriman);
                 }
             }}
 
