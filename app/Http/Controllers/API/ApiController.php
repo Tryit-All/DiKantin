@@ -30,7 +30,7 @@ class ApiController extends Controller
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            'token_fcm' => 'required',
+            // 'token_fcm' => 'required',
         ]);
 
         $dataEmail = $request->email;
@@ -46,7 +46,7 @@ class ApiController extends Controller
                         $token = Str::random(200);
                         Customer::where('email', $dataEmail)->update([
                             'token' => $token,
-                            'token_fcm' => $dataTokenFcm,
+                            // 'token_fcm' => $dataTokenFcm,
                         ]);
                         return $this->sendMassage($token, 200, true);
                     }
