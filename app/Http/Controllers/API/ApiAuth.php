@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Middleware\ApiKeyMiddleware;
-use App\Mail\VerifForgotPassword;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Mail\VerifForgotPassword;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAuth extends Controller
@@ -46,7 +47,7 @@ class ApiAuth extends Controller
 
                 $this->verifForgotPassword->dataForgot = $dataForgot;
 
-                \Mail::to($request->input('email'))->send($this->verifForgotPassword);
+                Mail::to($request->input('email'))->send($this->verifForgotPassword);
 
                 Customer::where('email', $emailData)->update([
                     'kode_verified' => $RandomNumber
