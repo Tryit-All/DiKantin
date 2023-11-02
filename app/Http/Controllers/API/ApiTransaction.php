@@ -7,16 +7,12 @@ use App\Models\Menu;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiKeyMiddleware;
-use App\Models\Customer;
 use App\Models\DetailTransaksi;
-use App\Models\Menu;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
-use App\Http\Middleware\ApiKeyMiddleware;
 use App\Models\Kurir;
 
 class ApiTransaction extends Controller
@@ -62,6 +58,18 @@ class ApiTransaction extends Controller
     }
 
 
+    public function detailPesanan($kode_tr)
+    {
+        $detail = Transaksi::findOrFail($kode_tr);
+
+        if($detail)
+        {
+            $trans = DB::table('menu')->join('detail_transaksi', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')->select('menu.nama', 'detail_transaksi.QTY')->where('detail_transaksi.kode_tr', '=', $kode_tr)->get();
+            return response()->json([$trans]);
+        } else {
+            return response()->json(['message', 'Transaksi tidak ditemukan'], 404);
+        }
+    }
 
     public function tampilStatus($kode_tr, $status_pesanan, $status_konfirm)
         {
@@ -112,7 +120,6 @@ class ApiTransaction extends Controller
             }
 
         }
-
 
         public function statusKurir($kode_tr, $status_konfirm){
             $kurir = Transaksi::findOrFail($kode_tr);
