@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('nama', 100);
             $table->boolean('status')->default(false);
             $table->string('token')->nullable(true);
+            $table->string('token_fcm')->nullable(true);
             $table->string('telepon', 13);
             $table->string('foto', 255)->nullable();
             $table->timestamps();
