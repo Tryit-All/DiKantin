@@ -106,7 +106,6 @@ class ApiTransaction extends Controller
 
         }
 
-
         public function statusKurir($kode_tr, $status_konfirm){
             $kurir = Transaksi::findOrFail($kode_tr);
 
