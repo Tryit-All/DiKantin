@@ -19,6 +19,7 @@ class Customer extends Model
         'email',
         'password',
         'token',
+        'token_fcm',
         'email_verified',
         'remember_token',
         'created_at',

@@ -64,27 +64,31 @@ class ApiMenuController extends Controller
             $productDiscount = DB::table('menu')
                 ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'))
                 ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-                ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
-                ->whereDate('transaksi.created_at', $today)
+                // ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+                // ->whereDate('transaksi.created_at', $today)
                 ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
                 ->whereNotNull('menu.diskon') // Filter menu dengan diskon tidak null
                 ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon')
-                ->orderBy('penjualan_hari_ini', 'desc')
+                // ->orderBy('penjualan_hari_ini', 'desc')
                 ->limit(10)
-                ->get();
+                ->get()->toArray();
+
+            shuffle($productDiscount);
 
             return $this->sendMassage($productDiscount, 200, true);
         } else {
             $productDiscount = DB::table('menu')
-                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'))
-                ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-                ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
-                ->whereDate('transaksi.created_at', $today)
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon')
+                // ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+                // ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+                // ->whereDate('transaksi.created_at', $today)
                 ->whereNotNull('menu.diskon') // Filter menu dengan diskon tidak null
                 ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon')
-                ->orderBy('penjualan_hari_ini', 'desc')
+                // ->orderBy('penjualan_hari_ini', 'desc')
                 ->limit(10)
-                ->get();
+                ->get()->toArray();
+
+            shuffle($productDiscount);
 
             return $this->sendMassage($productDiscount, 200, true);
         }

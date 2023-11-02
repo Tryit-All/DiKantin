@@ -44,6 +44,7 @@ Route::prefix('menu')->group(function () {
 });
 
 Route::prefix('transaction')->group(function () {
+    Route::get('/', [ApiTransaction::class, 'transaksiCustomer']);
     Route::get('/riwayatTransaction/{searchAll?}', [ApiTransaction::class, 'riwayatCustomer'])->where('searchAll', '.*');
 });
 
