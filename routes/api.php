@@ -56,3 +56,4 @@ Route::get('/transaction/{id_customer}', [ApiTransaction::class, 'tampilTransaks
 Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTransaction::class, 'tampilStatus']);
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
 Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
+Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
