@@ -55,5 +55,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/transaction/{id_customer}', [ApiTransaction::class, 'tampilTransaksi']);
 Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTransaction::class, 'tampilStatus']);
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
+Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
 Route::post('/customerAccount', [ApiTransaction::class, 'editCustomer']);

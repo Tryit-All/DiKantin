@@ -12,6 +12,8 @@ use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use App\Models\Kurir;
 
 class ApiTransaction extends Controller
 {
@@ -22,26 +24,50 @@ class ApiTransaction extends Controller
 
     public function riwayatCustomer(Request $request)
     {
+        //Mencari user dari token yang di dapatkan dari request
         $token = $request->bearerToken();
-
         $user = Customer::where('token', $token)->first();
 
         if (isset($user)) {
             $customer = $user->id_customer;
-            $riwayatCutomer = Menu::select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+            $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
                 ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
                 ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                 ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                 ->where('customer.id_customer', $customer)
                 ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
-                ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                ->orderBy('penjualan_hari_ini', 'desc')
-                ->limit(10)
+                ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
+                ->orderBy('transaksi.kode_tr', 'ASC')
+                // ->limit(10)
                 ->get();
 
             return $this->sendMassage($riwayatCutomer, 200, true);
         }
         return $this->sendMassage('User Tidak Ditemukan', 200, true);
+    }
+
+
+    public function tampilTransaksi($id_customer)
+    {
+        $customer = Transaksi::where('id_customer', $id_customer)->first();
+
+        if (!$customer) {
+            return response()->json(['message' => 'Tranksaksi tidak ditemukan'], 404);
+        }
+
+        return response()->json($customer);
+    }
+
+    public function detailPesanan($kode_tr)
+    {
+        $detail = Transaksi::findOrFail($kode_tr);
+
+        if ($detail) {
+            $trans = DB::table('menu')->join('detail_transaksi', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')->select('menu.nama', 'detail_transaksi.QTY')->where('detail_transaksi.kode_tr', '=', $kode_tr)->get();
+            return response()->json([$trans]);
+        } else {
+            return response()->json(['message', 'Transaksi tidak ditemukan'], 404);
+        }
     }
 
     public function tampilStatus($kode_tr, $status_pesanan, $status_konfirm)
@@ -108,9 +134,8 @@ class ApiTransaction extends Controller
 
     public function editCustomer(Request $request)
     {
-        // $customer = Customer::where('id_customer', $id_customer)->first();
+        //Mencari user dari token yang di dapatkan dari request
         $token = $request->bearerToken();
-
         $user = Customer::where('token', $token)->first();
 
         if ($user) {
