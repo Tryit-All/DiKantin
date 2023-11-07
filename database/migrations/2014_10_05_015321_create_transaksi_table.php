@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->integer('total_harga');
             $table->integer('kembalian');
             $table->enum('status_pengiriman', ['proses', 'kirim', 'terima']);
-            $table->string('bukti_pengiriman', 255);
+            $table->string('bukti_pengiriman', 255)->nullable(true);
             $table->enum('model_pembayaran', ['cash', 'gopay', 'qris', 'polijepay', 'tranfer bank']);
             $table->foreign('id_customer')->references('id_customer')->on('customer')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('id_kurir')->references('id_kurir')->on('kurir')->cascadeOnDelete()->cascadeOnUpdate();

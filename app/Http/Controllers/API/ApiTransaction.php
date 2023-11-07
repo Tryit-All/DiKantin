@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API;
 
 
-use App\Models\Menu;
-use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiKeyMiddleware;
+use App\Models\Customer;
 use App\Models\DetailTransaksi;
+use App\Models\Menu;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -24,21 +24,21 @@ class ApiTransaction extends Controller
 
     public function riwayatCustomer(Request $request)
     {
+        //Mencari user dari token yang di dapatkan dari request
         $token = $request->bearerToken();
-
         $user = Customer::where('token', $token)->first();
 
         if (isset($user)) {
             $customer = $user->id_customer;
-            $riwayatCutomer = Menu::select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+            $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
                 ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
                 ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                 ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                 ->where('customer.id_customer', $customer)
                 ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
-                ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                ->orderBy('penjualan_hari_ini', 'desc')
-                ->limit(10)
+                ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
+                ->orderBy('transaksi.kode_tr', 'ASC')
+                // ->limit(10)
                 ->get();
 
             return $this->sendMassage($riwayatCutomer, 200, true);
@@ -47,7 +47,8 @@ class ApiTransaction extends Controller
     }
 
 
-    public function tampilTransaksi($id_customer) {
+    public function tampilTransaksi($id_customer)
+    {
         $customer = Transaksi::where('id_customer', $id_customer)->first();
 
         if (!$customer) {
@@ -57,13 +58,11 @@ class ApiTransaction extends Controller
         return response()->json($customer);
     }
 
-
     public function detailPesanan($kode_tr)
     {
         $detail = Transaksi::findOrFail($kode_tr);
 
-        if($detail)
-        {
+        if ($detail) {
             $trans = DB::table('menu')->join('detail_transaksi', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')->select('menu.nama', 'detail_transaksi.QTY')->where('detail_transaksi.kode_tr', '=', $kode_tr)->get();
             return response()->json([$trans]);
         } else {
@@ -72,91 +71,86 @@ class ApiTransaction extends Controller
     }
 
     public function tampilStatus($kode_tr, $status_pesanan, $status_konfirm)
-        {
-            $transaction = Transaksi::findOrFail($kode_tr);
+    {
+        $transaction = Transaksi::findOrFail($kode_tr);
 
-            if($transaction)
-            {
-                if($status_pesanan == '1')
-                {
-                    if($status_konfirm == '1')
-                    {
-                        $transaction->status_konfirm = '1';
-                        $transaction->save();
-                        return response()->json('Memasak');
-                    }elseif($status_konfirm == '2')
-                    {
-                        $transaction->status_konfirm = '2';
-                        $transaction->save();
-                        return response()->json('Menunggu kurir');
-
-                    }else{
-                        return response()->json('Diproses');
-                    }
-                }
-
-                if($status_pesanan == '2'){
-                    if($status_konfirm == '3'){
-                        $transaction->status_konfirm = '3';
-                        $transaction->save();
-                        return response()->json('Proses');
-                    }
-                }
-
-                if($status_pesanan == '3')
-                {
-                    if($status_konfirm == '4')
-                    {
-                        $transaction->status_konfirm = '4';
-                        $transaction->save();
-                        return response()->json('Menunggu');
-                    }elseif($status_konfirm == '5')
-                    {
-                        $transaction->status_konfirm = '5';
-                        $transaction->save();
-                        return response()->json('Selesai');
-                    }
+        if ($transaction) {
+            if ($status_pesanan == '1') {
+                if ($status_konfirm == '1') {
+                    $transaction->status_konfirm = '1';
+                    $transaction->save();
+                    return $this->sendMassage('Memasak', 200, true);
+                } elseif ($status_konfirm == '2') {
+                    $transaction->status_konfirm = '2';
+                    $transaction->save();
+                    return $this->sendMassage('Menunggu kurir', 200, true);
+                } else {
+                    return $this->sendMassage('Diproses', 200, true);
                 }
             }
 
+            if ($status_pesanan == '2') {
+                if ($status_konfirm == '3') {
+                    $transaction->status_konfirm = '3';
+                    $transaction->save();
+                    return $this->sendMassage('Proses', 200, true);
+                }
+            }
+
+            if ($status_pesanan == '3') {
+                if ($status_konfirm == '4') {
+                    $transaction->status_konfirm = '4';
+                    $transaction->save();
+                    return $this->sendMassage('Menunggu', 200, true);
+                } elseif ($status_konfirm == '5') {
+                    $transaction->status_konfirm = '5';
+                    $transaction->save();
+                    return $this->sendMassage('Selesai', 200, true);
+                }
+            }
         }
 
-        public function statusKurir($kode_tr, $status_konfirm){
-            $kurir = Transaksi::findOrFail($kode_tr);
+    }
 
-            if($kurir){
-                if($status_konfirm == '6')
-                    {
-                        $kurir->status_konfirm = '6';
-                        $kurir->status_pengiriman = 'Proses';
-                        $kurir->save();
-                        return response()->json($kurir->status_pengiriman);
-                }elseif($status_konfirm == '7')
-                    {
-                        $kurir->status_konfirm = '7';
-                        $kurir->status_pengiriman = 'Kirim';
-                        $kurir->save();
-                        return response()->json($kurir->status_pengiriman);
-                }
-            }}
 
-            public function editCustomer(Request $request, $id_customer)
-            {
-                $customer = Customer::where('id_customer', $id_customer)->first();
+    public function statusKurir($kode_tr, $status_konfirm)
+    {
+        $kurir = Transaksi::findOrFail($kode_tr);
 
-                if ($customer) {
-                    $customer->nama = $request->input('nama');
-                    $customer->email = $request->input('email');
-                    $customer->no_telepon = $request->input('no_telepon');
-                    $customer->alamat = $request->input('alamat');
-
-                    $customer->save();
-
-                    return response()->json('Data terupdate');
-                } else {
-                    return response()->json(['message' => 'Pelanggan tidak ditemukan'], 404);
-                }
+        if ($kurir) {
+            if ($status_konfirm == '6') {
+                $kurir->status_konfirm = '6';
+                $kurir->status_pengiriman = 'Proses';
+                $kurir->save();
+                return $this->sendMassage($kurir->status_pengiriman, 200, true);
+            } elseif ($status_konfirm == '7') {
+                $kurir->status_konfirm = '7';
+                $kurir->status_pengiriman = 'Kirim';
+                $kurir->save();
+                return $this->sendMassage($kurir->status_pengiriman, 200, true);
             }
+        }
+    }
+
+    public function editCustomer(Request $request)
+    {
+        //Mencari user dari token yang di dapatkan dari request
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if ($user) {
+            $user->nama = $request->input('nama');
+            $user->email = $request->input('email');
+            $user->no_telepon = $request->input('no_telepon');
+            $user->alamat = $request->input('alamat');
+
+            $user->save();
+
+            return $this->sendMassage('Data terupdate', 200, true);
+        } else {
+            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
+        }
+    }
 
 
 
@@ -164,7 +158,6 @@ class ApiTransaction extends Controller
     {
         $dataDetailOrderan = $request->detail_orderan;
         $dataOrderan = $request->orderan;
-        // dd($dataOrderan);
         $today = Carbon::now();
 
         $Transaksi = new Transaksi();
@@ -192,7 +185,6 @@ class ApiTransaction extends Controller
         }
 
         return $this->sendMassage("Data berhasil di tambahkan", 200, true);
-        // return $this->sendMassage($dataDetailOrderan, 200, true);
     }
 
     // Function Massage
