@@ -134,7 +134,6 @@ class ApiTransaction extends Controller
 
     public function editCustomer(Request $request)
     {
-        //Mencari user dari token yang di dapatkan dari request
         $token = $request->bearerToken();
         $user = Customer::where('token', $token)->first();
 
