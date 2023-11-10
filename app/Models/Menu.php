@@ -19,4 +19,9 @@ class Menu extends Model
     {
         return $this->hasMany(DetailTransaksi::class, 'id_menu', 'id_menu');
     }
+
+    public function Kantin()
+    {
+        return $this->belongsTo(Menu::class, 'id_kantin', 'id_kantin');
+    }
 }

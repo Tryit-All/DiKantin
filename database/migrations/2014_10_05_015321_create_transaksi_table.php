@@ -11,12 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('transaksi', function (Blueprint $table) {
-            $table->integer('kode_tr')->primary();
-            $table->enum('status_konfirm', ['1', '2']);
-            $table->enum('status_pesanan', ['1', '2']);
+            $table->string('kode_tr', 9)->primary();
+            $table->enum('status_konfirm', ['1', '2', '3']);
+            $table->enum('status_pesanan', ['1', '2', '3']);
             $table->dateTime('tanggal');
-            $table->string('id_customer', 255);
-            $table->integer('id_kurir');
+            $table->string('id_customer', 9);
+            $table->string('id_kurir', 9);
             $table->integer('total_bayar');
             $table->integer('total_harga');
             $table->integer('kembalian');

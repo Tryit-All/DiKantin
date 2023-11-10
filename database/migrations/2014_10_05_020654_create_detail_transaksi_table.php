@@ -11,10 +11,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('detail_transaksi', function (Blueprint $table) {
-            $table->integer('kode_tr');
+            $table->string('kode_tr', 9);
             $table->integer('QTY');
             $table->integer('subtotal_bayar');
             $table->integer('kode_menu');
+            $table->enum('status_konfirm', ['memasak', 'selesai'])->nullable(true);
             $table->foreign('kode_tr')->references('kode_tr')->on('transaksi')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('kode_menu')->references('id_menu')->on('menu')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
