@@ -44,7 +44,11 @@ Route::prefix('menu')->group(function () {
 });
 
 Route::prefix('transaction')->group(function () {
-    Route::get('/', [ApiTransaction::class, 'transaksiCustomer']);
+    Route::post('/', [ApiTransaction::class, 'transaksiCustomer']);
+    Route::post('/konfirmasiPesanan', [ApiController::class, 'konfirmasiPesanan']);
+    Route::post('/diproses', [ApiTransaction::class, 'pesananDiproses']);
+    Route::post('/dikirim', [ApiTransaction::class, 'pesananDikirim']);
+    Route::post('/diterima', [ApiTransaction::class, 'pesananDiterima']);
     Route::get('/riwayatTransaction/{searchAll?}', [ApiTransaction::class, 'riwayatCustomer'])->where('searchAll', '.*');
 });
 
