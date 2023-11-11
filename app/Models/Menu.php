@@ -17,7 +17,7 @@ class Menu extends Model
 
     public function DetailTransaksi()
     {
-        return $this->hasMany(DetailTransaksi::class, 'id_menu', 'id_menu');
+        return $this->hasOne(DetailTransaksi::class, 'id_menu', 'id_menu');
     }
 
     public function Kantin()

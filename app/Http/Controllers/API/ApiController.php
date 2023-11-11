@@ -84,7 +84,7 @@ class ApiController extends Controller
             } else {
 
                 $isRegister = Customer::create([
-                    'id_customer' => "Cust " . $RandomNumber,
+                    'id_customer' => "CUST" . $RandomNumber,
                     'nama' => $request->input('nama'),
                     'no_telepon' => $request->input('no_telepon'),
                     'alamat' => $request->input('alamat'),
