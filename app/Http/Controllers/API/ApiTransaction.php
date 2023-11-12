@@ -230,7 +230,7 @@ class ApiTransaction extends Controller
 
             }
 
-            return $result;
+            return $this->sendMassage($result, 200, true);
         } else {
             return $this->sendMassage('Tidak ada Data', 400, false);
         }
@@ -273,7 +273,7 @@ class ApiTransaction extends Controller
 
             }
 
-            return $result;
+            return $this->sendMassage($result, 200, true);
         } else {
             return $this->sendMassage('Tidak ada Data', 400, false);
         }
@@ -317,7 +317,7 @@ class ApiTransaction extends Controller
 
             }
 
-            return $result;
+            return $this->sendMassage($result, 200, true);
         } else {
             return $this->sendMassage('Tidak ada Data', 400, false);
         }
