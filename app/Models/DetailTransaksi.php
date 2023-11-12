@@ -12,7 +12,7 @@ class DetailTransaksi extends Model
     public $incrementing = false;
     public $timestamps = true;
 
-    protected $fillable = array('kode_tr', 'QTY', 'subtotal_bayar', 'kode_menu', 'created_at', 'updated_at');
+    protected $fillable = array('kode_tr', 'QTY', 'subtotal_bayar', 'kode_menu', 'status_konfirm', 'created_at', 'updated_at');
 
     public function Transaksi()
     {
@@ -21,6 +21,6 @@ class DetailTransaksi extends Model
 
     public function Menu()
     {
-        return $this->hasOne(Menu::class, 'id_menu', 'id_menu');
+        return $this->hasOne(Menu::class, 'id_menu', 'kode_menu');
     }
 }

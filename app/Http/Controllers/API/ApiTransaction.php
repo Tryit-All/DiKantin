@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiKeyMiddleware;
 use App\Models\Customer;
 use App\Models\DetailTransaksi;
+use App\Models\Kantin;
 use App\Models\Menu;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class ApiTransaction extends Controller
                 ->where('customer.id_customer', $customer)
                 ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
                 ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                ->orderBy('transaksi.kode_tr', 'ASC')
+                ->orderBy('transaksi.created_at', 'ASC')
                 // ->limit(10)
                 ->get();
 
@@ -58,17 +59,17 @@ class ApiTransaction extends Controller
         return response()->json($customer);
     }
 
-    public function detailPesanan($kode_tr)
-    {
-        $detail = Transaksi::findOrFail($kode_tr);
+    // public function detailPesanan($kode_tr)
+    // {
+    //     $detail = Transaksi::findOrFail($kode_tr);
 
-        if ($detail) {
-            $trans = DB::table('menu')->join('detail_transaksi', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')->select('menu.nama', 'detail_transaksi.QTY')->where('detail_transaksi.kode_tr', '=', $kode_tr)->get();
-            return response()->json([$trans]);
-        } else {
-            return response()->json(['message', 'Transaksi tidak ditemukan'], 404);
-        }
-    }
+    //     if ($detail) {
+    //         $trans = DB::table('menu')->join('detail_transaksi', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')->select('menu.nama', 'detail_transaksi.QTY')->where('detail_transaksi.kode_tr', '=', $kode_tr)->get();
+    //         return response()->json([$trans]);
+    //     } else {
+    //         return response()->json(['message', 'Transaksi tidak ditemukan'], 404);
+    //     }
+    // }
 
     public function tampilStatus($kode_tr, $status_pesanan, $status_konfirm)
     {
@@ -151,32 +152,33 @@ class ApiTransaction extends Controller
         }
     }
 
-
-
     public function transaksiCustomer(Request $request)
     {
         $dataDetailOrderan = $request->detail_orderan;
         $dataOrderan = $request->orderan;
         $today = Carbon::now();
 
+        $RandomNumber = rand(1000, 9999);
+        $kodeTr = "TRDKN" . $RandomNumber;
+
         $Transaksi = new Transaksi();
-        $Transaksi->kode_tr = $dataDetailOrderan['kode_tr'];
-        $Transaksi->status_konfirm = $dataDetailOrderan['status_konfirm'];
-        $Transaksi->status_pesanan = $dataDetailOrderan['status_pesanan'];
+        $Transaksi->kode_tr = $kodeTr;
+        $Transaksi->status_konfirm = "1";
+        $Transaksi->status_pesanan = "1";
         $Transaksi->tanggal = $today;
         $Transaksi->id_customer = $dataDetailOrderan['id_customer'];
         $Transaksi->id_kurir = $dataDetailOrderan['id_kurir'];
         $Transaksi->total_bayar = $dataDetailOrderan['total_bayar'];
         $Transaksi->total_harga = $dataDetailOrderan['total_harga'];
         $Transaksi->kembalian = $dataDetailOrderan['kembalian'];
-        $Transaksi->status_pengiriman = $dataDetailOrderan['status_pengiriman'];
-        $Transaksi->bukti_pengiriman = $dataDetailOrderan['bukti_pengiriman'];
+        $Transaksi->status_pengiriman = "proses";
+        // $Transaksi->bukti_pengiriman = $dataDetailOrderan['bukti_pengiriman'];
         $Transaksi->model_pembayaran = $dataDetailOrderan['model_pembayaran'];
         $Transaksi->save();
 
         foreach ($dataOrderan as $key => $value) {
             $detail = new DetailTransaksi();
-            $detail->kode_tr = $dataDetailOrderan['kode_tr'];
+            $detail->kode_tr = $kodeTr;
             $detail->kode_menu = $value['kode_menu'];
             $detail->QTY = $value['qty_barang'];
             $detail->subtotal_bayar = $value['total_harga_barang'];
@@ -184,6 +186,140 @@ class ApiTransaction extends Controller
         }
 
         return $this->sendMassage("Data berhasil di tambahkan", 200, true);
+    }
+
+
+    public function pesananDiproses(Request $request)
+    {
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if (!$user) {
+            return $this->sendMassage('Token tidak valid', 401, false);
+        }
+
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'proses')
+            ->get();
+
+        if (sizeof($transaksi) != 0) {
+
+            $result = [];
+
+            foreach ($transaksi as $key => $value) {
+                $status_konfirm = $value['status_konfirm'];
+                $status_pesanan = $value['status_pesanan'];
+                $status_pengiriman = $value['status_pengiriman'];
+
+                $status = null;
+
+                if ($status_konfirm == '1' && $status_pesanan == '1' && $status_pengiriman == 'proses') {
+                    $status = 'Menunggu Konfirmasi';
+                } else if ($status_konfirm == '1' && $status_pesanan == '2' && $status_pengiriman == 'proses') {
+                    $status = 'Memasak';
+                } else if ($status_konfirm == '1' && $status_pesanan == '3' && $status_pengiriman == 'proses') {
+                    $status = 'Menunggu kurir';
+                }
+
+                $temp = [
+                    'status' => $status,
+                    'transaksi' => $value,
+                ];
+
+                $result[] = $temp;
+
+            }
+
+            return $this->sendMassage($result, 200, true);
+        } else {
+            return $this->sendMassage('Tidak ada Data', 400, false);
+        }
+    }
+
+    public function pesananDikirim(Request $request)
+    {
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+
+        if (!$user) {
+            return $this->sendMassage('Token tidak valid', 401, false);
+        }
+
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'kirim')
+            ->get();
+
+        if (sizeof($transaksi) != 0) {
+
+            $result = [];
+
+            foreach ($transaksi as $key => $value) {
+                $status_konfirm = $value['status_konfirm'];
+                $status_pesanan = $value['status_pesanan'];
+                $status_pengiriman = $value['status_pengiriman'];
+
+                $status = null;
+
+                if ($status_konfirm == '2' && $status_pesanan == '3' && $status_pengiriman == 'kirim') {
+                    $status = 'proses';
+                }
+
+                $temp = [
+                    'status' => $status,
+                    'transaksi' => $value,
+                ];
+
+                $result[] = $temp;
+
+            }
+
+            return $this->sendMassage($result, 200, true);
+        } else {
+            return $this->sendMassage('Tidak ada Data', 400, false);
+        }
+    }
+
+    public function pesananDiterima(Request $request)
+    {
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if (!$user) {
+            return $this->sendMassage('Token tidak valid', 401, false);
+        }
+
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'selesai')
+            ->get();
+
+        if (sizeof($transaksi) != 0) {
+
+            $result = [];
+
+            foreach ($transaksi as $key => $value) {
+                $status_konfirm = $value['status_konfirm'];
+                $status_pesanan = $value['status_pesanan'];
+                $status_pengiriman = $value['status_pengiriman'];
+
+                $status = null;
+
+                if ($status_konfirm == '2' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
+                    $status = 'Menunggu';
+                } else if ($status_konfirm == '3' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
+                    $status = 'Selesai';
+                }
+
+                $temp = [
+                    'status' => $status,
+                    'transaksi' => $value,
+                ];
+
+                $result[] = $temp;
+
+            }
+
+            return $this->sendMassage($result, 200, true);
+        } else {
+            return $this->sendMassage('Tidak ada Data', 400, false);
+        }
     }
 
     // Function Massage

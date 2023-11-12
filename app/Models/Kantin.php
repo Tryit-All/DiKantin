@@ -13,4 +13,9 @@ class Kantin extends Model
     public $incrementing = false;
     public $timestamps = true;
     protected $quarded = [];
+
+    public function infoKantin()
+    {
+        return $this->hasOne(Kantin::class, 'id_kantin', 'id_kantin');
+    }
 }

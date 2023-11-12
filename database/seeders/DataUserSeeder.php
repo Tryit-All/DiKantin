@@ -14,6 +14,6 @@ class DataUserSeeder extends Seeder
      */
     public function run(): void
     {
-        Customer::create(["id_customer" => "Cust d8a16ef5-13fc-409d-9015-d0e317d275c5", "nama" => "fathur", "no_telepon" => "32e233dw3", "email_verified" => "1", "kode_verified" => null, "alamat" => "dadwadw", "email" => "fathurrahman.dk@gmail.com", "password" => Hash::make('rahasia'), "foto" => null,]);
+        Customer::create(["id_customer" => "CUST98273", "nama" => "fathur", "no_telepon" => "32e233dw3", "email_verified" => "1", "kode_verified" => null, "alamat" => "dadwadw", "email" => "fathurrahman.dk@gmail.com", "password" => Hash::make('rahasia'), "foto" => null,]);
     }
 }

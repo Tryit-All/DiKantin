@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('customer', function (Blueprint $table) {
-            $table->string('id_customer', 255)->primary();
+            $table->string('id_customer', 9)->primary();
             $table->string('nama', 100);
             $table->string('no_telepon', 13);
             $table->boolean('email_verified')->default(false);
