@@ -23,7 +23,7 @@ class ApiTransaction extends Controller
         $this->middleware(ApiKeyMiddleware::class);
     }
 
-    public function riwayatCustomer(Request $request)
+    public function riwayatCustomer($searchAll, $selectedDate, Request $request)
     {
         //Mencari user dari token yang di dapatkan dari request
         $token = $request->bearerToken();
@@ -36,7 +36,8 @@ class ApiTransaction extends Controller
                 ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                 ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                 ->where('customer.id_customer', $customer)
-                ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
+                ->where('menu.nama', 'LIKE', $searchAll . '%')
+                ->whereDate('transaksi.created_at', $selectedDate)
                 ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
                 ->orderBy('transaksi.created_at', 'ASC')
                 // ->limit(10)
@@ -249,6 +250,8 @@ class ApiTransaction extends Controller
         $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'kirim')
             ->get();
 
+        // return $this->sendMassage($transaksi, 200, true);
+
         if (sizeof($transaksi) != 0) {
 
             $result = [];
@@ -288,7 +291,7 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'selesai')
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'terima')
             ->get();
 
         if (sizeof($transaksi) != 0) {

@@ -49,7 +49,7 @@ Route::prefix('transaction')->group(function () {
     Route::get('/diproses', [ApiTransaction::class, 'pesananDiproses']);
     Route::get('/dikirim', [ApiTransaction::class, 'pesananDikirim']);
     Route::get('/diterima', [ApiTransaction::class, 'pesananDiterima']);
-    Route::get('/riwayatTransaction/{searchAll?}', [ApiTransaction::class, 'riwayatCustomer'])->where('searchAll', '.*');
+    Route::get('/riwayatTransaction/{searchAll}/{selectedDate}', [ApiTransaction::class, 'riwayatCustomer']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
