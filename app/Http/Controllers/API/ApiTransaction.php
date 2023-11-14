@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\API;
 
 
-use App\Http\Controllers\Controller;
-use App\Http\Middleware\ApiKeyMiddleware;
-use App\Models\Customer;
-use App\Models\DetailTransaksi;
-use App\Models\Kantin;
 use App\Models\Menu;
+use App\Models\Kurir;
+use App\Models\Kantin;
+use App\Models\Customer;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\DetailTransaksi;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
-use App\Models\Kurir;
+use App\Http\Middleware\ApiKeyMiddleware;
 
 class ApiTransaction extends Controller
 {
@@ -143,6 +144,17 @@ class ApiTransaction extends Controller
             $user->email = $request->input('email');
             $user->no_telepon = $request->input('no_telepon');
             $user->alamat = $request->input('alamat');
+
+            if ($request->hasFile('foto')) {
+                $myFile = 'customer/'.$user->foto;
+                if(File::exists($myFile))
+                {
+                    File::delete($myFile);
+                }
+
+                $request->file('foto')->move('customer/', $request->file('foto')->getClientOriginalName());
+                $user->image=$request->file('foto')->getClientOriginalName();
+        }
 
             $user->save();
 
