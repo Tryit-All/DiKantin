@@ -64,3 +64,5 @@ Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan'
 
 Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
 Route::post('/imageProfile', [ApiController::class, 'profileImage']);
+
+Route::get('/profileShow', [ApiController::class, 'tampilCustomer']);
