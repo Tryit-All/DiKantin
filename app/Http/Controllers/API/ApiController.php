@@ -395,7 +395,7 @@ class ApiController extends Controller
         $user = Customer::where('token', $token)->first();
 
         if(!$token){
-            return $this->sendMassage('Tolong masukkan token', 200, true);
+            return $this->sendMassage('Tolong masukkan token', 200, false);
         }
 
             if ($request->hasFile('foto')) {
@@ -410,7 +410,7 @@ class ApiController extends Controller
 
                 $user->save();
 
-                return $this->sendMassage('Foto Profile terupdate', 200, true);
+                return $this->sendMassage('Foto Profile terupdate', 200, false);
             }
     }
 
@@ -420,7 +420,7 @@ class ApiController extends Controller
         $customer = Customer::where('token', $token)->first();
 
         if(!$token){
-            return $this->sendMassage('Tolong masukkan token', 200, true);
+            return $this->sendMassage('Tolong masukkan token', 200, false);
         }
 
         return $this->sendMassage($customer, 200, true);
