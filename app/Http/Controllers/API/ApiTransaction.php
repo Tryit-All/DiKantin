@@ -146,17 +146,6 @@ class ApiTransaction extends Controller
             $user->no_telepon = $request->input('no_telepon');
             $user->alamat = $request->input('alamat');
 
-            if ($request->hasFile('foto')) {
-                $myFile = 'customer/'.$user->foto;
-                if(File::exists($myFile))
-                {
-                    File::delete($myFile);
-                }
-
-                $request->file('foto')->move('customer/', $request->file('foto')->getClientOriginalName());
-                $user->image=$request->file('foto')->getClientOriginalName();
-        }
-
             $user->save();
 
             return $this->sendMassage('Data terupdate', 200, true);
