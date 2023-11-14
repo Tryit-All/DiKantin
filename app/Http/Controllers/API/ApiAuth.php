@@ -6,6 +6,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Mail\VerifForgotPassword;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Middleware\ApiKeyMiddleware;
@@ -114,6 +115,50 @@ class ApiAuth extends Controller
             }
             return $this->sendMassage('Password anda tidak sesuai dengan konfirmasi password', 400, false);
         }
+    }
+
+    public function editCustomer(Request $request)
+    {
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if (!$token) {
+            return $this->sendMassage('Tolong masukkan token', 400, false);
+        }
+            $user->nama = $request->input('nama');
+            $user->email = $request->input('email');
+            $user->no_telepon = $request->input('no_telepon');
+            $user->alamat = $request->input('alamat');
+
+            $user->save();
+
+            return $this->sendMassage('Data terupdate', 200, true);
+
+    }
+
+    public function profileImage(Request $request){
+
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if(!$token){
+            return $this->sendMassage('Tolong masukkan token', 200, true);
+        }
+
+            if ($request->hasFile('foto')) {
+                $myFile = 'customer/'.$user->foto;
+                if(File::exists($myFile))
+                {
+                    File::delete($myFile);
+                }
+
+                $request->file('foto')->move('customer/', $request->file('foto')->getClientOriginalName());
+                $user->foto=$request->file('foto')->getClientOriginalName();
+
+                $user->save();
+
+                return $this->sendMassage('Foto Profile terupdate', 200, true);
+            }
     }
 
     public function sendMassage($text, $kode, $status)

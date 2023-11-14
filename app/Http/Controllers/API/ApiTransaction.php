@@ -135,25 +135,6 @@ class ApiTransaction extends Controller
         }
     }
 
-    public function editCustomer(Request $request)
-    {
-        $token = $request->bearerToken();
-        $user = Customer::where('token', $token)->first();
-
-        if ($user) {
-            $user->nama = $request->input('nama');
-            $user->email = $request->input('email');
-            $user->no_telepon = $request->input('no_telepon');
-            $user->alamat = $request->input('alamat');
-
-            $user->save();
-
-            return $this->sendMassage('Data terupdate', 200, true);
-        } else {
-            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
-        }
-    }
-
     public function transaksiCustomer(Request $request)
     {
         $dataDetailOrderan = $request->detail_orderan;
