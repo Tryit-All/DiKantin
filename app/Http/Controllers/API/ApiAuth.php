@@ -117,50 +117,6 @@ class ApiAuth extends Controller
         }
     }
 
-    public function editCustomer(Request $request)
-    {
-        $token = $request->bearerToken();
-        $user = Customer::where('token', $token)->first();
-
-        if (!$token) {
-            return $this->sendMassage('Tolong masukkan token', 400, false);
-        }
-            $user->nama = $request->input('nama');
-            $user->email = $request->input('email');
-            $user->no_telepon = $request->input('no_telepon');
-            $user->alamat = $request->input('alamat');
-
-            $user->save();
-
-            return $this->sendMassage('Data terupdate', 200, true);
-
-    }
-
-    public function profileImage(Request $request){
-
-        $token = $request->bearerToken();
-        $user = Customer::where('token', $token)->first();
-
-        if(!$token){
-            return $this->sendMassage('Tolong masukkan token', 200, true);
-        }
-
-            if ($request->hasFile('foto')) {
-                $myFile = 'customer/'.$user->foto;
-                if(File::exists($myFile))
-                {
-                    File::delete($myFile);
-                }
-
-                $request->file('foto')->move('customer/', $request->file('foto')->getClientOriginalName());
-                $user->foto=$request->file('foto')->getClientOriginalName();
-
-                $user->save();
-
-                return $this->sendMassage('Foto Profile terupdate', 200, true);
-            }
-    }
-
     public function sendMassage($text, $kode, $status)
     {
         return response()->json([

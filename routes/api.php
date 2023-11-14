@@ -62,5 +62,5 @@ Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTr
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
 Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
 
-Route::post('/customerAccount', [ApiAuth::class, 'editCustomer']);
-Route::post('/imageProfile', [ApiAuth::class, 'profileImage']);
+Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
+Route::post('/imageProfile', [ApiController::class, 'profileImage']);
