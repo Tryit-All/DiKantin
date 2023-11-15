@@ -414,8 +414,6 @@ class ApiController extends Controller
             }
     }
 
-
-
     public function sendMassage($text, $kode, $status)
     {
         return response()->json([
