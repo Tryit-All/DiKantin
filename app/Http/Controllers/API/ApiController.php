@@ -429,7 +429,7 @@ class ApiController extends Controller
 
             $extension = $request->file('foto')->getClientOriginalExtension();
 
-            $newFilename = Str::random(30) . '.' . $extension;
+            $newFilename = 'customer/' . Str::random(30) . '.' . $extension;
 
             $request->file('foto')->move('customer/', $newFilename);
 
