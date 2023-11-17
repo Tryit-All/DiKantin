@@ -421,21 +421,26 @@ class ApiController extends Controller
             return $this->sendMassage('Tolong masukkan token', 200, false);
         }
 
-            if ($request->hasFile('foto')) {
-                $myFile = 'customer/'.$user->foto;
-                if(File::exists($myFile))
-                {
-                    File::delete($myFile);
-                }
-
-                $request->file('foto')->move('customer/', $request->file('foto')->getClientOriginalName());
-                $user->foto=$request->file('foto')->getClientOriginalName();
-
-                $user->save();
-
-                return $this->sendMassage('Foto Profile terupdate', 200, false);
+        if ($request->hasFile('foto')) {
+            $myFile = 'customer/'.$user->foto;
+            if(File::exists($myFile)) {
+                File::delete($myFile);
             }
+
+            $extension = $request->file('foto')->getClientOriginalExtension();
+
+            $newFilename = Str::random(30) . '.' . $extension;
+
+            $request->file('foto')->move('customer/', $newFilename);
+
+            $user->foto = $newFilename;
+
+            $user->save();
+
+            return $this->sendMassage('Foto Profile terupdate', 200, false);
+        }
     }
+
 
     public function tampilCustomer(Request $request){
 
