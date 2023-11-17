@@ -372,21 +372,43 @@ class ApiController extends Controller
 
     public function editCustomer(Request $request)
     {
+        // Mencari user dari token yang didapatkan dari request
         $token = $request->bearerToken();
         $user = Customer::where('token', $token)->first();
 
-        if (!$token) {
-            return $this->sendMassage('Tolong masukkan token', 400, false);
+        if ($user) {
+            // Periksa apakah ada perubahan nilai sebelum menyimpan
+            $nama = $request->input('nama');
+            $email = $request->input('email');
+            $no_telepon = $request->input('no_telepon');
+            $alamat = $request->input('alamat');
+
+            if (!empty($nama)) {
+                $user->nama = $nama;
+            }
+
+            if (!empty($email)) {
+                $user->email = $email;
+            }
+
+            if (!empty($no_telepon)) {
+                $user->no_telepon = $no_telepon;
+            }
+
+            if (!empty($alamat)) {
+                $user->alamat = $alamat;
+            }
+
+            // Simpan hanya jika ada perubahan nilai
+            if ($user->isDirty()) {
+                $user->save();
+                return $this->sendMassage('Data terupdate', 200, true);
+            } else {
+                return $this->sendMassage('Tidak ada perubahan data', 200, true);
+            }
+        } else {
+            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
         }
-            $user->nama = $request->input('nama');
-            $user->email = $request->input('email');
-            $user->no_telepon = $request->input('no_telepon');
-            $user->alamat = $request->input('alamat');
-
-            $user->save();
-
-            return $this->sendMassage('Data terupdate', 200, true);
-
     }
 
     public function profileImage(Request $request){
