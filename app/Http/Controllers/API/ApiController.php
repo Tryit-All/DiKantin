@@ -427,12 +427,16 @@ class ApiController extends Controller
                     File::delete($myFile);
                 }
 
-                $request->file('foto')->move('customer/', $request->file('foto')->getClientOriginalName());
-                $user->foto=$request->file('foto')->getClientOriginalName();
+                $extension = $request->file('foto')->getClientOriginalExtension();
+
+                $newFilename = 'profile_' . time() . '_' . uniqid() . '.' . $extension;
+
+                $request->file('foto')->move('customer/', $newFilename);
+                $user->$newFilename;
 
                 $user->save();
 
-                return $this->sendMassage('Foto Profile terupdate', 200, false);
+                return $this->sendMassage('Foto Profile terupdate', 200, true);
             }
     }
 
