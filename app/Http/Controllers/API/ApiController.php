@@ -414,6 +414,18 @@ class ApiController extends Controller
             }
     }
 
+    public function tampilCustomer(Request $request){
+
+        $token = $request->bearerToken();
+        $customer = Customer::where('token', $token)->first();
+
+        if(!$token){
+            return $this->sendMassage('Tolong masukkan token', 200, false);
+        }
+
+        return $this->sendMassage($customer, 200, true);
+    }
+
     public function sendMassage($text, $kode, $status)
     {
         return response()->json([
