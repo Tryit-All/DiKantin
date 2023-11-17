@@ -23,4 +23,9 @@ class DetailTransaksi extends Model
     {
         return $this->hasOne(Menu::class, 'id_menu', 'kode_menu');
     }
+
+    public static function getTotalMenuByTanggal($tanggal)
+    {
+        return static::where('created_at', $tanggal)->sum('QTY');
+    }
 }

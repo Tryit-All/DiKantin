@@ -24,7 +24,7 @@ class ApiTransaction extends Controller
         $this->middleware(ApiKeyMiddleware::class);
     }
 
-    public function riwayatCustomer($searchAll, $selectedDate, Request $request)
+    public function riwayatCustomer(Request $request)
     {
         //Mencari user dari token yang di dapatkan dari request
         $token = $request->bearerToken();
@@ -32,19 +32,63 @@ class ApiTransaction extends Controller
 
         if (isset($user)) {
             $customer = $user->id_customer;
-            $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
-                ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-                ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
-                ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
-                ->where('customer.id_customer', $customer)
-                ->where('menu.nama', 'LIKE', $searchAll . '%')
-                ->whereDate('transaksi.created_at', $selectedDate)
-                ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                ->orderBy('transaksi.created_at', 'ASC')
-                // ->limit(10)
-                ->get();
+            $searchAll = $request->get('searchAll');
+            $searchDate = $request->get('searchDate');
 
-            return $this->sendMassage($riwayatCutomer, 200, true);
+            // return $searchAll;
+            if ($searchAll == '' && $searchDate == '') {
+                $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+                    ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+                    ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+                    ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
+                    ->where('customer.id_customer', $customer)
+                    ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
+                    ->orderBy('transaksi.created_at', 'ASC')
+                    // ->limit(10)
+                    ->get();
+
+                return $this->sendMassage($riwayatCutomer, 200, true);
+            } elseif ($searchAll == '' && $searchDate != '') {
+                $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+                    ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+                    ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+                    ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
+                    ->where('customer.id_customer', $customer)
+                    ->whereDate('transaksi.created_at', $request->get('searchDate'))
+                    ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
+                    ->orderBy('transaksi.created_at', 'ASC')
+                    // ->limit(10)
+                    ->get();
+
+                return $this->sendMassage($riwayatCutomer, 200, true);
+            } elseif ($searchAll != '' && $searchDate == '') {
+                $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+                    ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+                    ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+                    ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
+                    ->where('customer.id_customer', $customer)
+                    ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
+                    ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
+                    ->orderBy('transaksi.created_at', 'ASC')
+                    // ->limit(10)
+                    ->get();
+
+                return $this->sendMassage($riwayatCutomer, 200, true);
+            } elseif ($searchAll != '' && $searchDate != '') {
+                $riwayatCutomer = Menu::select('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', DB::raw('SUM(detail_transaksi.QTY) as penjualan_hari_ini'), DB::raw('SUM(detail_transaksi.subtotal_bayar) as jumlah_subtotal'), 'transaksi.created_at')
+                    ->join('detail_transaksi', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+                    ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
+                    ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
+                    ->where('customer.id_customer', $customer)
+                    ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
+                    ->whereDate('transaksi.created_at', $request->get('searchDate'))
+                    ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
+                    ->orderBy('transaksi.created_at', 'ASC')
+                    // ->limit(10)
+                    ->get();
+
+                return $this->sendMassage($riwayatCutomer, 200, true);
+            }
         }
         return $this->sendMassage('User Tidak Ditemukan', 200, true);
     }
@@ -138,6 +182,11 @@ class ApiTransaction extends Controller
     public function transaksiCustomer(Request $request)
     {
         $dataDetailOrderan = $request->detail_orderan;
+
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+        $customer = $user->id_customer;
+
         $dataOrderan = $request->orderan;
         $today = Carbon::now();
 
@@ -149,8 +198,8 @@ class ApiTransaction extends Controller
         $Transaksi->status_konfirm = "1";
         $Transaksi->status_pesanan = "1";
         $Transaksi->tanggal = $today;
-        $Transaksi->id_customer = $dataDetailOrderan['id_customer'];
-        $Transaksi->id_kurir = $dataDetailOrderan['id_kurir'];
+        $Transaksi->id_customer = $customer;
+        // $Transaksi->id_kurir = $dataDetailOrderan['id_kurir'];
         $Transaksi->total_bayar = $dataDetailOrderan['total_bayar'];
         $Transaksi->total_harga = $dataDetailOrderan['total_harga'];
         $Transaksi->kembalian = $dataDetailOrderan['kembalian'];

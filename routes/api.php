@@ -25,6 +25,7 @@ Route::prefix('validate')->group(function () {
     Route::post('/login', [ApiController::class, 'loginUser']);
     Route::post('/register', [ApiController::class, 'registerUser']);
     Route::post('/forgotPassword', [ApiAuth::class, 'forgotPassword']);
+    Route::post('/customerAccount', [ApiTransaction::class, 'editCustomer']);
     Route::post('/verifKode', [ApiAuth::class, 'verifKode']);
     Route::post('/confirmPassword', [ApiAuth::class, 'verifPasswordNew']);
     Route::get('/verified/{id}', [ApiController::class, 'verified']);
@@ -49,7 +50,7 @@ Route::prefix('transaction')->group(function () {
     Route::get('/diproses', [ApiTransaction::class, 'pesananDiproses']);
     Route::get('/dikirim', [ApiTransaction::class, 'pesananDikirim']);
     Route::get('/diterima', [ApiTransaction::class, 'pesananDiterima']);
-    Route::get('/riwayatTransaction/{searchAll}/{selectedDate}', [ApiTransaction::class, 'riwayatCustomer']);
+    Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -61,8 +62,13 @@ Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTr
 
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
 Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
+<<<<<<< HEAD
+// Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
+
+=======
 
 Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
 Route::post('/imageProfile', [ApiController::class, 'profileImage']);
 
 Route::get('/profileShow', [ApiController::class, 'tampilCustomer']);
+>>>>>>> 8d97a0dd33a548f59768de213f1df42f32121fe4

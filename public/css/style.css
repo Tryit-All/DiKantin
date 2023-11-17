@@ -1,0 +1,297 @@
+body {
+    background-image: url("/img/bac-login.png");
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+   
+}
+
+
+
+.top-kantin {
+    background: white;
+    border-radius: 20px;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overflow-x: clip;
+    height: 450px;
+    padding: 20px;
+}
+
+.kantin1 {
+    background: rgba(236, 31, 36, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin1 i {
+    color: #ff4a4f;
+}
+
+.kantin2 {
+    background: rgba(228, 234, 23, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin2 i {
+    color: #a3a711;
+}
+
+.kantin3 {
+    background: rgba(132, 216, 149, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin3 i {
+    color: #54be6d;
+}
+
+.kantin4 {
+    background: rgba(107, 177, 215, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin4 i {
+    color: #51aadd;
+}
+
+.kantin5 i {
+    color: #757374;
+}
+
+.kantin5 {
+    background-color: rgba(12, 124, 235, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin6 {
+    background-color: rgba(215, 165, 107, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin7 {
+    background: rgba(107, 177, 215, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.kantin8 {
+    background: rgba(107, 177, 215, 0.2);
+    border-radius: 20px;
+    padding: 8px;
+}
+
+#pendapatan {
+    overflow: auto;
+}
+
+#pendapatan::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+#pendapatan::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #514D4E33;
+}
+
+.dashboard-warna4 {
+    background: white;
+    border-radius: 20px;
+    height: 450px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.dashboard-warna1 {
+    background-image: linear-gradient(to right, #6DC17F, #84D795);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.dashboard-warna2 {
+    background-image: linear-gradient(to right, #D1D44F, #E7EB5D);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.dashboard-warna3 {
+    background-image: linear-gradient(to right, #5A9CBF, #6BB1D6);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.logoo {
+    width: 350px;
+    height: 125px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+}
+
+.my-swal .swal2-popup {
+    width: 400px;
+    height: 285px;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+/* .card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+} */
+.content1 {
+    background-color: transparent;
+    margin-top: 90px;
+}
+
+/* .card{
+    justify-content: center;
+    display: flex;
+    background-color: transparent;
+    border: none;
+} */
+
+.card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-body {
+    /* width: 350px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: transparent !important;
+    margin-top: 30px;
+    /* flex-direction: column; */
+    /* padding: 0 15px 0 15px; */
+
+}
+
+.input-field .in .input {
+    width: 200px;
+    border-radius: 30px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    /* justify-content: center; */
+    align-items: center !important;
+}
+
+.input-field .input {
+    background-color: #f2f2f28c;
+    color: #343435;
+    border-radius: 30px;
+    width: 300px;
+    height: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 18px;
+    border-color: rgba(255, 255, 255, 0.747);
+    border-style: double;
+}
+
+.input::placeholder {
+    font-size: 18px;
+}
+
+.rememb {
+    padding-left: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.warna {
+    color: #494949
+}
+
+.btn-login {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 300px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-login:hover {
+    background-color: #2d39e6;
+}
+
+.forgot {
+    padding-left: 60px;
+}
+
+.forgot:hover {
+    color: #FF0000;
+    text-decoration: underline;
+}
+
+
+.input-bayar {
+    width: 50%;
+    border: none;
+    outline: none;
+}
+
+.no_meja {
+    width: 50% !important;
+}
+
+h5 {
+    text-align: center;
+}
+
+h5 span {
+    display: none;
+    /* menyembunyikan elemen span */
+}
+
+.btn-simpan {
+    background-color: #51AADD !important;
+    border-radius: 10px;
+}
+
+.btn-simpan:hover {
+    background-color: #4d5dda !important;
+}
+
+.btn-clearall {
+    background-color: #FF4A4F;
+    border-radius: 10px;
+}
+
+.btn-clearall:hover {
+    background-color: #c52f34;
+}
+
+.bungkus-menu:hover {
+    background-color: #a71b1b;
+    /* Ganti warna background saat mouse masuk */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    /* Tambahkan shadow */
+    transition: background-color 0.3s ease;
+    /* Berikan efek transisi */
+}
