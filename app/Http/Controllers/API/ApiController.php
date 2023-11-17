@@ -412,34 +412,33 @@ class ApiController extends Controller
     }
 
 
-    public function profileImage(Request $request){
+    public function profileImage(Request $request)
+{
+    $token = $request->bearerToken();
+    $user = Customer::where('token', $token)->first();
 
-        $token = $request->bearerToken();
-        $user = Customer::where('token', $token)->first();
-
-        if(!$token){
-            return $this->sendMassage('Tolong masukkan token', 200, false);
-        }
-
-        if ($request->hasFile('foto')) {
-            $myFile = 'customer/'.$user->foto;
-            if(File::exists($myFile)) {
-                File::delete($myFile);
-            }
-
-            $extension = $request->file('foto')->getClientOriginalExtension();
-
-            $newFilename = 'customer/' . Str::random(30) . '.' . $extension;
-
-            $request->file('foto')->move('customer/', $newFilename);
-
-            $user->foto = $newFilename;
-
-            $user->save();
-
-            return $this->sendMassage('Foto Profile terupdate', 200, false);
-        }
+    if (!$token) {
+        return $this->sendMassage('Tolong masukkan token', 200, false);
     }
+
+    if ($request->hasFile('foto')) {
+        $oldFilePath = public_path($user->foto);
+        if (File::exists($oldFilePath)) {
+            File::delete($oldFilePath);
+        }
+
+        $originalFilename = $request->file('foto')->getClientOriginalName();
+        $extension = $request->file('foto')->getClientOriginalExtension();
+        $newFilename = 'customer' . '/' . Str::random(30) . '.' . $extension;
+        $request->file('foto')->move('customer/', $newFilename);
+
+        $user->foto = $newFilename;
+        $user->save();
+
+        return $this->sendMassage('Foto Profile terupdate', 200, false);
+    }
+}
+
 
 
     public function tampilCustomer(Request $request){
