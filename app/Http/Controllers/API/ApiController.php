@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\DetailTransaksi;
-use App\Models\Menu;
-use App\Models\Transaksi;
 use Http;
+use App\Models\Menu;
 use App\Models\Kurir;
 use App\Mail\VerifMail;
 use App\Models\Customer;
+use App\Models\Transaksi;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\DetailTransaksi;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Middleware\ApiKeyMiddleware;
@@ -450,6 +451,90 @@ class ApiController extends Controller
             }
             // return $this->sendMassage('status konfirm = 3, status pesanan = 3, status pengiriman = terima', 400, true);
         }
+    }
+
+    public function editCustomer(Request $request)
+    {
+        // Mencari user dari token yang didapatkan dari request
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if ($user) {
+            // Periksa apakah ada perubahan nilai sebelum menyimpan
+            $nama = $request->input('nama');
+            $email = $request->input('email');
+            $no_telepon = $request->input('no_telepon');
+            $alamat = $request->input('alamat');
+
+            if (!empty($nama)) {
+                $user->nama = $nama;
+            }
+
+            if (!empty($email)) {
+                $user->email = $email;
+            }
+
+            if (!empty($no_telepon)) {
+                $user->no_telepon = $no_telepon;
+            }
+
+            if (!empty($alamat)) {
+                $user->alamat = $alamat;
+            }
+
+            // Simpan hanya jika ada perubahan nilai
+            if ($user->isDirty()) {
+                $user->save();
+                return $this->sendMassage('Data terupdate', 200, true);
+            } else {
+                return $this->sendMassage('Tidak ada perubahan data', 200, true);
+            }
+        } else {
+            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
+        }
+    }
+
+
+    public function profileImage(Request $request)
+    {
+        $token = $request->bearerToken();
+        $user = Customer::where('token', $token)->first();
+
+        if (!$token) {
+            return $this->sendMassage('Tolong masukkan token', 200, false);
+        }
+
+        if ($request->hasFile('foto')) {
+            $oldFilePath = public_path($user->foto);
+            if (File::exists($oldFilePath)) {
+                File::delete($oldFilePath);
+            }
+
+            $originalFilename = $request->file('foto')->getClientOriginalName();
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            $newFilename = 'customer' . '/' . Str::random(30) . '.' . $extension;
+            $request->file('foto')->move('customer/', $newFilename);
+
+            $user->foto = $newFilename;
+            $user->save();
+
+            return $this->sendMassage('Foto Profile terupdate', 200, true);
+        }
+    }
+
+
+
+    public function tampilCustomer(Request $request)
+    {
+
+        $token = $request->bearerToken();
+        $customer = Customer::where('token', $token)->first();
+
+        if (!$token) {
+            return $this->sendMassage('Tolong masukkan token', 200, false);
+        }
+
+        return $this->sendMassage($customer, 200, true);
     }
 
     public function sendMassage($text, $kode, $status)

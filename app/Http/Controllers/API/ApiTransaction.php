@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\API;
 
 
-use App\Http\Controllers\Controller;
-use App\Http\Middleware\ApiKeyMiddleware;
-use App\Models\Customer;
-use App\Models\DetailTransaksi;
-use App\Models\Kantin;
 use App\Models\Menu;
+use App\Models\Kurir;
+use App\Models\Kantin;
+use App\Models\Customer;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\DetailTransaksi;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
-use App\Models\Kurir;
+use App\Http\Middleware\ApiKeyMiddleware;
 
 class ApiTransaction extends Controller
 {
@@ -175,26 +176,6 @@ class ApiTransaction extends Controller
                 $kurir->save();
                 return $this->sendMassage($kurir->status_pengiriman, 200, true);
             }
-        }
-    }
-
-    public function editCustomer(Request $request)
-    {
-        //Mencari user dari token yang di dapatkan dari request
-        $token = $request->bearerToken();
-        $user = Customer::where('token', $token)->first();
-
-        if ($user) {
-            $user->nama = $request->input('nama');
-            $user->email = $request->input('email');
-            $user->no_telepon = $request->input('no_telepon');
-            $user->alamat = $request->input('alamat');
-
-            $user->save();
-
-            return $this->sendMassage('Data terupdate', 200, true);
-        } else {
-            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
         }
     }
 
