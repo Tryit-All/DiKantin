@@ -435,7 +435,7 @@ class ApiController extends Controller
         $user->foto = $newFilename;
         $user->save();
 
-        return $this->sendMassage('Foto Profile terupdate', 200, false);
+        return $this->sendMassage('Foto Profile terupdate', 200, true);
     }
 }
 
