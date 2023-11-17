@@ -9,6 +9,7 @@ use Http;
 use App\Models\Kurir;
 use App\Mail\VerifMail;
 use App\Models\Customer;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -274,6 +275,14 @@ class ApiController extends Controller
             // return $this->sendMassage('status konfirm = 1, status pesanan = 2, status pengiriman = proses', 200, true);
         } elseif ($kode == '2') {
             foreach ($listIdkantin as $key => $value) {
+
+                $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
+
+                $listKurir = [];
+                $listKurirPakaiDahulu = [];
+                $listKurirPakai = [];
+                $kurirTerpilih = [];
+
                 if ($value->id_kantin == $kantin) {
                     $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
                         ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
@@ -291,11 +300,11 @@ class ApiController extends Controller
                             'status_konfirm' => $konfirm_status,
                         ]);
                     } else {
-                        $konfirm_status = null;
-                        DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
-                            'status_konfirm' => $konfirm_status,
-                        ]);
-                        return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
+                        // $konfirm_status = null;
+                        // DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
+                        //     'status_konfirm' => $konfirm_status,
+                        // ]);
+                        // return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
                     }
                 }
             }
@@ -322,8 +331,80 @@ class ApiController extends Controller
 
             array_push($validatePesanan, $temp);
 
+            foreach ($selectKurir as $key => $value) {
+                $kurirFree = Kurir::select('kurir.id_kurir')->join('transaksi', 'kurir.id_kurir', '=', 'transaksi.id_kurir')->where('transaksi.id_kurir', $value['id_kurir'])->get();
+
+                if ($kurirFree->isEmpty()) {
+                    $status = 'free';
+                } else {
+                    $kurirAfterTransaction = Transaksi::with('detail_transaksi.Menu')->where('id_kurir', $value['id_kurir'])->get();
+
+                    if (sizeof($kurirAfterTransaction) != 0) {
+
+                        foreach ($kurirAfterTransaction as $key => $value) {
+                            $status_konfirm = $value['status_konfirm'];
+                            $status_pesanan = $value['status_pesanan'];
+                            $status_pengiriman = $value['status_pengiriman'];
+
+                            $status = null;
+
+                            if ($status_konfirm == '3' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
+                                $status = 'sudah mendapatkan transaksi';
+                            } else {
+                                $status = 'busy';
+                            }
+
+                        }
+
+                    }
+                }
+
+                $temp = [
+                    'id_kurir' => $value['id_kurir'],
+                    'status' => $status,
+                ];
+
+                $listKurir[] = $temp;
+            }
+
+
+            foreach ($listKurir as $key => $value) {
+                if ($value['status'] == 'free') {
+                    $temp = [
+                        'id_kurir' => $value['id_kurir'],
+                        'status' => $value['status'],
+                    ];
+
+                    $listKurirPakaiDahulu[] = $temp;
+                }
+            }
+
+            foreach ($listKurir as $key => $value) {
+                if ($value['status'] == 'sudah mendapatkan transaksi') {
+
+                    $temp = [
+                        'id_kurir' => $value['id_kurir'],
+                        'status' => $value['status'],
+                    ];
+
+                    $listKurirPakai[] = $temp;
+                }
+            }
+
+
+            if (sizeof($listKurirPakai) != 0 || sizeof($listKurirPakaiDahulu) != 0) {
+                if (sizeof($listKurirPakaiDahulu) != 0) {
+                    $kurirTerpilih = Arr::get($listKurirPakaiDahulu, array_rand($listKurirPakaiDahulu, 1));
+                } else {
+                    $kurirTerpilih = Arr::get($listKurirPakai, array_rand($listKurirPakai, 1));
+                }
+            } else {
+                return $this->sendMassage('Tidak ada Kurir', 400, false);
+            }
+
             if ($valid2 == true) {
                 Transaksi::where('kode_tr', $kodeTransaksi)->update([
+                    'id_kurir' => $kurirTerpilih['id_kurir'],
                     'status_pesanan' => '3',
                 ]);
             }
@@ -333,10 +414,12 @@ class ApiController extends Controller
         } elseif ($kode == '3') {
             if ($kode_tr == $kodeTransaksi) {
                 if ($idKurir == $kurir && $statusKonfirm == '1' && $statusPesanan == '3') {
+
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
                         'status_konfirm' => '2',
                         'status_pengiriman' => 'kirim'
                     ]);
+
                     return $this->sendMassage('Pesanan dikirim', 200, true);
                 }
                 return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);

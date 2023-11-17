@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->enum('status_konfirm', ['1', '2', '3']);
             $table->enum('status_pesanan', ['1', '2', '3']);
             $table->dateTime('tanggal');
-            $table->string('id_customer', 9);
+            $table->string('id_customer', 9)->nullable(true);
             $table->string('id_kurir', 9);
             $table->integer('total_bayar');
             $table->integer('total_harga');

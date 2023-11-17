@@ -15,12 +15,12 @@ return new class extends Migration {
             $table->string('username', 100);
             $table->string('email', 100);
             $table->string('password', 100);
-            $table->integer('id_kantin');
+            $table->integer('id_kantin')->nullable();
             $table->integer('id_role');
             $table->string('foto', 255);
             $table->foreign('id_kantin')->references('id_kantin')->on('kantin')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('id_role')->references('id_role')->on('role')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamps();
         });
     }

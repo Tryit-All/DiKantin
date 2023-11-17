@@ -29,4 +29,14 @@ class Transaksi extends Model
     {
         return $this->belongsTo(Kurir::class, 'id_kurir', 'id_kurir');
     }
+
+    public static function getTotalPendapatanByTanggal($tanggal)
+    {
+        return static::where('created_at', $tanggal)
+            ->sum('total_harga');
+    }
+    public static function getTotalTransaksiByTanggal($tanggal)
+    {
+        return static::whereDate('created_at', $tanggal)->count();
+    }
 }
