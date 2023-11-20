@@ -62,13 +62,11 @@ Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTr
 
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
 Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
-<<<<<<< HEAD
-// Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
 
-=======
+// Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
 
 Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
 Route::post('/imageProfile', [ApiController::class, 'profileImage']);
 
 Route::get('/profileShow', [ApiController::class, 'tampilCustomer']);
->>>>>>> 8d97a0dd33a548f59768de213f1df42f32121fe4
+
