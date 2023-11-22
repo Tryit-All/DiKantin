@@ -139,7 +139,7 @@ class ApiController extends Controller
         }
     }
 
-    //Controller Kurir
+    // Controller Kurir
     public function loginKurir(Request $request)
     {
         $validadte = Validator::make($request->all(), [
@@ -171,6 +171,32 @@ class ApiController extends Controller
         }
     }
 
+    // Controller Kantin
+    public function login(Request $request)
+    {
+        // return 'anu';
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            if ($user->id_kantin !== null) {
+                return response()->json(['user' => $user], 200);
+            } else {
+                return response()->json(['user' => $user], 200);
+                // Auth::logout();
+                // return response()->json(['error' => 'You are not authorized to access this resource'], 401);
+            }
+        } else {
+            return response()->json(['error' => 'Invalid email or password'], 401);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return response()->json(['message' => 'Logout successful'], 200);
+    }
+
     public function editProfile(Request $request)
     {
         $token = $request->bearerToken();
@@ -193,6 +219,7 @@ class ApiController extends Controller
             }
         }
     }
+    // End Controller Kurir
 
     public function konfirmasiPesanan(Request $request)
     {
@@ -200,10 +227,11 @@ class ApiController extends Controller
         $kode = $request->kode;
         $kantin = $request->kantin;
         $kurir = $request->kurir;
+        $customer = $request->customer;
         $kodeTransaksi = $request->kode_tr;
         $buktiPengiriman = $request->bukti_pengiriman;
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu.Kantin')->where('kode_tr', $request->kode_tr)->first();
+        $transaksi = Transaksi::with('detail_transaksi.Menu.Kantin')->where('kode_tr', $kodeTransaksi)->first();
         $listKodeMenu = collect($transaksi['detail_transaksi'])->pluck('kode_menu')->toArray();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -219,7 +247,16 @@ class ApiController extends Controller
         $valid = false;
         $valid2 = false;
 
-        if ($kode == '1') {
+        if ($kode == '0') {
+
+            if (isset($customer)) {
+                Transaksi::where('id_customer', $customer)->where('kode_tr', $kodeTransaksi)->delete();
+                return $this->sendMassage("Kode transaksi $kodeTransaksi telah berhasil di hapus", 200, true);
+            }
+            return $this->sendMassage("Id customer tidak valid", 400, false);
+
+        } elseif ($kode == '1') {
+
             foreach ($listIdkantin as $key => $value) {
                 if ($value->id_kantin == $kantin) {
                     $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
@@ -232,7 +269,7 @@ class ApiController extends Controller
                     $kodeMenu = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
 
-                    if ($status == null) {
+                    if ($status == "menunggu") {
                         $konfirm_status = "memasak";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
@@ -275,8 +312,8 @@ class ApiController extends Controller
             return $validatePesanan;
             // return $this->sendMassage('status konfirm = 1, status pesanan = 2, status pengiriman = proses', 200, true);
         } elseif ($kode == '2') {
-            foreach ($listIdkantin as $key => $value) {
 
+            foreach ($listIdkantin as $key => $value) {
                 $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
 
                 $listKurir = [];
@@ -301,11 +338,11 @@ class ApiController extends Controller
                             'status_konfirm' => $konfirm_status,
                         ]);
                     } else {
-                        // $konfirm_status = null;
+                        // $konfirm_status = "menunggu";
                         // DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                         //     'status_konfirm' => $konfirm_status,
                         // ]);
-                        // return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
+                        return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
                     }
                 }
             }
@@ -522,8 +559,6 @@ class ApiController extends Controller
         }
     }
 
-
-
     public function tampilCustomer(Request $request)
     {
 
@@ -535,6 +570,45 @@ class ApiController extends Controller
         }
 
         return $this->sendMassage($customer, 200, true);
+    }
+
+    // List orderan pada setiap kantin 
+    public function listOrdersKantin(Request $request)
+    {
+        if ($request->has('id_kantin')) {
+            // Ambil nilai ID kantin
+            $id_kantin = $request->input('id_kantin');
+            $dataList = Transaksi::select(
+                'menu.foto as foto',
+                'detail_transaksi.kode_tr as id_detail',
+                'transaksi.created_at as tanggal',
+                'transaksi.kode_tr',
+                'customer.nama as pembeli',
+                'customer.no_telepon as no_telepon_pembeli',
+                'transaksi.model_pembayaran',
+                'transaksi.no_meja',
+                'kantin.id_kantin as kantin',
+                'menu.nama as pesanan',
+                'menu.harga as harga_satuan',
+                'detail_transaksi.QTY as jumlah',
+                'menu.diskon as diskon',
+                'transaksi.status_pengiriman as status',
+                'detail_transaksi.status_konfirm as status_detail'
+            )
+                ->leftJoin('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
+                ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+                ->leftJoin('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
+                ->leftJoin('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
+                ->where('kantin.id_kantin', $id_kantin)
+                ->where('transaksi.status_pengiriman', 'proses')
+                ->get();
+
+            // Konversi data menjadi format JSON dan kembalikan
+            return response()->json($dataList);
+        } else {
+            // Jika parameter ID kantin tidak diberikan, kirimkan pesan kesalahan
+            return response()->json(['error' => 'Parameter ID kantin tidak diberikan']);
+        }
     }
 
     public function sendMassage($text, $kode, $status)

@@ -11,13 +11,16 @@
                             $no = 1;
                         @endphp
                         <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Nama Menu</th>
-                        <th>No Meja</th>
-                        <th>Jumlah</th>
+                        <th>Kode Transaksi</th>
+                        <th>Tanggal Order</th>
+                        <th>Tanggal Diterima</th>
+                        <th>Customer</th>
+                        <th>kurir</th>
+                        <th>Detail</th>
+                        <th>Pembayaran</th>
                         <th>Harga</th>
-                        <th>Diskon (%)</th>
                         <th>Status</th>
+                        <th>Aksi</th>
 
                     </tr>
                 </thead>
@@ -25,18 +28,56 @@
                     @foreach ($data as $d)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $d->tanggal }}</td>
-                            <td>{{ $d->pesanan }}</td>
-                            <td>{{ $d->no_meja }}</td>
-                            <td>{{ $d->jumlah }}</td>
-                            <td>Rp {{ number_format($d->harga_satuan) }}</td>
-                            <td>{{ $d->diskon }}</td>
-                            <td>{{ $d->status }}</td>
+                            <td>{{ $d->Kode_Tr }}</td>
+                            <td>{{ $d->Tanggal_Order }}</td>
+                            <td>{{ $d->Tanggal_Selesai }}</td>
+                            <td>{{ $d->Customer }}</td>
+                            <td>{{ $d->Kurir }}</td>
+                            <td>{{ $d->Detail }}</td>
+                            <td>{{ $d->Pembayaran }}</td>
+                            <td>Rp {{ number_format($d->Total) }}</td>
+                            <td>{{ $d->Status }}</td>
+                            <td>
+                                @if ($d->Kode_Tr == $d->Bukti && $d->SK == '2' && $d->SP == '3')
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="/success/{{ $d->Kode_Tr }}" method="POST">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn btn-success btn-sm" type="submit" id="konfirmasi-button"
+                                                onclick="confirm('Apakah anda ingin menyelesaikan Transaksi ? ')">Konfirmasi</button>
+                                        </form>
+                                    </div>
+                                @elseif ($d->Bukti == null && $d->SK == '2' && $d->SP == '3')
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="" method="">
+                                            @csrf
+                                            <button class="btn btn-outline-success btn-sm" id="">Validasi
+                                                Kurir</button>
+                                        </form>
+                                    </div>
+                                @elseif ($d->Bukti == 'Done' && $d->SK == '3' && $d->SP == '3')
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="" method="">
+                                            @csrf
+                                            <button class="btn btn-light btn-sm" id="">Transaksi Selesai</button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="/trouble/{{ $d->Kode_Tr }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-secondary btn-sm" type="submit" id="konfirmasi-button"
+                                                onclick="confirm('Apakah anda ingin mengulang validasi transaksi ? ')">Tidak
+                                                Valid</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
 
                         </tr>
                     @endforeach
                     <script>
-                        const deleteButtons = document.querySelectorAll('.delete-button');
+                        const deleteButtons = document.querySelectorAll('.konfirmasi-button');
 
                         deleteButtons.forEach(button => {
                             button.addEventListener('click', function(event) {
