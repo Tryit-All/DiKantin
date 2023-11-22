@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('token')->nullable(true);
             $table->string('token_fcm')->nullable(true);
             $table->string('telepon', 13);
-            $table->string('foto', 255)->nullable();
+            $table->string('foto', 255)->nullable(true);
             $table->timestamps();
         });
     }

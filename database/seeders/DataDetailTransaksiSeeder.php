@@ -46,15 +46,6 @@ class DataDetailTransaksiSeeder extends Seeder
                 "created_at" => "2023-11-09 05:17:55",
                 "updated_at" => "2023-11-09 12:46:28",
             ),
-
-            array(
-                "kode_tr" => "TRDKN8882",
-                "QTY" => "2",
-                "subtotal_bayar" => "20000",
-                "kode_menu" => "20",
-                "created_at" => "2023-11-10 05:17:55",
-                "updated_at" => "2023-11-10 12:46:28",
-            ),
             array(
                 "kode_tr" => "TRDKN8882",
                 "QTY" => "1",

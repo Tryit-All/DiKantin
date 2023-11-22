@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 // Route Login, Register, Forgot
 Route::prefix('validate')->group(function () {
-    //Customer
+    // Customer
     Route::post('/login', [ApiController::class, 'loginUser']);
     Route::post('/register', [ApiController::class, 'registerUser']);
     Route::post('/forgotPassword', [ApiAuth::class, 'forgotPassword']);
@@ -30,9 +30,13 @@ Route::prefix('validate')->group(function () {
     Route::post('/confirmPassword', [ApiAuth::class, 'verifPasswordNew']);
     Route::get('/verified/{id}', [ApiController::class, 'verified']);
 
-    //Kurir
+    // Kurir
     Route::post('/loginKurir', [ApiController::class, 'loginKurir']);
     Route::post('/editProfile', [ApiController::class, 'editProfile']);
+
+    // Kantin
+    Route::post('/loginKantin', [ApiController::class, 'login']);
+    Route::post('/logoutKantin', [ApiController::class, 'logout']);
 });
 
 // Route Product
@@ -51,6 +55,8 @@ Route::prefix('transaction')->group(function () {
     Route::get('/dikirim', [ApiTransaction::class, 'pesananDikirim']);
     Route::get('/diterima', [ApiTransaction::class, 'pesananDiterima']);
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
+    Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
+    // Route::post('/updateStatus', [ApiController::class, 'updateStatusPenjualan']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

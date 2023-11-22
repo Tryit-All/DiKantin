@@ -33,8 +33,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/allOrder', [orderController::class, 'get_all_order']);
     Route::delete('/allOrder/{id}', [orderController::class, 'delete_order']);
-    Route::get('/success', [SuccesController::class, 'index']);
-    Route::delete('/success/{id}', [SuccesController::class, 'delete_success']);
+    Route::get('/success', [SuccesController::class, 'get_order_solved']);
+    Route::post('/success/{kode_tr}', [SuccesController::class, 'validate_success']);
+    Route::post('/trouble/{kode_tr}', [SuccesController::class, 'trouble_transaction']);
 
     Route::get('/kasir/{id}', [KasirController::class, 'struk']);
     Route::get('/kasir', [KasirController::class, 'index']);
@@ -43,6 +44,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/kasir/hapussemua/{id}', [KasirController::class, 'hapussemua']);
 
 });
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

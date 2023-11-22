@@ -24,6 +24,7 @@ class ApiTransaction extends Controller
         $this->middleware(ApiKeyMiddleware::class);
     }
 
+    // List Riwayat Pesanan Pada Setiap Customer
     public function riwayatCustomer(Request $request)
     {
         //Mencari user dari token yang di dapatkan dari request
@@ -159,7 +160,6 @@ class ApiTransaction extends Controller
 
     }
 
-
     public function statusKurir($kode_tr, $status_konfirm)
     {
         $kurir = Transaksi::findOrFail($kode_tr);
@@ -179,6 +179,7 @@ class ApiTransaction extends Controller
         }
     }
 
+    // List Pesanan Pada Setiap Customer
     public function transaksiCustomer(Request $request)
     {
         $dataDetailOrderan = $request->detail_orderan;

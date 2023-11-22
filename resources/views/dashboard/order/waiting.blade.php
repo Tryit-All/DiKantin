@@ -11,6 +11,7 @@
                             $no = 1;
                         @endphp
                         <th>No</th>
+                        <th>Kode Transaksi</th>
                         <th>Tanggal</th>
                         <th>Nama Menu</th>
                         <th>No Meja</th>
@@ -25,6 +26,7 @@
                     @foreach ($data as $d)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $d->nomer_penjualan }}</td>
                             <td>{{ $d->tanggal }}</td>
                             <td>{{ $d->pesanan }}</td>
                             <td>{{ $d->no_meja }}</td>
