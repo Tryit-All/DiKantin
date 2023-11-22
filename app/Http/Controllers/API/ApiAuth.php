@@ -20,7 +20,6 @@ class ApiAuth extends Controller
     public function __construct()
     {
         $this->verifForgotPassword = new VerifForgotPassword();
-        $this->middleware(ApiKeyMiddleware::class);
     }
 
     // Controller ForgotPassrword
