@@ -254,6 +254,12 @@ class ApiController extends Controller
 
         } elseif ($kode == '1') {
 
+            $listKodeMenu = collect($transaksi['detail_transaksi'])->pluck('kode_menu')->toArray();
+
+            // return $this->sendMassage($transaksi, 200, true);
+            $listIdkantin = Menu::select('id_kantin')->whereIn('id_menu', $listKodeMenu)->get();
+
+            // return $this->sendMassage($listIdkantin, 200, true);
             foreach ($listIdkantin as $key => $value) {
                 if ($value->id_kantin == $kantin) {
                     $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
@@ -310,12 +316,6 @@ class ApiController extends Controller
             // return $this->sendMassage('status konfirm = 1, status pesanan = 2, status pengiriman = proses', 200, true);
         } elseif ($kode == '2') {
 
-            $listKodeMenu = collect($transaksi['detail_transaksi'])->pluck('kode_menu')->toArray();
-
-            // return $this->sendMassage($transaksi, 200, true);
-            $listIdkantin = Menu::select('id_kantin')->whereIn('id_menu', $listKodeMenu)->get();
-
-            // return $this->sendMassage($listIdkantin, 200, true);
             foreach ($listIdkantin as $key => $value) {
                 $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
 
