@@ -366,36 +366,17 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'terima')
+        $transaksi = Transaksi::select('transaksi.kode_tr', 'transaksi.created_at', DB::raw('SUM(detail_transaksi.QTY) as QTY'), 'transaksi.total_harga')
+            ->join('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->where('transaksi.id_kurir', '=', $user->id_kurir)
+            ->where('transaksi.status_pengiriman', '=', 'proses')
+            ->where('transaksi.status_konfirm', '=', '1')
+            ->where('transaksi.status_pesanan', '=', '3')
+            ->groupBy('transaksi.kode_tr')
             ->get();
 
-        if (sizeof($transaksi) != 0) {
-
-            $result = [];
-
-            foreach ($transaksi as $key => $value) {
-                $status_konfirm = $value['status_konfirm'];
-                $status_pesanan = $value['status_pesanan'];
-                $status_pengiriman = $value['status_pengiriman'];
-
-                $status = null;
-
-                if ($status_konfirm == '2' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
-                    $status = 'Menunggu';
-                } else if ($status_konfirm == '3' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
-                    $status = 'Selesai';
-                }
-
-                $temp = [
-                    'status' => $status,
-                    'transaksi' => $value,
-                ];
-
-                $result[] = $temp;
-
-            }
-
-            return $this->sendMassage($result, 200, true);
+        if (isset($transaksi)) {
+            return $this->sendMassage($transaksi, 200, true);
         } else {
             return $this->sendMassage('Tidak ada Data', 400, false);
         }
@@ -404,13 +385,16 @@ class ApiTransaction extends Controller
     public function pesananKonfirmasi(Request $request)
     {
         $token = $request->bearerToken();
-        $user = Customer::where('token', $token)->first();
+        $user = Kurir::where('token', $token)->first();
 
         if (!$user) {
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'terima')
+        $transaksi = Transaksi::select('transaksi.kode_tr', 'transaksi.created_at', DB::raw('SUM(detail_transaksi.QTY) as QTY'), 'transaksi.total_harga', 'transaksi.status_pengiriman', 'transaksi.status_konfirm', 'transaksi.status_pesanan')
+            ->join('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->where('transaksi.id_kurir', '=', $user->id_kurir)
+            ->groupBy('transaksi.kode_tr')
             ->get();
 
         if (sizeof($transaksi) != 0) {
@@ -424,15 +408,17 @@ class ApiTransaction extends Controller
 
                 $status = null;
 
-                if ($status_konfirm == '2' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
+                if ($status_konfirm == '2' && $status_pesanan == '3' && $status_pengiriman == 'kirim') {
                     $status = 'Menunggu';
+                } else if ($status_konfirm == '2' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
+                    $status = 'Menunggu 2';
                 } else if ($status_konfirm == '3' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
                     $status = 'Selesai';
                 }
 
                 $temp = [
-                    'status' => $status,
                     'transaksi' => $value,
+                    'status' => $status
                 ];
 
                 $result[] = $temp;

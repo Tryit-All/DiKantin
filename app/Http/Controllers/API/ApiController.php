@@ -233,14 +233,13 @@ class ApiController extends Controller
 
         $transaksi = Transaksi::with('detail_transaksi.Menu.Kantin')->where('kode_tr', $kodeTransaksi)->first();
 
-        $kode_tr = $transaksi->kode_tr;
-        $statusPesanan = $transaksi->status_pesanan;
-        $statusKonfirm = $transaksi->status_konfirm;
-
         $valid = false;
         $valid2 = false;
 
         if ($kode == '0') {
+
+            $statusPesanan = $transaksi->status_pesanan;
+            $statusKonfirm = $transaksi->status_konfirm;
 
             if ($statusKonfirm != '2' && $statusKonfirm != '3' && $statusPesanan != '2' && $statusPesanan != '3') {
                 if (isset($customer)) {
@@ -458,6 +457,11 @@ class ApiController extends Controller
             return $validatePesanan;
             // return $this->sendMassage('status konfirm = 1, status pesanan = 3, status pengiriman = proses', 400, true);
         } elseif ($kode == '3') {
+
+            $kode_tr = $transaksi->kode_tr;
+            $statusPesanan = $transaksi->status_pesanan;
+            $statusKonfirm = $transaksi->status_konfirm;
+
             $idKurir = $transaksi->id_kurir;
 
             if ($kode_tr == $kodeTransaksi) {
@@ -474,6 +478,11 @@ class ApiController extends Controller
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = kirim', 400, true);
         } elseif ($kode == '4') {
+
+            $kode_tr = $transaksi->kode_tr;
+            $statusPesanan = $transaksi->status_pesanan;
+            $statusKonfirm = $transaksi->status_konfirm;
+
             $idKurir = $transaksi->id_kurir;
 
             if ($kode_tr == $kodeTransaksi) {
@@ -489,6 +498,11 @@ class ApiController extends Controller
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = terima', 400, true);
         } elseif ($kode == '5') {
+
+            $kode_tr = $transaksi->kode_tr;
+            $statusPesanan = $transaksi->status_pesanan;
+            $statusKonfirm = $transaksi->status_konfirm;
+
             if ($kode_tr == $kodeTransaksi) {
                 if ($kode_tr == $buktiPengiriman && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
