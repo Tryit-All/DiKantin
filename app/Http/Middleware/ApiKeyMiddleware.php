@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Customer;
+use App\Models\Kurir;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +22,13 @@ class ApiKeyMiddleware
 
         $token = $request->bearerToken();
 
-        $user = Customer::where('token', $token)->first();
+        $customer = Customer::where('token', $token)->first();
 
-        if (isset($user)) {
+        $kurir = Kurir::where('token', $token)->first();
+
+        if (isset($customer)) {
+            return $next($request);
+        } elseif (isset($kurir)) {
             return $next($request);
         } else {
             return response()->json(
