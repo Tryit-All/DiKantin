@@ -219,7 +219,7 @@ class ApiController extends Controller
             }
         }
     }
-    // End Controller Kurir
+    // End Controller Kantin
 
     public function konfirmasiPesanan(Request $request)
     {
@@ -249,11 +249,14 @@ class ApiController extends Controller
 
         if ($kode == '0') {
 
-            if (isset($customer)) {
-                Transaksi::where('id_customer', $customer)->where('kode_tr', $kodeTransaksi)->delete();
-                return $this->sendMassage("Kode transaksi $kodeTransaksi telah berhasil di hapus", 200, true);
+            if ($statusKonfirm != '2' && $statusKonfirm != '3' && $statusPesanan != '2' && $statusPesanan != '3') {
+                if (isset($customer)) {
+                    Transaksi::where('id_customer', $customer)->where('kode_tr', $kodeTransaksi)->delete();
+                    return $this->sendMassage("Kode transaksi $kodeTransaksi telah berhasil di hapus", 200, true);
+                }
+                return $this->sendMassage("Id customer tidak valid", 400, false);
             }
-            return $this->sendMassage("Id customer tidak valid", 400, false);
+            return $this->sendMassage('error validasi', 400, false);
 
         } elseif ($kode == '1') {
 

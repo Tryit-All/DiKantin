@@ -56,7 +56,6 @@ Route::prefix('transaction')->group(function () {
     Route::get('/diterima', [ApiTransaction::class, 'pesananDiterima']);
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
     Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
-    // Route::post('/updateStatus', [ApiController::class, 'updateStatusPenjualan']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
