@@ -10,11 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('role_has_model', function (Blueprint $table) {
-            $table->integer('id_roles');
+        Schema::create('model_has_roles', function (Blueprint $table) {
+            $table->integer('role_id');
             $table->string('model_type', 100);
             $table->integer('model_id');
-            $table->foreign('id_roles')->references('id_detail_roles')->on('detail_role')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

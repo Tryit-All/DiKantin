@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\ApiAuth;
 use App\Http\Controllers\API\ApiController;
+use App\Http\Controllers\API\ApiDikantinOld;
 use App\Http\Controllers\API\ApiMenuController;
 
 use App\Http\Controllers\API\ApiTransaction;
@@ -29,6 +30,9 @@ Route::prefix('validate')->group(function () {
     Route::post('/verifKode', [ApiAuth::class, 'verifKode']);
     Route::post('/confirmPassword', [ApiAuth::class, 'verifPasswordNew']);
     Route::get('/verified/{id}', [ApiController::class, 'verified']);
+    Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
+    Route::post('/imageProfile', [ApiController::class, 'profileImage']);
+    Route::get('/profileShow', [ApiController::class, 'tampilCustomer']);
 
     // Kurir
     Route::post('/loginKurir', [ApiController::class, 'loginKurir']);
@@ -37,32 +41,69 @@ Route::prefix('validate')->group(function () {
     // Kantin
     Route::post('/loginKantin', [ApiController::class, 'login']);
     Route::post('/logoutKantin', [ApiController::class, 'logout']);
+    Route::post('/updateprofile', [ApiController::class, 'updateprofile']);
+    Route::post('/userprofile', [ApiController::class, 'ubahprofile']);
 });
 
 // Route Product
 Route::prefix('menu')->group(function () {
+    // List Category of Product 
     Route::get('/productBestToday/{searchAll?}', [ApiMenuController::class, 'productBestToday'])->where('searchAll', '.*');
     Route::get('/productWithDiscount/{searchAll?}', [ApiMenuController::class, 'productWithDiscount'])->where('searchAll', '.*');
     Route::get('/productAll/{searchAll?}', [ApiMenuController::class, 'product'])->where('searchAll', '.*');
     Route::get('/food/{searchAll?}', [ApiMenuController::class, 'product_food'])->where('searchAll', '.*');
     Route::get('/drink/{searchAll?}', [ApiMenuController::class, 'product_drink'])->where('searchAll', '.*');
+
+    // Menu Kantin 
+    Route::post('/apimenu', [ApiMenuController::class, 'apimenu']);
 });
 
 Route::prefix('transaction')->group(function () {
     Route::post('/', [ApiTransaction::class, 'transaksiCustomer']);
+
+    // Button Request Pesanan 
     Route::post('/konfirmasiPesanan', [ApiController::class, 'konfirmasiPesanan']);
+
+    // List Pesanan 
     Route::get('/diproses', [ApiTransaction::class, 'pesananDiproses']);
     Route::get('/dikirim', [ApiTransaction::class, 'pesananDikirim']);
     Route::get('/diterima', [ApiTransaction::class, 'pesananDiterima']);
     Route::get('/untukDikirim', [ApiTransaction::class, 'pesananUntukDikirim']);
     Route::get('/konfirmasi', [ApiTransaction::class, 'pesananKonfirmasi']);
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
+
+    // list Orders Kantin 
     Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
 });
+
+// List Riwayat Kantin
+Route::post('/api-riwayat', [ApiDikantinOld::class, 'api_riwayat']);
+
+Route::post('/apisucces-date', [ApiDikantinOld::class, 'apisucces_date']);
+Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
+
+// Isi Dashboard Kantin
+Route::post('/hargabulanan', [ApiDikantinOld::class, 'api_jumlah_penjualan_bulan_ini']);
+Route::post('/hargaharian', [ApiDikantinOld::class, 'api_jumlah_penjualan_hari_ini']);
+Route::post('/statistik', [ApiDikantinOld::class, 'Statistik']);
+Route::post('/rentangpendapatan', [ApiDikantinOld::class, 'rentangPendapatan']);
+Route::post('/menuTerlaris', [ApiDikantinOld::class, 'menuTerlaris']);
+
+// Request Kantin
+Route::post('/updatestatus', [ApiDikantinOld::class, 'updateStatusPenjualan']);
+Route::post('/updatehabis', [ApiDikantinOld::class, 'updateHabis']);
+Route::get('/update', [ApiDikantinOld::class, 'barangada']);
+Route::get('/baranghabis', [ApiDikantinOld::class, 'baranghabis']);
+Route::post('/updateada', [ApiDikantinOld::class, 'updateAda']);
+Route::get('/ubahHarga', [ApiDikantinOld::class, 'ubahHarga']);
+Route::get('/updateselesai', [ApiDikantinOld::class, 'orderselesai']);
+Route::get('/updatemenu', [ApiDikantinOld::class, 'menuada']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
 
 Route::get('/transaction/{id_customer}', [ApiTransaction::class, 'tampilTransaksi']);
 Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTransaction::class, 'tampilStatus']);
@@ -70,10 +111,6 @@ Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTr
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
 Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
 
+
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
-
-Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
-Route::post('/imageProfile', [ApiController::class, 'profileImage']);
-
-Route::get('/profileShow', [ApiController::class, 'tampilCustomer']);
 

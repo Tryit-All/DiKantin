@@ -11,7 +11,7 @@ class SuccesController extends Controller
 {
     function __construct()
     {
-        // $this->middleware('permission:successorder-list', ['only' => ['index']]);
+        $this->middleware('permission:successorder-list', ['only' => ['index']]);
     }
 
     public function get_order_solved()

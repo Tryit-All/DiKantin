@@ -1,10 +1,17 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\orderController;
+use App\Http\Controllers\OrderDetailTransaksiController;
+use App\Http\Controllers\OrderTransaksiController;
+use App\Http\Controllers\RekapitulasiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SuccesController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,11 +44,54 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/success/{kode_tr}', [SuccesController::class, 'validate_success']);
     Route::post('/trouble/{kode_tr}', [SuccesController::class, 'trouble_transaction']);
 
+    // transaksi
+    Route::get('/transaksi', [TransaksiController::class, 'index']);
+    Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
+    Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
+
+    Route::get('/menu', [MenuController::class, 'index'])->name('menuAll');
+    Route::get('/menu/create', [MenuController::class, 'create']);
+    Route::post('/menu', [MenuController::class, 'store']);
+    Route::get('/menu/{id}/edit', [MenuController::class, 'edit']);
+    Route::put('/menu/{id}', [MenuController::class, 'update']);
+    Route::delete('/menu/{id}', [MenuController::class, 'destroy']);
+    Route::get('/rupiah', [MenuController::class, 'rupiah']);
+
+    Route::get('/penjualan', [OrderTransaksiController::class, 'index']);
+    Route::get('/penjualan/create', [OrderTransaksiController::class, 'create']);
+    Route::post('/penjualan', [OrderTransaksiController::class, 'store']);
+    Route::get('/penjualan/{id}/edit', [OrderTransaksiController::class, 'edit']);
+    Route::put('/penjualan/{id}', [OrderTransaksiController::class, 'update']);
+    Route::delete('/penjualan/{id}', [OrderTransaksiController::class, 'destroy']);
+
+    Route::get('/detailpenjualan', [OrderDetailTransaksiController::class, 'index']);
+    Route::get('/detailpenjualan/create', [OrderDetailTransaksiController::class, 'create']);
+    Route::post('/detailpenjualan', [OrderDetailTransaksiController::class, 'store']);
+    Route::get('/detailpenjualan/{id}/edit', [OrderDetailTransaksiController::class, 'edit']);
+    Route::put('/detailpenjualan/{id}', [OrderDetailTransaksiController::class, 'update']);
+    Route::delete('/detailpenjualan/{id}', [OrderDetailTransaksiController::class, 'destroy']);
+
     Route::get('/kasir/{id}', [KasirController::class, 'struk']);
     Route::get('/kasir', [KasirController::class, 'index']);
     Route::post('/kasir', [KasirController::class, 'order']);
     Route::get('/kasir/{id}/{datetime}', [KasirController::class, 'reload']);
     Route::get('/kasir/hapussemua/{id}', [KasirController::class, 'hapussemua']);
+
+    Route::get('/laporan', [LaporanController::class, 'index']);
+    Route::get('/ceklaporan/cetak/{tglMulai}/{tglSelesai}/{idKantin}/{status}', [LaporanController::class, 'cekLaporan']);
+    Route::get('/laporan/cetak/{tglMulai}/{tglSelesai}/{idKantin}/{status}', [LaporanController::class, 'cetak']);
+
+    Route::get('/rekapitulasi', [RekapitulasiController::class, 'index']);
+    Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
+    Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
+
+    Route::get('/customer', [CustomerController::class, 'index']);
+    Route::get('/autocomplete', [CustomerController::class, 'search'])->name('autocomplete');
+    Route::get('/customer/create', [CustomerController::class, 'create']);
+    Route::post('/customer', [CustomerController::class, 'store']);
+    Route::get('/customer/{id}/edit', [CustomerController::class, 'edit']);
+    Route::put('/customer/{id}', [CustomerController::class, 'update']);
+    Route::delete('/customer/{id}', [CustomerController::class, 'destroy']);
 
 });
 

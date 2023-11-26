@@ -10,11 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('role_has_permission', function (Blueprint $table) {
+        Schema::create('role_has_permissions', function (Blueprint $table) {
             $table->integer('permission_id');
             $table->integer('role_id');
-            $table->foreign('permission_id')->references('id_permission')->on('permission')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign('role_id')->references('id_detail_roles')->on('detail_role')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('permission_id')->references('id')->on('permissions')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

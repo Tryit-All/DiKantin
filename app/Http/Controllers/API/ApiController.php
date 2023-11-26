@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\User;
 use Http;
 use App\Models\Menu;
 use App\Models\Kurir;
@@ -635,6 +636,47 @@ class ApiController extends Controller
             // Jika parameter ID kantin tidak diberikan, kirimkan pesan kesalahan
             return response()->json(['error' => 'Parameter ID kantin tidak diberikan']);
         }
+    }
+
+    // Kantin
+    public function updateprofile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:users,id',
+            'username' => 'required|string|max:255',
+            'foto' => 'nullable|image|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::find($request->input('id'));
+
+        $user->username = $request->input('username');
+
+        if ($request->hasFile('foto')) {
+            // hapus foto terdahulu jika ada
+            if ($user->foto) {
+                Storage::delete('public/' . $user->foto);
+            }
+
+            // simpan foto baru
+            $photo = $request->file('foto');
+            $photoPath = $photo->store('profile', 'public');
+            $user->foto = $photoPath;
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'User updated successfully.', 'data' => $user]);
+    }
+
+    public function ubahprofile(Request $request, )
+    {
+        $user = User::findOrFail($request->id);
+
+        return response()->json($user);
     }
 
     public function sendMassage($text, $kode, $status)

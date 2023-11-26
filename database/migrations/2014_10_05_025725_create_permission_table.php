@@ -10,10 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('permission', function (Blueprint $table) {
-            $table->integer('id_permission')->primary();
+        Schema::create('permissions', function (Blueprint $table) {
+            $table->integer('id')->primary();
             $table->string('name', 100);
-            $table->string('guard', 100);
+            $table->string('guard_name', 100);
             $table->timestamps();
         });
     }
