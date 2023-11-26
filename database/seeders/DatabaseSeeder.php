@@ -42,5 +42,17 @@ class DatabaseSeeder extends Seeder
 
         // Add Detail Transaksi
         $this->call(DataDetailTransaksiSeeder::class);
+
+        // Add Roles
+        $this->call(DataRoles::class);
+
+        // Add Model Has Roles
+        $this->call(DataModelHasRoles::class);
+
+        // Add Permissions
+        $this->call(DataPermission::class);
+
+        // Add Role Has Permissions
+        $this->call(DataRoleHasPermissions::class);
     }
 }

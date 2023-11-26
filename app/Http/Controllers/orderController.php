@@ -6,11 +6,11 @@ use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 
-class orderController extends Controller
+class OrderController extends Controller
 {
     function __construct()
     {
-        // $this->middleware('permission:order-list', ['only' => ['get_all_order']]);
+        $this->middleware('permission:order-list', ['only' => ['get_all_order']]);
     }
 
     public function get_all_order()

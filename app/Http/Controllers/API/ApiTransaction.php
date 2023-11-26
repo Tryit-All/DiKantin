@@ -206,7 +206,9 @@ class ApiTransaction extends Controller
         $Transaksi->kembalian = $dataDetailOrderan['kembalian'];
         $Transaksi->status_pengiriman = "proses";
         // $Transaksi->bukti_pengiriman = $dataDetailOrderan['bukti_pengiriman'];
+        $Transaksi->no_meja = "0";
         $Transaksi->model_pembayaran = $dataDetailOrderan['model_pembayaran'];
+        $Transaksi->expired_at = now()->addMinutes(1);
         $Transaksi->save();
 
         foreach ($dataOrderan as $key => $value) {
@@ -264,7 +266,7 @@ class ApiTransaction extends Controller
 
             return $this->sendMassage($result, 200, true);
         } else {
-            return $this->sendMassage('Tidak ada Data', 400, false);
+            return $this->sendMassage([], 200, true);
         }
     }
 
@@ -309,7 +311,7 @@ class ApiTransaction extends Controller
 
             return $this->sendMassage($result, 200, true);
         } else {
-            return $this->sendMassage('Tidak ada Data', 400, false);
+            return $this->sendMassage([], 200, true);
         }
     }
 
@@ -353,7 +355,7 @@ class ApiTransaction extends Controller
 
             return $this->sendMassage($result, 200, true);
         } else {
-            return $this->sendMassage('Tidak ada Data', 400, false);
+            return $this->sendMassage([], 200, true);
         }
     }
 
@@ -378,7 +380,7 @@ class ApiTransaction extends Controller
         if (isset($transaksi)) {
             return $this->sendMassage($transaksi, 200, true);
         } else {
-            return $this->sendMassage('Tidak ada Data', 400, false);
+            return $this->sendMassage([], 200, true);
         }
     }
 
@@ -427,7 +429,7 @@ class ApiTransaction extends Controller
 
             return $this->sendMassage($result, 200, true);
         } else {
-            return $this->sendMassage('Tidak ada Data', 400, false);
+            return $this->sendMassage([], 200, true);
         }
     }
 

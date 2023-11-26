@@ -10,10 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('detail_role', function (Blueprint $table) {
-            $table->integer('id_detail_roles')->primary();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->integer('id')->primary();
             $table->string('name', 100);
-            $table->string('guard', 100);
+            $table->string('guard_name', 100);
             $table->timestamps();
         });
     }
