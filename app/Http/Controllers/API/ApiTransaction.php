@@ -206,7 +206,7 @@ class ApiTransaction extends Controller
         $Transaksi->kembalian = $dataDetailOrderan['kembalian'];
         $Transaksi->status_pengiriman = "proses";
         // $Transaksi->bukti_pengiriman = $dataDetailOrderan['bukti_pengiriman'];
-        $Transaksi->no_meja = "0";
+        $Transaksi->no_meja = 0;
         $Transaksi->model_pembayaran = $dataDetailOrderan['model_pembayaran'];
         $Transaksi->expired_at = now()->addMinutes(1);
         $Transaksi->save();
