@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailTransaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderDetailTransaksiController extends Controller
 {
@@ -11,7 +12,7 @@ class OrderDetailTransaksiController extends Controller
     {
         // $data = Detail_penjualan::all()->orderBy('id', 'desc')
         //     ->get();
-        $data = DB::table('detail_penjualans')->orderBy('id', 'desc')->get();
+        $data = DetailTransaksi::orderBy('kode_tr', 'desc')->get();
         $title = 'detail penjualan';
         return view('dashboard.detail_penjualan.index', compact('data', 'title'));
     }
