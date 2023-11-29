@@ -14,23 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->call(function () {
-            $expiredPayments = Transaksi::where('expired_at', '<=', now())->get();
-            foreach ($expiredPayments as $payment) {
-
-                DetailTransaksi::where('kode_tr', $payment['kode_tr'])->update([
-                    'status_konfirm' => 'menunggu',
-                ]);
-                // if (sizeof($payment) != 0) {
-
-                // }
-                // Lakukan tindakan sesuai kebutuhan, contohnya:
-                // $payment->delete();
-                // atau
-                // $payment->update(['status' => 'expired']);
-            }
-        })->everyTwoSeconds();
+        $schedule->command('app:update-otomatis')->everyFifteenSeconds();
     }
 
     /**

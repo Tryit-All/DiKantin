@@ -63,6 +63,9 @@ class DataTransaksiSeeder extends Seeder
                 "created_at" => "2023-11-10 05:17:55",
                 "updated_at" => "2023-11-10 12:46:28",
             ),
+            array("kode_tr" => "TRDKN2708", "status_konfirm" => "1", "status_pesanan" => "1", "tanggal" => "2023-11-26 13:40:50", "id_customer" => "CUST98273", "id_kurir" => null, "id_kasir" => null, "total_bayar" => "11000", "total_harga" => "11000", "kembalian" => "0", "status_pengiriman" => "proses", "bukti_pengiriman" => null, "no_meja" => "0", "model_pembayaran" => "cash", "expired_at" => "2023-11-26 13:41:50", "created_at" => "2023-11-26 13:40:50", "updated_at" => "2023-11-26 13:40:50"),
+            array("kode_tr" => "TRDKN5138", "status_konfirm" => "1", "status_pesanan" => "1", "tanggal" => "2023-11-26 13:49:41", "id_customer" => "CUST98273", "id_kurir" => null, "id_kasir" => null, "total_bayar" => "8000", "total_harga" => "8000", "kembalian" => "0", "status_pengiriman" => "proses", "bukti_pengiriman" => null, "no_meja" => "0", "model_pembayaran" => "cash", "expired_at" => "2023-11-26 13:50:41", "created_at" => "2023-11-26 13:49:41", "updated_at" => "2023-11-26 13:49:41"),
+            array("kode_tr" => "TRDKN9405", "status_konfirm" => "1", "status_pesanan" => "1", "tanggal" => "2023-11-26 13:40:37", "id_customer" => "CUST98273", "id_kurir" => null, "id_kasir" => null, "total_bayar" => "5000", "total_harga" => "5000", "kembalian" => "0", "status_pengiriman" => "proses", "bukti_pengiriman" => null, "no_meja" => "0", "model_pembayaran" => "cash", "expired_at" => "2023-11-26 13:41:37", "created_at" => "2023-11-26 13:40:37", "updated_at" => "2023-11-26 13:40:37")
             // Tambahkan data lainnya sesuai dengan contoh di atas
         ];
 
