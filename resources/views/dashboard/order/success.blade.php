@@ -41,7 +41,7 @@
                                 @if ($d->Kode_Tr == $d->Bukti && $d->SK == '2' && $d->SP == '3')
                                     <div class="d-flex align-items-center gap-2">
                                         <form action="/success/{{ $d->Kode_Tr }}" method="POST">
-                                            @method('DELETE')
+                                            {{-- @method('DELETE') --}}
                                             @csrf
                                             <button class="btn btn-success btn-sm" type="submit" id="konfirmasi-button"
                                                 onclick="confirm('Apakah anda ingin menyelesaikan Transaksi ? ')">Konfirmasi</button>

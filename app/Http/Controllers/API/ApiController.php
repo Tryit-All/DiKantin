@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,7 +38,7 @@ class ApiController extends Controller
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            'token_fcm' => 'required',
+            // 'token_fcm' => 'required',
         ]);
 
         $dataEmail = $request->email;
@@ -146,7 +147,7 @@ class ApiController extends Controller
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            'token_fcm' => 'required',
+            // 'token_fcm' => 'required',
         ]);
 
         $dataEmail = $request->email;
@@ -228,6 +229,7 @@ class ApiController extends Controller
         $kode = $request->kode;
         $kantin = $request->kantin;
         $kurir = $request->kurir;
+        $kodeMenu = $request->kode_menu;
         $customer = $request->customer;
         $kodeTransaksi = $request->kode_tr;
         $buktiPengiriman = $request->bukti_pengiriman;
@@ -253,34 +255,30 @@ class ApiController extends Controller
 
         } elseif ($kode == '1') {
 
-            $listKodeMenu = collect($transaksi['detail_transaksi'])->pluck('kode_menu')->toArray();
+            if (isset($kantin, $kodeMenu, $kodeTransaksi)) {
+                $statusKonfirm = DetailTransaksi::join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
+                    ->select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu', 'menu.id_kantin')
+                    ->where('detail_transaksi.kode_tr', $kodeTransaksi)
+                    ->where('menu.id_kantin', $kantin)
+                    ->where('detail_transaksi.kode_menu', $kodeMenu)
+                    ->first();
 
-            // return $this->sendMassage($transaksi, 200, true);
-            $listIdkantin = Menu::select('id_kantin')->whereIn('id_menu', $listKodeMenu)->get();
-
-            // return $this->sendMassage($listIdkantin, 200, true);
-            foreach ($listIdkantin as $key => $value) {
-                if ($value->id_kantin == $kantin) {
-                    $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
-                        ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
-                        ->join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
-                        ->where('detail_transaksi.kode_tr', $kodeTransaksi)
-                        ->where('kantin.id_kantin', $kantin)
-                        ->first();
-
+                if (isset($statusKonfirm)) {
+                    $kodeIdKantin = $statusKonfirm->id_kantin;
                     $kodeMenu = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
 
-                    if ($status == "menunggu") {
+                    if ($status == "menunggu" && $kodeIdKantin == $kantin) {
                         $konfirm_status = "memasak";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
                         ]);
-                        // return $this->sendMassage('Memasak', 200, true);
                     } else {
-                        return $this->sendMassage('Anda sudah melakukan Konfirmasi Memasak', 200, true);
+                        return $this->sendMassage('Anda sudah memproses pesanan', 400, false);
                     }
                 }
+                // return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
+
             }
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
@@ -324,11 +322,6 @@ class ApiController extends Controller
             foreach ($listIdkantin as $key => $value) {
                 $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
 
-                $listKurir = [];
-                $listKurirPakaiDahulu = [];
-                $listKurirPakai = [];
-                $kurirTerpilih = [];
-
                 if ($value->id_kantin == $kantin) {
                     $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
                         ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
@@ -354,6 +347,11 @@ class ApiController extends Controller
                     }
                 }
             }
+
+            $listKurir = [];
+            $listKurirPakaiDahulu = [];
+            $listKurirPakai = [];
+            $kurirTerpilih = [];
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
 
@@ -464,9 +462,11 @@ class ApiController extends Controller
             $statusKonfirm = $transaksi->status_konfirm;
 
             $idKurir = $transaksi->id_kurir;
+            $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
+            $kurir2 = $idKurir2->id_kurir; // sementara bolo
 
             if ($kode_tr == $kodeTransaksi) {
-                if ($idKurir == $kurir && $statusKonfirm == '1' && $statusPesanan == '3') {
+                if ($idKurir == $kurir2 && $statusKonfirm == '1' && $statusPesanan == '3') {
 
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
                         'status_konfirm' => '2',
@@ -607,6 +607,7 @@ class ApiController extends Controller
             $id_kantin = $request->input('id_kantin');
             $dataList = Transaksi::select(
                 'menu.foto as foto',
+                'menu.id_menu as id_menu',
                 'detail_transaksi.kode_tr as id_detail',
                 'transaksi.created_at as tanggal',
                 'transaksi.kode_tr',
