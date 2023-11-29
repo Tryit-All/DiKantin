@@ -34,7 +34,7 @@
                 <tbody>
                     @foreach ($data as $m)
                         <tr>
-                            <td>{{ $m->kantin }}</td>
+                            <td>{{ $m->nama_kantin }}</td>
                             <td>Rp {{ number_format($m->total) }}</td>
                         </tr>
                     @endforeach

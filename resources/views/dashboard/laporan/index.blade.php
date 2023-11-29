@@ -37,6 +37,7 @@
                     <select class="form-select" aria-label="Default select example" name="status" required id="statuss">
                         <option value="">Pilih Status</option>
                         <option value="proses">Proses</option>
+                        <option value="selesai">Dikirim</option>
                         <option value="selesai">Selesai</option>
                     </select>
                 </div>
