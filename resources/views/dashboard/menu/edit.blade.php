@@ -2,14 +2,14 @@
 @section('title', 'Edit Menu')
 @section('content')
     <div class="container mt-3">
-        <form method="POST" action="/menu/{{ $menu->id }}" class="bg-white p-3" style="border-radius: 20px;"
+        <form method="POST" action="/menu/{{ $menu->id_menu }}" class="bg-white p-3" style="border-radius: 20px;"
             enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-2">
                 <label for="nama_menu" class="form-label">Menu</label>
                 <input type="text" class="form-control" id="nama_menu" name="nama_menu" required
-                    value="{{ $menu->nama_menu }}">
+                    value="{{ $menu->nama }}">
             </div>
             <div class="mb-2">
                 <label for="harga" class="form-label">Harga</label>
@@ -46,9 +46,8 @@
             </div>
             <div class="mb-2">
                 <button type="submit" class="btn text-white" style="background: #51AADD">Ubah</button>
-                <a href="/menu" class="btn btn-light px-3">Kembali</a>
+                <a href="/menuAll" class="btn btn-light px-3">Kembali</a>
             </div>
         </form>
     </div>
 @endsection
-

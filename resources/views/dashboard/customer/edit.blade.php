@@ -2,13 +2,13 @@
 @section('title', 'Edit Customer')
 @section('content')
     <div class="container mt-3">
-        <form class="bg-white p-4" style="border-radius: 20px;" method="POST" action="/customer/{{ $data->id }}">
+        <form class="bg-white p-4" style="border-radius: 20px;" method="POST" action="/customer/{{ $data->id_customer }}">
             @method('PUT')
             @csrf
             <div class="mb-2">
                 <label for="id_customer" class="form-label">ID Customer</label>
                 <input type="text" class="form-control" id="id_customer" name="id_customer" required
-                    value="{{ $data->id_customer }}">
+                    value="{{ $data->id_customer }}"readonly>
             </div>
             <div class="mb-2">
                 <label for="nama" class="form-label">Nama</label>
@@ -26,7 +26,7 @@
                     value="{{ $data->no_telepon }}">
             </div>
             <button type="submit" class="btn text-white" style="background: #51AADD">Ubah</button>
-            <a href="/customer" class="btn btn-light px-3">Kembali</a>
+            <a href="/pelanggan" class="btn btn-light px-3">Kembali</a>
         </form>
     </div>
 @endsection

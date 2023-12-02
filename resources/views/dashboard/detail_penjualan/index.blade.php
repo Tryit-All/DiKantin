@@ -13,7 +13,7 @@
                         <th>No</th>
                         <th>Tanggal Penjualan</th>
                         <th>ID Penjualan</th>
-                        <th>ID Kantin</th>
+                        <th>Nama Kantin</th>
                         <th>ID Menu</th>
                         <th>Jumlah</th>
                         <th>Harga</th>
@@ -26,17 +26,17 @@
                     @foreach ($data as $m)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $m->tanggal_penjualan }}</td>
-                            <td>{{ $m->id_penjualan }}</td>
-                            <td>{{ $m->id_kantin }}</td>
-                            <td>{{ $m->id_menu }}</td>
-                            <td>{{ $m->jumlah }}</td>
-                            <td>Rp {{ number_format($m->harga) }}</td>
+                            <td>{{ $m->created_at }}</td>
+                            <td>{{ $m->kode_tr }}</td>
+                            <td>{{ $m->nama }}</td>
+                            <td>{{ $m->kode_menu }}</td>
+                            <td>{{ $m->QTY }}</td>
+                            <td>Rp {{ number_format($m->subtotal_bayar) }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td>{{ $m->status }}</td>
+                            <td>{{ $m->status_konfirm }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <a href="/detailpenjualan/{{ $m->id }}/edit"
+                                    <a href="/detailpenjualan/{{ $m->kode_tr }}/{{ $m->kode_menu }}/edit"
                                         class="btn btn-warning btn-sm" style="color: white;">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit</a>
                                     {{-- <form action="/detailpenjualan/{{ $m->id }}" method="post">
@@ -51,14 +51,14 @@
                                         <button class="btn btn-danger btn-sm text-white m-0" type="submit"
                                             onclick="deleteData()">Hapus</button>
                                     </form> --}}
-                                    <form action="/detailpenjualan/{{ $m->id }}" method="post" class="delete-form">
+                                    {{-- <form action="/detailpenjualan/{{ $m->kode_tr }}" method="post" class="delete-form">
                                         @method('DELETE')
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $m->id }}">
                                         <button class="btn btn-danger btn-sm m-0 delete-button" style="color: white;"
                                             type="submit">
                                             <i class="fa-solid fa-trash-can"></i> Hapus</button>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\DetailTransaksi;
 use App\Models\Menu;
 use App\Models\Transaksi;
@@ -365,5 +366,21 @@ class ApiDikantinOld extends Controller
             'code' => $kode,
             'status' => $status
         ], $kode);
+    }
+
+    public function showByIdCustomer(Request $req)
+    {
+
+        $id_customer = $req->id_customer;
+
+        if ($id_customer) {
+            $customer = Customer::where('id_customer', $id_customer)->first();
+            return [
+                'success' => true,
+                'data' => $customer
+            ];
+        } else {
+            return ['success' => false];
+        }
     }
 }

@@ -2,7 +2,7 @@
 @section('title', 'User')
 @section('content')
     <div class="container-fluid mt-3">
-        @if (auth()->user()->id == 1 || auth()->user()->id == 4)
+        @if (auth()->user()->id_user == 1 || auth()->user()->id_user == 4)
             <a href="{{ route('users.create') }}" class="btn btn-dark text-white" style="padding: 7px; border-radius:10px;"> +
                 Tambah User
             </a>
@@ -29,7 +29,7 @@
                     @foreach ($data as $key => $user)
                         <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
                                 @if (!empty($user->getRoleNames()))
@@ -42,20 +42,25 @@
                             <td>{{ $user->id_kantin }}</td>
                             <td>
                                 {{-- @if (auth()->user()->roles == 'Admin') --}}
-                                @if (auth()->user()->id == 1 || auth()->user()->id == 4)
-                                    {{-- <a class="btn btn-info" href="{{ route('users.show', $user->id) }}">Detail</a> --}}
+                                @if (auth()->user()->id_user == 1 || auth()->user()->id_user == 4)
                                     <a class="btn btn-warning btn-sm" style="color: white;"
-                                        href="{{ route('users.edit', $user->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                                        href="{{ route('users.edit', $user->id_user) }}"><i
+                                            class="fa-solid fa-pen-to-square"></i> Edit</a>
+
+                                    {{-- <a class="btn btn-danger btn-sm m-0 " style="color: white;" href=""><i
+                                            class="fa-solid fa-pen-to-square"></i>
+                                        Edit</a> --}}
+
                                     {!! Form::open([
                                         'method' => 'DELETE',
-                                        'route' => ['users.destroy', $user->id],
+                                        'route' => ['users.destroy', $user->id_user],
                                         'style' => 'display:inline',
-                                        'id' => 'delete-form-' . $user->id,
+                                        'id' => 'delete-form-' . $user->id_user,
                                     ]) !!}
                                     {!! Form::button('<i class="fa-solid fa-trash-can"></i> Hapus', [
                                         'class' => 'btn btn-danger btn-sm m-0 ',
                                         'style' => 'color: white',
-                                        'onclick' => "deleteData($user->id)",
+                                        'onclick' => "deleteData($user->id_user)",
                                     ]) !!}
                                     {!! Form::close() !!}
                                 @else

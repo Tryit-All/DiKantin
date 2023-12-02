@@ -12,14 +12,14 @@
                 {{-- onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"> --}}
                 {{-- {{ __('Logout') }} --}}
-                </a> -->
+                {{-- </a> --> --}}
                 <div class="card-body d-flex flex-column align-items-center">
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="row mb-3 input-field">
                             <!-- <label for="email"
-                                                                            class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label> -->
+                                                                                                                            class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label> -->
                             <div class="col-md-12">
                                 <input id="email" type="email" placeholder="Email"
                                     class="input form-control @error('email') is-invalid @enderror" name="email"
@@ -44,7 +44,7 @@
 
                         <div class="row mb-3 input-field">
                             <!-- <label for="password"
-                                                                            class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label> -->
+                                                                                                                            class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label> -->
 
                             <div class="col-md-12 position-relative">
                                 <div class="password-wrapper d-flex align-items-center">
@@ -69,7 +69,15 @@
                                 <button type="submit" class="btn-login">
                                     {{ __('Login') }}
                                 </button>
-
+                                <div class=”container”>
+                                    <div class=”row”>
+                                        <div class=”col-md-12 row-block”>
+                                            <a href="{{ url('google') }}" class="btn bth-lg-primaty btn-block">
+                                                <strong>Login With Google</strong>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <a
                                     style="font-weight:bold; margin-top: 25px; font-size: 15px; color:white; display: flex; text-align: center; margin-left: 100px;">Powered
                                     by :</a>

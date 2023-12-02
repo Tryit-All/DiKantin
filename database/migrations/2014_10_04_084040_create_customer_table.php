@@ -18,10 +18,11 @@ return new class extends Migration {
             $table->string('kode_verified', 7)->nullable();
             $table->string('token')->nullable(true);
             $table->string('token_fcm')->nullable(true);
-            $table->string('alamat', 100);
-            $table->string('email', 100);
-            $table->string('password', 100);
+            $table->string('alamat', 100)->nullable();
+            $table->string('email', 100)->nullable();
+            $table->string('password', 100)->nullable();
             $table->string('foto', 255)->nullable();
+            $table->string('google_id')->nullable();
             $table->timestamps();
         });
     }

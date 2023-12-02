@@ -22,23 +22,21 @@
                     @foreach ($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->tanggal }}</td>
+                            <td>{{ $item->created_at }}</td>
                             <td> {{ auth()->user()->name }} </td>
-                            <td>{{ $item->nomer_penjualan }}</td>
+                            <td>{{ $item->kode_tr }}</td>
                             <td>{{ $item->no_meja }}</td>
-                            <td>Rp {{ number_format($item->total) }}</td>
-                            <td>Rp {{ number_format($item->bayar) }}</td>
+                            <td>Rp {{ number_format($item->total_harga) }}</td>
+                            <td>Rp {{ number_format($item->total_bayar) }}</td>
                             <td>Rp {{ number_format($item->kembalian) }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-1">
                                     {{-- <button class="btn btn-info btn-sm text-white m-0" type="submit">Cetak Ulang
                                         Nota</button> --}}
-                                    <a href="/transaksi/{{ $item->nomer_penjualan }}" target="_blank"
-                                        class="btn btn-info btn-sm">
+                                    <a href="/transaksi/{{ $item->kode_tr }}" target="_blank" class="btn btn-info btn-sm">
                                         <i class="fa-solid fa-print"></i> Cetak Ulang Nota
                                     </a>
-                                    <form action="/transaksi/{{ $item->nomer_penjualan }}" method="post"
-                                        class="delete-form">
+                                    <form action="/transaksi/{{ $item->kode_tr }}" method="post" class="delete-form">
                                         @method('DELETE')
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $item->id }}">

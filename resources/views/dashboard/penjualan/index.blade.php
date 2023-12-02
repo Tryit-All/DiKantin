@@ -15,7 +15,7 @@
                         <th>ID Customer</th>
                         <th>Subtotal</th>
                         <th>Diskon (%)</th>
-                        <th>Total</th>
+                        <th>Kembalian</th>
                         <th>Bayar</th>
                         <th>Model Pembayaran</th>
                         <th>Aksi</th>
@@ -25,18 +25,18 @@
                     @foreach ($data as $m)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $m->tanggal_penjualan }}</td>
+                            <td>{{ $m->created_at }}</td>
                             <td>{{ $m->id_customer }}</td>
                             {{-- <td>{{ $m->id_kasir }}</td> --}}
-                            <td>Rp {{ number_format($m->subtotal)  }}</td>
+                            <td>Rp {{ number_format($m->total_harga) }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td>Rp {{ number_format($m->total) }}</td>
-                            <td>Rp {{ number_format($m->bayar) }}</td>
+                            <td>Rp {{ number_format($m->kembalian) }}</td>
+                            <td>Rp {{ number_format($m->total_bayar) }}</td>
                             <td>{{ $m->model_pembayaran }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-1">
-                                    <a href="/penjualan/{{ $m->id }}/edit"
-                                    class="btn btn-warning btn-sm" style="color: white;">
+                                    <a href="/penjualan/{{ $m->kode_tr }}/edit" class="btn btn-warning btn-sm"
+                                        style="color: white;">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit</a>
                                     {{-- <form action="/penjualan/{{ $m->id }}" method="post">
                                         @method('DELETE')
@@ -50,10 +50,10 @@
                                         <button class="btn btn-danger btn-sm text-white m-0" type="submit"
                                             onclick="deleteData()">Hapus</button>
                                     </form> --}}
-                                    <form action="/penjualan/{{ $m->id }}" method="post" class="delete-form">
+                                    <form action="/penjualan/{{ $m->kode_tr }}" method="post" class="delete-form">
                                         @method('DELETE')
                                         @csrf
-                                        <input type="hidden" name="id" value="{{ $m->id }}">
+                                        <input type="hidden" name="id" value="{{ $m->kode_tr }}">
                                         <button class="btn btn-danger btn-sm m-0 delete-button" style="color: white;"
                                             type="submit">
                                             <i class="fa-solid fa-trash-can"></i> Hapus</button>

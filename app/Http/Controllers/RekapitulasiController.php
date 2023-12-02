@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class RekapitulasiController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:rekapitulasi-list|cek-Rekapitulasi|cetak-Rekapitulasi', ['only' => ['index', 'cekRekapitulasi', 'cetak']]);
+        $this->middleware('permission:rekapitulasi-list', ['only' => ['index']]);
+        $this->middleware('permission:cek-Rekapitulasi', ['only' => ['cekRekapitulasi']]);
+        $this->middleware('permission:cetak-Rekapitulasi', ['only' => ['cetak']]);
+    }
+
     public function index()
     {
         return view('dashboard.rekapitulasi.index');

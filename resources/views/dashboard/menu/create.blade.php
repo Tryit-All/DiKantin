@@ -1,12 +1,13 @@
 @extends('main')
 @section('title', 'Tambah Menu')
 @section('content')
-<div class="container-fluid mt-3">
-        <form method="POST" action="/menu" class="bg-white p-3" style="border-radius: 20px;" enctype="multipart/form-data">
+    <div class="container-fluid mt-3">
+        <form method="POST" action="/menuCreate" class="bg-white p-3" style="border-radius: 20px;"
+            enctype="multipart/form-data">
             @csrf
             <div class="mb-2">
                 <label for="nama_menu" class="form-label">Menu</label>
-                <input type="text" class="form-control" id="nama_menu" name="nama_menu" required>
+                <input type="text" class="form-control" id="nama_menu" name="nama" required>
             </div>
             <div class="mb-2">
                 <label for="harga" class="form-label">Harga</label>
@@ -41,13 +42,8 @@
             </div>
             <div class="mb-2">
                 <button type="submit" class="btn btn-dark text-white">Simpan</button>
-                <a href="/menu" class="btn btn-light px-3">Kembali</a>
+                <a href="/menuAll" class="btn btn-light px-3">Kembali</a>
             </div>
         </form>
     </div>
 @endsection
-
-    
-
-
-

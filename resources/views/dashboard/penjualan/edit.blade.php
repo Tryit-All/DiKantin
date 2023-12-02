@@ -2,44 +2,51 @@
 @section('title', 'Edit Penjualan')
 @section('content')
     <div class="container mt-3">
-        <form method="POST" action="/penjualan/{{ $data->id }}" class="bg-white p-3" style="border-radius: 20px;"
+        <form method="POST" action="/penjualan/{{ $data->kode_tr }}" class="bg-white p-3" style="border-radius: 20px;"
             enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-2">
                 <label for="tanggal_penjualan" class="form-label">Tanggal Penjualan</label>
-                <input type="date" class="form-control" id="tanggal_penjualan" name="tanggal_penjualan" required
-                    value="{{ $data->tanggal_penjualan }}">
+                <input type="text" class="form-control" id="tanggal_penjualan" name="tanggal_penjualan" required
+                    value="{{ $data->created_at }}"readonly>
             </div>
             <div class="mb-2">
                 <label for="nomer_penjualan" class="form-label">No Penjualan</label>
-                <input type="number" class="form-control" id="nomer_penjualan" name="nomer_penjualan" required
-                    value="{{ $data->nomer_penjualan }}">
+                <input type="text" class="form-control" id="nomer_penjualan" name="nomer_penjualan" required
+                    value="{{ $data->kode_tr }}"readonly>
             </div>
             <div class="mb-2">
                 <label for="id_customer" class="form-label">ID Customer</label>
-                <input type="number" class="form-control" id="id_customer" name="id_customer" accept="image/*"
-                    value="{{ $data->id_customer }}">
+                <input type="text" class="form-control" id="id_customer" name="id_customer" accept="image/*"
+                    value="{{ $data->id_customer }}"readonly>
             </div>
             <div class="mb-2">
                 <label for="id_kasir" class="form-label">ID Kasir</label>
-                <input type="number" class="form-control" id="id_kasir" name="id_kasir" value="{{ $data->id_kasir }}">
+                <input type="text" class="form-control" id="id_kasir" name="id_kasir"
+                    value="{{ $data->id_kasir }}"readonly>
+            </div>
+            <div class="mb-2">
+                <label for="id_kurir" class="form-label">ID Kurir</label>
+                <input type="text" class="form-control" id="id_kurir" name="id_kurir"
+                    value="{{ $data->id_kurir }}"readonly>
             </div>
             <div class="mb-2">
                 <label for="subtotal" class="form-label">Subtotal</label>
-                <input type="number" class="form-control" id="subtotal" name="subtotal" value="{{ $data->subtotal }}">
+                <input type="number" class="form-control" id="subtotal" name="subtotal" value="{{ $data->total_harga }}">
             </div>
             <div class="mb-2">
                 <label for="diskon" class="form-label">Diskon</label>
                 <input type="number" class="form-control" id="diskon" name="diskon" value="{{ $data->diskon }}">
             </div>
             <div class="mb-2">
-                <label for="total" class="form-label">Total</label>
-                <input type="number" class="form-control" id="total" name="total" value="{{ $data->total }}">
+                <label for="kembalian" class="form-label">Kembalian</label>
+                <input type="number" class="form-control" id="kembalian" name="kembalian" value="{{ $data->kembalian }}">
             </div>
             <div class="mb-2">
-                <label for="bayar" class="form-label">Bayar</label>
-                <input type="number" class="form-control" id="bayar" name="bayar" value="{{ $data->bayar }}">
+                <label for="total_bayar" class="form-label">Bayar</label>
+                <input type="number" class="form-control" id="total_bayar" name="total_bayar"
+                    value="{{ $data->total_bayar }}">
             </div>
             <div class="mb-2">
                 <label for="model_pembayaran" class="form-label">Model Pembayaran</label>

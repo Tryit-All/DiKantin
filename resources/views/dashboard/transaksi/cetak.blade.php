@@ -22,12 +22,12 @@
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mb-0">
         <div class="d-flex justify-content-between">
             <div class="order">
-                <p style="margin-bottom: 1px;">{{ $penjualan->nomer_penjualan }}</p>
+                <p style="margin-bottom: 1px;">{{ $penjualan->kode_tr }}</p>
                 <p style="margin-bottom: 1px;">No Meja : {{ $penjualan->no_meja }}</p>
             </div>
             <div class="value">
                 <p style="margin-bottom: 1px; text-align: right;">
-                    {{ date('Y-m-d', strtotime($penjualan->tanggal_penjualan)) }}</p>
+                    {{ date('Y-m-d', strtotime($penjualan->created_at)) }}</p>
                 <p style="margin-bottom: 1px; text-align: right;">Kasir : {{ auth()->user()->name }}</p>
             </div>
         </div>
@@ -36,26 +36,26 @@
         <div class="d-flex justify-content-between">
             <div class="nama-product">
                 <p class="fw-bold mb-0">Menu</p>
-                @foreach ($penjualan->details as $item)
-                    <p class="mb-0">{{ $item->menus->nama_menu }}</p>
+                @foreach ($penjualan->detail_transaksi as $item)
+                    <p class="mb-0">{{ $item->menu->nama }}</p>
                 @endforeach
             </div>
             <div class="qty">
                 <p class="fw-bold mb-0">Qty</p>
-                @foreach ($penjualan->details as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->jumlah }}</p>
+                @foreach ($penjualan->detail_transaksi as $item)
+                    <p class="mb-0" style="text-align: center;">{{ $item->QTY }}</p>
                 @endforeach
             </div>
             <div class="diskon">
                 <p class="fw-bold mb-0">Diskon</p>
-                @foreach ($penjualan->details as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->diskon }}</p>
+                @foreach ($penjualan->detail_transaksi as $item)
+                    <p class="mb-0" style="text-align: center;">{{ $item->menu->diskon }}</p>
                 @endforeach
             </div>
             <div class="harga">
                 <p class="fw-bold mb-0">Harga</p>
-                @foreach ($penjualan->details as $item)
-                    <p class="mb-0" style="text-align: right;">{{ number_format($item->harga) }}</p>
+                @foreach ($penjualan->detail_transaksi as $item)
+                    <p class="mb-0" style="text-align: right;">{{ number_format($item->menu->harga) }}</p>
                 @endforeach
             </div>
         </div>
@@ -64,8 +64,8 @@
         <div class="d-flex justify-content-between">
             <div class="bayar">
                 <p class="mb-2" style="line-height: 1;">Model Pembayaran</p>
-                <p class="mb-2" style="line-height: 1;">Subtotal</p>
-                <p class="mb-2" style="line-height: 1;">Diskon</p>
+                {{-- <p class="mb-2" style="line-height: 1;">Subtotal</p>
+                <p class="mb-2" style="line-height: 1;">Diskon</p> --}}
                 <p class="fw-bold mb-2" style="line-height: 1;">Total</p>
                 <p class="fw-bold mb-2" style="line-height: 1;">Bayar</p>
                 <p class="fw-bold mb-2" style="line-height: 1;">Kembali</p>
@@ -73,15 +73,18 @@
             </div>
             <div class="value-bayar mb-1">
                 <p class="mb-2" style="line-height: 1; text-align: right;">{{ $penjualan->model_pembayaran }}</p>
-                <p class="mb-2" style="line-height: 1; text-align: right;">{{ number_format($penjualan->subtotal) }}</p>
-                @if ( $penjualan->diskon == null)
-                <p class="mb-2" style="line-height: 1; text-align: right;"> 0 %</p>
+                </p>
+                {{-- @if ($penjualan->diskon == null)
+                    <p class="mb-2" style="line-height: 1; text-align: right;"> 0 %</p>
                 @else
-                <p class="mb-2" style="line-height: 1; text-align: right;">{{ $penjualan->diskon }} %</p>
-                @endif
-                <p class="mb-2" style="line-height: 1; text-align: right;">{{ number_format($penjualan->total) }}</p>
-                <p class="mb-2" style="line-height: 1; text-align: right;">{{ number_format($penjualan->bayar) }}</p>
-                <p class="mb-2" style="line-height: 1; text-align: right;">{{ number_format($penjualan->kembalian) }}</p>
+                    <p class="mb-2" style="line-height: 1; text-align: right;">{{ $penjualan->diskon }} %</p>
+                @endif --}}
+                <p class="mb-2" style="line-height: 1; text-align: right;">
+                    {{ number_format($penjualan->total_harga) }}</p>
+                <p class="mb-2" style="line-height: 1; text-align: right;">
+                    {{ number_format($penjualan->total_bayar) }}</p>
+                <p class="mb-2" style="line-height: 1; text-align: right;">{{ number_format($penjualan->kembalian) }}
+                </p>
             </div>
         </div>
 

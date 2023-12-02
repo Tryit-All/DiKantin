@@ -7,9 +7,19 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:customer-list|customer-create|customer-edit|customer-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:customer-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:customer-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $customer = Customer::all();
+        // return $customer;
         return view('dashboard.customer.index', [
             'title' => 'customer',
             'customer' => $customer
@@ -36,16 +46,16 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-
+        // return "anu";
         $this->validate($request, [
-            "id_customer" => 'required|unique:customers,id_customer',
+            "id_customer" => 'required|unique:customer,id_customer',
             "nama" => 'required',
             "alamat" => 'required',
             "no_telepon" => 'required'
         ]);
         // Customer::insert($data);
         Customer::create($request->all());
-        return redirect('/customer');
+        return redirect('/pelanggan');
     }
 
     /**
@@ -76,9 +86,20 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = Customer::find($id);
-        $data->update($request->all());
-        return redirect('/customer');
+        $data = Customer::where('id_customer', $id)
+            ->first();
+
+        if (!$data) {
+            return abort(404); // Or handle the case where the record is not found.
+        }
+
+        Customer::where('id_customer', $id)->update([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no_telepon' => $request->no_telepon,
+        ]);
+
+        return redirect('/pelanggan');
     }
 
     /**
@@ -88,6 +109,6 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $customer->delete();
-        return redirect('/customer');
+        return redirect('/pelanggan');
     }
 }

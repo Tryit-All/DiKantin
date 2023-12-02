@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthLoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KasirController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\orderController;
 use App\Http\Controllers\OrderDetailTransaksiController;
 use App\Http\Controllers\OrderTransaksiController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\RekapitulasiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SuccesController;
@@ -27,8 +29,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('viewLoginNew');
 });
+
+Route::get('google', [AuthLoginController::class, 'redirectToGoogle']);
+Route::get('google/callback', [AuthLoginController::class, 'handleGoogleCallback']);
 
 Auth::routes();
 
@@ -49,9 +54,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
     Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
 
-    Route::get('/menu', [MenuController::class, 'index'])->name('menuAll');
+    Route::get('/productAll', [MenuController::class, 'product']);
+    Route::get('/searchProductAll', [MenuController::class, 'searchProduct']);
+    Route::get('/menuAll', [MenuController::class, 'index']);
     Route::get('/menu/create', [MenuController::class, 'create']);
-    Route::post('/menu', [MenuController::class, 'store']);
+    Route::post('/menuCreate', [MenuController::class, 'store']);
     Route::get('/menu/{id}/edit', [MenuController::class, 'edit']);
     Route::put('/menu/{id}', [MenuController::class, 'update']);
     Route::delete('/menu/{id}', [MenuController::class, 'destroy']);
@@ -67,8 +74,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/detailpenjualan', [OrderDetailTransaksiController::class, 'index']);
     Route::get('/detailpenjualan/create', [OrderDetailTransaksiController::class, 'create']);
     Route::post('/detailpenjualan', [OrderDetailTransaksiController::class, 'store']);
-    Route::get('/detailpenjualan/{id}/edit', [OrderDetailTransaksiController::class, 'edit']);
-    Route::put('/detailpenjualan/{id}', [OrderDetailTransaksiController::class, 'update']);
+    Route::get('/detailpenjualan/{id}/{id_menu}/edit', [OrderDetailTransaksiController::class, 'edit']);
+    Route::put('/detailpenjualan/{id}/{id_menu}/', [OrderDetailTransaksiController::class, 'update']);
     Route::delete('/detailpenjualan/{id}', [OrderDetailTransaksiController::class, 'destroy']);
 
     Route::get('/kasir/{id}', [KasirController::class, 'struk']);
@@ -85,13 +92,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
     Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
 
-    Route::get('/customer', [CustomerController::class, 'index']);
+    Route::get('/pelanggan', [CustomerController::class, 'index']);
     Route::get('/autocomplete', [CustomerController::class, 'search'])->name('autocomplete');
     Route::get('/customer/create', [CustomerController::class, 'create']);
-    Route::post('/customer', [CustomerController::class, 'store']);
+    Route::post('/prosesCustomer', [CustomerController::class, 'store']);
     Route::get('/customer/{id}/edit', [CustomerController::class, 'edit']);
     Route::put('/customer/{id}', [CustomerController::class, 'update']);
-    Route::delete('/customer/{id}', [CustomerController::class, 'destroy']);
+    Route::post('/deleteCustomer/{id}', [CustomerController::class, 'destroy'])->name('deleteCustomer');
 
 });
 

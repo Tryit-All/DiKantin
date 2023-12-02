@@ -36,7 +36,8 @@
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" aria-label="Default select example" name="status" required id="statuss">
                         <option value="proses" {{ $status == 'proses' ? 'selected' : '' }}>Proses</option>
-                        <option value="terima" {{ $status == 'terima' ? 'selected' : '' }}>Terima</option>
+                        <option value="dikirim" {{ $status == 'terima' ? 'selected' : '' }}>Dikirim</option>
+                        <option value="terima" {{ $status == 'terima' ? 'selected' : '' }}>Selesai</option>
                     </select>
                 </div>
                 <div class="col-md-2">

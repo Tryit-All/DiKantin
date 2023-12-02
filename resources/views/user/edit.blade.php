@@ -4,7 +4,7 @@
     <div class="container mt-3 bg-white p-3" style="border-radius: 20px">
         {!! Form::model($user, [
             'method' => 'PATCH',
-            'route' => ['users.update', $user->id],
+            'route' => ['users.update', $user->id_user],
             'enctype' => 'multipart/form-data',
         ]) !!}
         {{-- {{ csrf_field() }} --}}

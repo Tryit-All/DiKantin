@@ -15,9 +15,9 @@ return new class extends Migration {
             $table->enum('status_konfirm', ['1', '2', '3']);
             $table->enum('status_pesanan', ['1', '2', '3']);
             $table->dateTime('tanggal');
-            $table->string('id_customer', 9);
+            $table->string('id_customer', 9)->nullable();
             $table->string('id_kurir', 9)->nullable(true);
-            $table->integer('id_kasir')->nullable();
+            $table->unsignedBigInteger('id_kasir')->nullable();
             $table->integer('total_bayar');
             $table->integer('total_harga');
             $table->integer('kembalian');
@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->enum('model_pembayaran', ['cash', 'gopay', 'qris', 'polijepay', 'tranfer bank']);
             $table->foreign('id_customer')->references('id_customer')->on('customer')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('id_kurir')->references('id_kurir')->on('kurir')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('id_kasir')->references('id_user')->on('user')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamp('expired_at')->nullable(true);
             $table->timestamps();
         });

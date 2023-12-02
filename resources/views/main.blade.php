@@ -101,10 +101,10 @@
                                     <a href="/transaksi" class="text-white fw-semibold">Transaksi</a>
                                 </li>
                                 <li>
-                                    <a href="/menu" class="text-white fw-semibold">Menu</a>
+                                    <a href="/menuAll" class="text-white fw-semibold">Menu</a>
                                 </li>
                                 <li>
-                                    <a href="/customer" class="text-white fw-semibold">Customer</a>
+                                    <a href="/pelanggan" class="text-white fw-semibold">Customer</a>
                                 </li>
                                 <li>
                                     <a href="/penjualan" class="text-white fw-semibold">Penjualan</a>
@@ -138,12 +138,12 @@
                         <div class="collapse" id="sidebarUser">
                             <ul class="side-nav-second-level text-white">
                                 <li>
-                                    {{-- <a href="{{ route('users.index') }}" class="text-white fw-semibold">Tambah User
-                                    </a> --}}
+                                    <a href="{{ route('users.index') }}" class="text-white fw-semibold">Tambah User
+                                    </a>
                                 </li>
                                 <li>
-                                    {{-- <a href="{{ route('roles.index') }}" class="text-white fw-semibold">Tambah
-                                        Role</a> --}}
+                                    <a href="{{ route('roles.index') }}" class="text-white fw-semibold">Tambah
+                                        Role</a>
                                 </li>
                             </ul>
                         </div>
@@ -208,7 +208,7 @@
                                 </span>
                                 <span>
                                     <span class="account-user-name">
-                                        {{ auth()->user()->name }}
+                                        {{ auth()->user()->username }}
                                     </span>
                                     <span class="account-position">{{ auth()->user()->email }}</span>
                                 </span>
@@ -221,11 +221,11 @@
                                 </div>
 
                                 <!-- item-->
-                                {{-- <a href="{{ route('users.edit', auth()->user()->id) }}"
+                                <a href="{{ route('users.edit', auth()->user()->id_role) }}"
                                     class="dropdown-item notify-item">
                                     <i class="mdi mdi-account-circle me-1"></i>
                                     <span>Akun Saya</span>
-                                </a> --}}
+                                </a>
 
 
                                 <a class="dropdown-item notify-item" href="{{ route('logout') }}"
