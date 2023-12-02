@@ -12,7 +12,6 @@
 
                     </div>
                     <input type="hidden" id="inputid">
-
                     <div class="col-md-3"><input type="text" placeholder="Nama" class="form-control" id="inputnama"
                             class="form-control bg-lingkaran" readonly style="border-radius: 10px;"></div>
                     <div class="col-md-3"><input type="text" placeholder="No Telepon" class="form-control"
@@ -143,35 +142,30 @@
 
     @push('script')
         <script>
+            let idCus = 1;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 }
             })
 
-
-
-
-
-
-
             function reloadmenu() {
                 var totalAwal = 0;
                 $.ajax({
-                    url: "/api/updatemenu",
+                    url: "/productAll",
                     type: "GET",
                     method: "GET",
                     data: {},
                     success: function(response) {
                         totalAwal = response;
-                        console.log(response);
+                        // console.log(response);
                     }
                 })
 
                 setInterval(() => {
 
                     $.ajax({
-                        url: "/api/updatemenu",
+                        url: "/productAll",
                         type: "GET",
                         method: "GET",
                         data: {},
@@ -214,8 +208,9 @@
 
             function addCart(id) {
                 let id_menu = id;
+                console.log(id_menu);
                 $.ajax({
-                    url: "/api/penjualan/save",
+                    url: "{{ route('penjualan.save') }}",
                     type: "POST",
                     method: "POST",
                     data: {
@@ -232,7 +227,9 @@
 
             function showCart(element) {
 
+                // console.log(element);
                 let id = $(element).data('id');
+                console.log(id);
                 let cart = $('.cart-menu');
                 let isThere = false;
                 for (let i = 0; i < cart.length; i++) {
@@ -379,21 +376,21 @@
             function getMenu() {
                 searching = $('#search-input').val();
                 $.ajax({
-                    url: '/api/menus?q=' + searching,
+                    url: '/searchProductAll?q=' + searching,
                     method: 'GET',
                     success: function(response) {
                         html = ''
                         response.data.forEach((item) => {
                             html += `<div class="col-md-3 mt-2 pb-2">
-                                    <div id="menu_luar" class="bungkus-menu bg-second bg-white" style="cursor: pointer; border-radius : 10px;" data-nama="${item.nama_menu}" data-harga="${item.harga}" data-id="${item.id}" onclick="showCart(this)">
-                                    <img src="public/storage/${item.foto}" alt="" width="80px"
+                                    <div id="menu_luar" class="bungkus-menu bg-second bg-white" style="cursor: pointer; border-radius : 10px;" data-nama="${item.nama}" data-harga="${item.harga}" data-id="${item.id_menu}" onclick="showCart(this)">
+                                    <img src="public/${item.foto}" alt="" width="80px"
                                         class="justify-content-center align-items-center mx-auto d-block p-2"
                                         id="menu_dalam" style="object-fit: cover;
     height: 100px;">
                                     <p class="m-0 text-center text-primary fw-bold" id="harga_menu">Rp
                                         ${item.harga}</p>
                                     <p class="m-0 text-center" id="nama_menu" onclick="namamakanan(this.value)">
-                                         ${item.nama_menu}</p>
+                                         ${item.nama}</p>
                                     <p class="text-primary fw-bold m-0 text-center" id="id_kantin"><small> <i>Kantin ${item.id_kantin} </i>
                                             </small></p>
                                     </div>
@@ -408,6 +405,9 @@
             $(document).ready(function() {
                 $('#id_customer').on('change', function() {
                     const value = $(this).val();
+                    console.log("tess");
+                    idCus = value
+                    console.log(idCus);
 
                     $.ajax({
                         url: '/api/customer/get-by-id-customer?id_customer=' + value,
@@ -421,6 +421,7 @@
                             $('#inputalamat').val(customer.alamat);
                             $('#inputtelepon').val(customer.no_telepon);
                             $('#nama_tampil').html(customer.nama);
+
                         }
                     })
                 });
@@ -439,7 +440,6 @@
                     inputNoMeja.setCustomValidity('');
                 }
 
-
                 let details = [];
 
                 let cart = $('.cart-menu');
@@ -452,12 +452,20 @@
                     })
                 }
 
+
+                // console.log(anu);
+                console.log($('#total').attr('data-value'));
+                console.log($('#bayar').attr('data-value'));
+
+                console.log($('#inputid').val() +
+                    " aasdd");
+
                 $.ajax({
-                    url: "/api/penjualan/save",
+                    url: "api/kon/save",
                     type: "POST",
                     method: "POST",
                     data: {
-                        id_customer: ($('#inputid').val()) ? $('#inputid').val() : '1',
+                        id_customer: idCus,
                         id_kasir: '{{ Auth::user()->id }}',
                         subtotal: $('#subtotal').attr('data-value'),
                         diskon: $('#diskon').val(),
@@ -468,6 +476,7 @@
                         no_meja: $('input[name="no_meja"]').val(),
                         details: details
                     },
+
                     success: function(response) {
                         console.log(response);
                         if (response.status == true) {
@@ -485,6 +494,8 @@
                                 });
                         }
                     }
+
+                    // console.log(data);
 
 
                 });

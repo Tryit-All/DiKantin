@@ -26,7 +26,7 @@
                     @foreach ($menu as $m)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $m->nama_menu }}</td>
+                            <td>{{ $m->nama }}</td>
                             <td>Rp {{ number_format($m->harga) }}</td>
                             <td>
                                 <img src="{{ url('public/storage/' . $m->foto) }}"
@@ -37,8 +37,8 @@
                             <td>{{ $m->id_kantin }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-1" style="color: white;">
-                                    <a href="/menu/{{ $m->id }}/edit"
-                                        class="btn btn-warning btn-sm" style="color: white;">
+                                    <a href="/menu/{{ $m->id_menu }}/edit" class="btn btn-warning btn-sm"
+                                        style="color: white;">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit</a>
                                     {{-- <form action="/menu/{{ $m->id }}" method="post">
                                         @method('DELETE')
@@ -52,12 +52,11 @@
                                         <button class="btn btn-danger btn-sm" type="submit"
                                             onclick="deleteData()">Hapus</button>
                                     </form> --}}
-                                    <form action="/menu/{{ $m->id }}" method="post" class="delete-form">
+                                    <form action="/menu/{{ $m->id_menu }}" method="post" class="delete-form">
                                         @method('DELETE')
                                         @csrf
-                                        <input type="hidden" name="id" value="{{ $m->id }}">
-                                        <button class="btn btn-danger btn-sm m-0 delete-button"
-                                            type="submit">
+                                        <input type="hidden" name="id" value="{{ $m->id_menu }}">
+                                        <button class="btn btn-danger btn-sm m-0 delete-button" type="submit">
                                             <i class="fa-solid fa-trash-can"></i> Hapus</button>
                                     </form>
                                 </div>

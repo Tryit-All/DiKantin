@@ -32,6 +32,7 @@ class ApiTransaction extends Controller
         $user = Customer::where('token', $token)->first();
 
         if (isset($user)) {
+            // return 'anu';
             $customer = $user->id_customer;
             $searchAll = $request->get('searchAll');
             $searchDate = $request->get('searchDate');
@@ -43,6 +44,9 @@ class ApiTransaction extends Controller
                     ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                     ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                     ->where('customer.id_customer', $customer)
+                    ->where('transaksi.status_pengiriman', 'terima')
+                    ->where('transaksi.status_konfirm', '3')
+                    ->where('transaksi.status_pesanan', '3')
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
                     ->orderBy('transaksi.created_at', 'ASC')
                     // ->limit(10)
@@ -55,6 +59,9 @@ class ApiTransaction extends Controller
                     ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                     ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                     ->where('customer.id_customer', $customer)
+                    ->where('transaksi.status_pengiriman', 'terima')
+                    ->where('transaksi.status_konfirm', '3')
+                    ->where('transaksi.status_pesanan', '3')
                     ->whereDate('transaksi.created_at', $request->get('searchDate'))
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
                     ->orderBy('transaksi.created_at', 'ASC')
@@ -68,6 +75,9 @@ class ApiTransaction extends Controller
                     ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                     ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                     ->where('customer.id_customer', $customer)
+                    ->where('transaksi.status_pengiriman', 'terima')
+                    ->where('transaksi.status_konfirm', '3')
+                    ->where('transaksi.status_pesanan', '3')
                     ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
                     ->orderBy('transaksi.created_at', 'ASC')
@@ -81,6 +91,9 @@ class ApiTransaction extends Controller
                     ->join('transaksi', 'detail_transaksi.kode_tr', '=', 'transaksi.kode_tr')
                     ->join('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                     ->where('customer.id_customer', $customer)
+                    ->where('transaksi.status_pengiriman', 'terima')
+                    ->where('transaksi.status_konfirm', '3')
+                    ->where('transaksi.status_pesanan', '3')
                     ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
                     ->whereDate('transaksi.created_at', $request->get('searchDate'))
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
@@ -89,9 +102,12 @@ class ApiTransaction extends Controller
                     ->get();
 
                 return $this->sendMassage($riwayatCutomer, 200, true);
+            } else {
+                return $this->sendMassage([], 500, false);
             }
+        } else {
+            return $this->sendMassage([], 404, false);
         }
-        return $this->sendMassage('User Tidak Ditemukan', 200, true);
     }
 
 
@@ -390,7 +406,9 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('transaksi.id_kurir', '=', $user->id_kurir)->where('status_pengiriman', 'proses')
+        $transaksi = Transaksi::with('detail_transaksi.Menu')
+            ->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            ->where('transaksi.id_kurir', '=', $user->id_kurir)->where('status_pengiriman', 'proses')
             ->get();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -435,7 +453,12 @@ class ApiTransaction extends Controller
         }
 
         $transaksi = Transaksi::with('detail_transaksi.Menu')
+            ->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->where('transaksi.id_kurir', '=', $user->id_kurir)
+            ->where(function ($query) {
+                $query->where('transaksi.status_pengiriman', '=', 'kirim')
+                    ->orWhere('transaksi.status_pengiriman', '=', 'terima');
+            })
             ->groupBy('transaksi.kode_tr')
             ->get();
 

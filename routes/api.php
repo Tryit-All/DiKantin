@@ -6,6 +6,7 @@ use App\Http\Controllers\API\ApiDikantinOld;
 use App\Http\Controllers\API\ApiMenuController;
 
 use App\Http\Controllers\API\ApiTransaction;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +80,7 @@ Route::prefix('transaction')->group(function () {
 // List Riwayat Kantin
 Route::post('/api-riwayat', [ApiDikantinOld::class, 'api_riwayat']);
 
+// Count Data Succes And Process
 Route::post('/apisucces-date', [ApiDikantinOld::class, 'apisucces_date']);
 Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
 
@@ -98,6 +100,7 @@ Route::post('/updateada', [ApiDikantinOld::class, 'updateAda']);
 Route::get('/ubahHarga', [ApiDikantinOld::class, 'ubahHarga']);
 Route::get('/updateselesai', [ApiDikantinOld::class, 'orderselesai']);
 Route::get('/updatemenu', [ApiDikantinOld::class, 'menuada']);
+Route::get('/customer/get-by-id-customer', [ApiDikantinOld::class, 'showByIdCustomer']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -110,6 +113,12 @@ Route::post('/pesananStatus/{kode_tr}/{status_pesanan}/{status_konfirm}', [ApiTr
 
 Route::post('/kurirStatus/{kode_tr}/{status_konfirm}', [ApiTransaction::class, 'statusKurir']);
 Route::get('/detailTransaksi/{kode_tr}', [ApiTransaction::class, 'detailPesanan']);
+
+// Route tambahan dari web lama
+Route::post('/kon/save', [PenjualanController::class, 'store'])->name('penjualan.save');
+Route::post('/penjualan/tambahJumlah', [PenjualanController::class, 'tambahJumlah'])->name('penjualan.tambahJumlah');
+Route::post('/penjualan/kurangJumlah', [PenjualanController::class, 'kurangJumlah'])->name('penjualan.kurangJumlah');
+Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->name('penjualan.hapusItem');
 
 
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);

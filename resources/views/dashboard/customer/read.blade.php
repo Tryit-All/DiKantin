@@ -46,10 +46,10 @@
                             <td>{{ $c->alamat }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <a href="/customer/{{ $c->id }}/edit"
+                                    <a href="/customer/{{ $c->id_customer }}/edit"
                                         class="btn btn-warning text-white m-0">Edit</a>
-                                    <form action="/customer/{{ $c->id }}" method="post">
-                                        @method('DELETE')
+                                    <form action="/deleteCustomer/{{ $c->id_customer }}" method="post">
+                                        {{-- @method('DELETE') --}}
                                         @csrf
                                         <input type="submit" value="Hapus" class="btn btn-danger text-white m-0">
                                     </form>

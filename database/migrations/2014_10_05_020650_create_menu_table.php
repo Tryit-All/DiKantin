@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('menu', function (Blueprint $table) {
-            $table->integer('id_menu')->primary();
+            $table->integer('id_menu')->autoIncrement();
             $table->string('nama', 100);
             $table->integer('harga');
             $table->string('foto', 255);

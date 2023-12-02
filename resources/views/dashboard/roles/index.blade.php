@@ -44,7 +44,8 @@
                                 <a class="btn btn-info btn-sm" href="{{ route('roles.show', $role->id) }}">Detail</a>
                                 @can('role-edit')
                                     <a class="btn btn-warning btn-sm" style="color: white;"
-                                        href="{{ route('roles.edit', $role->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                                        href="{{ route('roles.edit', $role->id) }}"><i class="fa-solid fa-pen-to-square"></i>
+                                        Edit</a>
                                 @endcan
                                 @can('role-delete')
                                     {!! Form::open([

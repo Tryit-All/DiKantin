@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class OrderTransaksiController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:orderpenjualan-list|orderpenjualan-edit|orderpenjualan-delete', ['only' => ['index']]);
+        $this->middleware('permission:orderpenjualan-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:orderpenjualan-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         // $data = Penjualan::all();

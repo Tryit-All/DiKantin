@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -82,10 +83,11 @@ class RoleController extends Controller
             'permission' => 'required',
         ]);
 
+        // return $request->permission;
         $role = Role::find($id);
         $role->name = $request->input('name');
         $role->save();
-        $role->syncPermissions($request->input('permission'));
+        $role->syncPermissions($request->permission);
         return redirect()->route('roles.index');
     }
 
@@ -95,7 +97,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
 
-        DB::table("roles")->where('id', $id)->delete();
+        Role::where('id', $id)->delete();
         return redirect()->route('roles.index')
             ->with('success', 'Role deleted successfully');
     }

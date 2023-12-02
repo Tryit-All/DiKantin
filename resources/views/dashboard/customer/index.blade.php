@@ -46,8 +46,8 @@
                             <td>{{ $c->alamat }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-1">
-                                    <a href="/customer/{{ $c->id }}/edit"
-                                    class="btn btn-warning btn-sm" style="color: white;">
+                                    <a href="/customer/{{ $c->id_customer }}/edit" class="btn btn-warning btn-sm"
+                                        style="color: white;">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit</a>
                                     {{-- <button class="btn btn-warning" onclick="show({{ url('/customer/show/{{ $c->id }}') }})">Edit</button> --}}
                                     {{-- <button class="btn btn-warning" onclick="show({{ $c->id }})">Edit</button> --}}
@@ -63,12 +63,13 @@
                                         <button class="btn btn-danger btn-sm text-white m-0" type="submit"
                                             onclick="deleteData()">Hapus</button>
                                     </form> --}}
-                                    <form action="/customer/{{ $c->id }}" method="post" class="delete-form">
-                                        @method('DELETE')
+                                    <form action="/deleteCustomer/{{ $c->id_customer }}" method="post" class="delete-form">
+                                        {{-- @method('DELETE') --}}
                                         @csrf
-                                        <input type="hidden" name="id" value="{{ $c->id }}">
-                                        <button class="btn btn-danger btn-sm m-0 delete-button" style="color: white;" type="submit">
-                                        <i class="fa-solid fa-trash-can"></i> Hapus</button>
+                                        <input type="hidden" name="id" value="{{ $c->id_customer }}">
+                                        <button class="btn btn-danger btn-sm m-0 delete-button" style="color: white;"
+                                            type="submit">
+                                            <i class="fa-solid fa-trash-can"></i> Hapus</button>
                                     </form>
                                 </div>
                             </td>
@@ -100,7 +101,7 @@
                                     }
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        this.parentNode.action = '/customer/' + id;
+                                        this.parentNode.action = '/deleteCustomer/' + id;
                                         this.parentNode.submit();
                                     }
                                 });
