@@ -13,7 +13,7 @@
             <div class="mb-2">
                 <div class="form-group">
                     <strong>Nama</strong>
-                    {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+                    {!! Form::text('username', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
                 </div>
             </div>
             <div class="mb-2">

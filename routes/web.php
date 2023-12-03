@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('viewLoginNew');
+    return view('auth.login');
 });
 
 Route::get('google', [AuthLoginController::class, 'redirectToGoogle']);
