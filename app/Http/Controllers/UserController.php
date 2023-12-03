@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\Roles;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -30,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name', 'name')->all();
+        $roles = Roles::pluck('name', 'name')->all();
         return view('user.create', compact('roles'));
     }
 
@@ -42,15 +45,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required',
-            'foto' => 'image|nullable|max:1999',
-            'id_kantin' => 'nullable|integer',
+        // $this->validate($request, [
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:users,email',
+        //     'password' => 'required|same:confirm-password',
+        //     'roles' => 'required',
+        //     'foto' => 'image|nullable|max:1999',
+        //     'id_kantin' => 'nullable|integer',
 
-        ]);
+        // ]);
         if ($request->hasFile('foto')) {
             $input = $request->all();
             $input['foto'] = $request->file('foto')->store('profile', 'public');
@@ -88,7 +91,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = Role::pluck('name', 'name')->all();
+        $roles = Roles::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
 
         return view('user.edit', compact('user', 'roles', 'userRole'));
@@ -103,14 +106,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required',
-            'foto' => 'image|nullable|max:1999',
-            'id_kantin' => 'nullable|integer',
-        ]);
+
+        // dd($request->all());
+        // $this->validate($request, [
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:users,email,' . $id,
+        //     'password' => 'same:confirm-password',
+        //     'roles' => 'required',
+        //     'foto' => 'image|nullable|max:1999',
+        //     'id_kantin' => 'nullable|integer',
+        // ]);
 
         $input = $request->all();
         if (!empty($input['password']) || !empty($input['foto'])) {
@@ -133,7 +138,7 @@ class UserController extends Controller
 
         $user->assignRole($request->input('roles'));
         // return redirect()->route('users.index');
-        return redirect('dashboard');
+        return redirect('/users');
     }
 
     /**

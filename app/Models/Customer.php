@@ -20,6 +20,7 @@ class Customer extends Model
         'password',
         'token',
         'token_fcm',
+        'google_id',
         'email_verified',
         'remember_token',
         'created_at',

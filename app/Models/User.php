@@ -24,6 +24,7 @@ class User extends Authenticatable
         'id_kantin',
         'id_role',
         'foto',
+        'google_id',
         'created_at',
         'updated_at',
     ];

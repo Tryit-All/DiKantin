@@ -17,9 +17,10 @@ return new class extends Migration {
             $table->string('password', 100);
             $table->integer('id_kantin')->nullable();
             $table->integer('id_role');
-            $table->string('foto', 255);
+            $table->string('google_id')->nullable();
+            $table->string('foto', 255)->nullable(true);
             $table->foreign('id_kantin')->references('id_kantin')->on('kantin')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign('id_role')->references('id_role')->on('role')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('id_role')->references('id')->on('roles')->cascadeOnDelete()->cascadeOnUpdate();
             $table->rememberToken()->nullable();
             $table->timestamps();
         });
