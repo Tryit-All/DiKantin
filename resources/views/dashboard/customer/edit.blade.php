@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Edit Customer')
 @section('content')
     <div class="container mt-3">

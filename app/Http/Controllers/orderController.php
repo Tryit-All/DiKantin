@@ -37,7 +37,7 @@ class OrderController extends Controller
                 'menu.harga as harga_satuan',
                 'detail_transaksi.QTY as jumlah',
                 'menu.diskon as diskon',
-                'transaksi.status_pesanan as status'
+                'transaksi.status_pengiriman as status'
             )
             ->get();
         // dd($data);

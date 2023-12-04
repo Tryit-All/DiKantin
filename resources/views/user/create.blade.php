@@ -48,7 +48,16 @@
         <div class="mb-2">
             <div class="form-group">
                 <strong>Role</strong>
-                {!! Form::select('roles[]', $roles, [], ['class' => 'form-control', 'multiple', 'required' => true]) !!}
+                {!! Form::select(
+                    'roles[]',
+                    [
+                        1 => 'Admin',
+                        2 => 'Tefa',
+                        3 => 'Kantin',
+                    ],
+                    [],
+                    ['class' => 'form-control', 'multiple', 'required' => true],
+                ) !!}
             </div>
         </div>
 

@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Proses Order')
 @section('content')
     <div class="container-fluid mt-2">
@@ -33,7 +33,17 @@
                             <td>{{ $d->jumlah }}</td>
                             <td>Rp {{ number_format($d->harga_satuan) }}</td>
                             <td>{{ $d->diskon }}</td>
-                            <td>{{ $d->status }}</td>
+                            <td>
+                                @if ($d->status == 'proses')
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="" method="">
+                                            @csrf
+                                            <button class="btn btn-secondary btn-sm" id=""
+                                                disabled>{{ $d->status }}</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
 
                         </tr>
                     @endforeach

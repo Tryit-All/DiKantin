@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('content')
     <div class="container">
         <div class="row">
@@ -58,4 +58,3 @@
 
         {!! $data->render() !!}
     </div>
-    

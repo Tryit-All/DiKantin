@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Penjualan')
 @section('content')
     <div class="container-fluid mt-3">

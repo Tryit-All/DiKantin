@@ -19,7 +19,7 @@
                         @csrf
                         <div class="row mb-3 input-field">
                             <!-- <label for="email"
-                                                                                                                                        class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label> -->
+                                                                                                                    class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label> -->
                             <div class="col-md-12">
                                 <input id="email" type="email" placeholder="Email"
                                     class="input form-control @error('email') is-invalid @enderror" name="email"
@@ -44,7 +44,7 @@
 
                         <div class="row mb-3 input-field">
                             <!-- <label for="password"
-                                                                                                                                        class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label> -->
+                                                                                                                    class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label> -->
 
                             <div class="col-md-12 position-relative">
                                 <div class="password-wrapper d-flex align-items-center">

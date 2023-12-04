@@ -63,7 +63,7 @@
                                         </tr>
                                         <tr>
                                             <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>
-                                            <td><a href="dikantin.com/api/validate/verified/{{ $dataUser['email'] }}"
+                                            <td><a href="{{ route('verifiedEmail', ['id' => $dataUser['email']]) }}"
                                                     style="color:#1b74e4;text-decoration:none;display:block;width:370px"
                                                     target="_blank"
                                                     data-saferedirecturl="https://www.google.com/url?q=https://www.instagram.com/_n/emaillogin?uid%3Dhjizt14%26token%3Dcsi7jk%26auto_send%3D0&amp;source=gmail&amp;ust=1697094208467000&amp;usg=AOvVaw3knwqubET7eWn7p-h8TaQr">

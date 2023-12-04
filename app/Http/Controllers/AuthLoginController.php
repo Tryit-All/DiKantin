@@ -19,6 +19,20 @@ class AuthLoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function loginUser(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+
+            return redirect()->intended('/dashboard');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
+
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();

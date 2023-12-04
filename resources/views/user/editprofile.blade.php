@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('content')
     <div class="container mt-3">
         {!! Form::model($user, [

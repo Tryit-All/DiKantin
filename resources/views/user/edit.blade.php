@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Edit User')
 @section('content')
     <div class="container mt-3 bg-white p-3" style="border-radius: 20px">
