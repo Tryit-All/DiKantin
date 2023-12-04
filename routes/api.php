@@ -30,7 +30,7 @@ Route::prefix('validate')->group(function () {
     Route::post('/customerAccount', [ApiTransaction::class, 'editCustomer']);
     Route::post('/verifKode', [ApiAuth::class, 'verifKode']);
     Route::post('/confirmPassword', [ApiAuth::class, 'verifPasswordNew']);
-    Route::get('/verified/{id}', [ApiController::class, 'verified']);
+    Route::get('/verified/{id}', [ApiController::class, 'verified'])->name('verifiedEmail');
     Route::post('/customerAccount', [ApiController::class, 'editCustomer']);
     Route::post('/imageProfile', [ApiController::class, 'profileImage']);
     Route::get('/profileShow', [ApiController::class, 'tampilCustomer']);

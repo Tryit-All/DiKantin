@@ -15,4 +15,16 @@ class RoleHasPermissions extends Model
         'permission_id',
         'role_id'
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Roles::class, "role_id");
+    }
+
+    public function permissions()
+    {
+        return $this->belongsTo(Permissions::class, "permissions_id");
+
+    }
+
 }

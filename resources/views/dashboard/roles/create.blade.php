@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Tambah Role')
 @section('content')
     <div class="container mt-3">
@@ -12,17 +12,18 @@
                 </div>
             </div>
             <div class="mb-2">
-            <div class="form-group">
-                <strong>Akses</strong>
-                <br />
-                <label class="mb-2">{{ Form::checkbox('select_all', 1, false, ['id' => 'select-all']) }} Pilih Semua</label>
-                <br />
-                @foreach ($permission as $value)
-                    <label>{{ Form::checkbox('permission[]', $value->id, false, ['class' => 'name']) }}
-                        {{ $value->name }}</label>
+                <div class="form-group">
+                    <strong>Akses</strong>
                     <br />
-                @endforeach
-            </div>
+                    <label class="mb-2">{{ Form::checkbox('select_all', 1, false, ['id' => 'select-all']) }} Pilih
+                        Semua</label>
+                    <br />
+                    @foreach ($permission as $value)
+                        <label>{{ Form::checkbox('permission[]', $value->id, false, ['class' => 'name']) }}
+                            {{ $value->name }}</label>
+                        <br />
+                    @endforeach
+                </div>
             </div>
 
             <div class="mb-3">

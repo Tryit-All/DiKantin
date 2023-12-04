@@ -127,17 +127,30 @@ class ApiController extends Controller
 
         if ($editCustomer) {
             $hasil = Customer::where("email", $id)->first();
-            return response()->json([
+            return view('email.notifikasiEmail', compact('hasil'))->with([
                 'data' => $hasil->email_verified,
                 'code' => 200,
                 'status' => true
-            ], 200);
+            ]);
+            // return view('email.notifikasiEmail', compact('hasil'));
+            // return response()->json([
+            //     'data' => $hasil->email_verified,
+            //     'code' => 200,
+            //     'status' => true
+            // ], 200);
         } else {
-            return response()->json([
-                'data' => null,
+            $hasil = "Kesalahan akun";
+            return view('email.notifikasiEmail')->with([
+                'data' => 'salah',
                 'code' => 400,
                 'status' => false
-            ], 400);
+            ]);
+            // return view('email.notifikasiEmail', compact('hasil'));
+            // return response()->json([
+            //     'data' => 'salah',
+            //     'code' => 400,
+            //     'status' => false
+            // ], 400);
         }
     }
 

@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('model_has_permissions', function (Blueprint $table) {
-            $table->integer('permission_id');
+            $table->unsignedBigInteger('permission_id');
             $table->string('model_type', 100);
             $table->integer('model_id');
             $table->foreign('permission_id')->references('id')->on('permissions')->cascadeOnDelete()->cascadeOnUpdate();

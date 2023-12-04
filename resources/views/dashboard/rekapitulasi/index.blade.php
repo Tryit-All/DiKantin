@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Rekapitulasi Laporan Pendapatan')
 @section('content')
     <div class="container-fluid mt-3">
@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
                 <tfoot>
                     <tr>
@@ -45,7 +45,7 @@
                 onclick="this.href='/rekapitulasi/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value ">Cetak
                 Rekapitulasi</a>
         </div>
-        
+
     </div>
 @endsection
 

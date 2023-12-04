@@ -27,11 +27,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::get('/', function () {
-    return view('auth.login');
+    return view('layout.pageLogin');
 });
 
+Route::post('loginWeb', [AuthLoginController::class, 'loginUser'])->name('loginUserWeb');
 Route::get('google', [AuthLoginController::class, 'redirectToGoogle']);
 Route::get('google/callback', [AuthLoginController::class, 'handleGoogleCallback']);
 
@@ -40,6 +40,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    // Route::put('roles/{id}/edit', [RoleController::class, 'update'])->name('roles.update');
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 

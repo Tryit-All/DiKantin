@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\RoleHasPermissions;
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +12,8 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+    use HasRoles;
+
     public function __construct()
     {
         $this->middleware('permission:role-list|role-create|role-edit|role-update', ['only' => ['index', 'store']]);
@@ -44,8 +48,18 @@ class RoleController extends Controller
             'permission' => 'required'
         ]);
 
-        $role = Roles::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
+        $role = Roles::create(['name' => $request->input('name'), 'guard_name' => 'web']);
+        // dd($role);
+        $newRole = Roles::latest()->first();
+        // dd($newRole);
+        foreach ($request->input('permission') as $key => $value) {
+            # code...
+            RoleHasPermissions::create([
+                'permission_id' => $value,
+                "role_id" => $newRole->id
+            ]);
+        }
+        // $role->syncPermissions($request->input('permission'));
 
         return redirect()->route('roles.index')->with('success', 'Role Created Successfully');
     }
@@ -84,11 +98,36 @@ class RoleController extends Controller
             'permission' => 'required',
         ]);
 
-        // return $request->permission;
-        $role = Roles::find($id);
-        $role->name = $request->input('name');
-        $role->save();
-        $role->syncPermissions($request->permission);
+        // return $request;
+        $role = Roles::with('permissions')->find($id);
+
+
+        try {
+            //code...
+            $role->permissions()->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        try {
+            //code...
+            $role->name = $request->input('name');
+            $role->save();
+
+            foreach ($request->input('permission') as $key => $value) {
+                # code...
+                RoleHasPermissions::create([
+                    'permission_id' => $value,
+                    "role_id" => $role->id
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+
+
         return redirect()->route('roles.index');
     }
 

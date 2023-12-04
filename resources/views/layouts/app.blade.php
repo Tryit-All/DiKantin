@@ -24,9 +24,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url(asset('/css/style.css')) }}" />
-    <link href="<https://fonts.googleapis.com/icon?family=Material+Icons>" rel="stylesheet" />
-    <script src="<https://cdn.tailwindcss.com>"></script>
-    {{-- @vite('resources/css/app.css') --}}
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])

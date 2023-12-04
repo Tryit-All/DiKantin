@@ -58,14 +58,29 @@ class UserController extends Controller
             $input = $request->all();
             $input['foto'] = $request->file('foto')->store('profile', 'public');
             $input['password'] = Hash::make($input['password']);
-            $user = User::create($input);
-            $user->assignRole($request->input('roles'));
+            User::create([
+                'username' => $input['username'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'id_kantin' => $input['id_kantin'],
+                'id_role' => $input['roles'][0]
+            ]);
+            // $user = User::create($input);
+            // $user->assignRole($request->input('roles'));
             return redirect()->route('users.index');
         } else {
             $input = $request->all();
+            // dd($input['roles'][0]);
             $input['password'] = Hash::make($input['password']);
-            $user = User::create($input);
-            $user->assignRole($request->input('roles'));
+            // $user = User::create($input);
+            User::create([
+                'username' => $input['username'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'id_kantin' => $input['id_kantin'],
+                'id_role' => $input['roles'][0]
+            ]);
+            // $user->assignRole($request->input('roles'));
             return redirect()->route('users.index');
         }
     }

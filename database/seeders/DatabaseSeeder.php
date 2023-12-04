@@ -31,9 +31,6 @@ class DatabaseSeeder extends Seeder
         // Add Role
         $this->call(DataRoleSeeder::class);
 
-        // Add Customer
-        $this->call(DataUserSeeder::class);
-
         // Add Kurir
         $this->call(DataKurirSeeder::class);
 
@@ -54,5 +51,9 @@ class DatabaseSeeder extends Seeder
 
         // Add Role Has Permissions
         $this->call(DataRoleHasPermissions::class);
+
+        // Add Customer
+        $this->call(DataUserSeeder::class);
+
     }
 }

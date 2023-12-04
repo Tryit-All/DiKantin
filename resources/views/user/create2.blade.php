@@ -1,5 +1,4 @@
-
-@extends('main')
+@extends('layout.main')
 @section('content')
     <div class="container mt-3">
         <form method="POST" action="/user" class="bg-white p-3" style="border-radius: 20px;" enctype="multipart/form-data">

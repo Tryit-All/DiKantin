@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Selesai Order')
 @section('content')
     <div class="container-fluid mt-2">
@@ -36,7 +36,27 @@
                             <td>{{ $d->Detail }}</td>
                             <td>{{ $d->Pembayaran }}</td>
                             <td>Rp {{ number_format($d->Total) }}</td>
-                            <td>{{ $d->Status }}</td>
+                            <td>
+                                @if ($d->Status == 'kirim')
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="" method="">
+                                            {{-- @method('DELETE') --}}
+                                            @csrf
+                                            <button class="btn btn-warning" type="submit" id="konfirmasi-button"
+                                                onclick="confirm('Apakah anda ingin menyelesaikan Transaksi ? ')"
+                                                disabled>{{ $d->Status }}</button>
+                                        </form>
+                                    </div>
+                                @elseif ($d->Status == 'terima')
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="" method="">
+                                            @csrf
+                                            <button class="btn btn-primary" id=""
+                                                disabled>{{ $d->Status }}</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                             <td>
                                 @if ($d->Kode_Tr == $d->Bukti && $d->SK == '2' && $d->SP == '3')
                                     <div class="d-flex align-items-center gap-2">
@@ -59,7 +79,8 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <form action="" method="">
                                             @csrf
-                                            <button class="btn btn-light btn-sm" id="">Transaksi Selesai</button>
+                                            <button class="btn btn-success" id="" disabled>Transaksi
+                                                Selesai</button>
                                         </form>
                                     </div>
                                 @else

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('email', 100);
             $table->string('password', 100);
             $table->integer('id_kantin')->nullable();
-            $table->integer('id_role');
+            $table->unsignedBigInteger('id_role')->nullable();
             $table->string('google_id')->nullable();
             $table->string('foto', 255)->nullable(true);
             $table->foreign('id_kantin')->references('id_kantin')->on('kantin')->cascadeOnDelete()->cascadeOnUpdate();
