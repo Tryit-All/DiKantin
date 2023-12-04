@@ -56,6 +56,7 @@ class SuccesController extends Controller
         Transaksi::where('kode_tr', $kode_tr)->update([
             'status_konfirm' => '2',
             'status_pesanan' => '3',
+            'status_pengiriman' => 'kirim',
             'bukti_pengiriman' => null,
         ]);
         return redirect()->back();

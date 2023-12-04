@@ -498,9 +498,11 @@ class ApiController extends Controller
             $statusKonfirm = $transaksi->status_konfirm;
 
             $idKurir = $transaksi->id_kurir;
+            $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
+            $kurir2 = $idKurir2->id_kurir; // sementara bolo
 
             if ($kode_tr == $kodeTransaksi) {
-                if ($idKurir == $kurir && $statusKonfirm == '2' && $statusPesanan == '3') {
+                if ($idKurir == $kurir2 && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
                         'status_konfirm' => '2',
                         'status_pengiriman' => 'terima',
