@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Kasir')
 @section('content')
     <div class="container-fluid mt-0" id="bungkusLuar" onload="updatePost()">
