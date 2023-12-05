@@ -38,7 +38,7 @@ class ApiController extends Controller
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            // 'token_fcm' => 'required',
+            'token_fcm' => 'required',
         ]);
 
         $dataEmail = $request->email;
@@ -54,7 +54,7 @@ class ApiController extends Controller
                         $token = Str::random(200);
                         Customer::where('email', $dataEmail)->update([
                             'token' => $token,
-                            // 'token_fcm' => $dataTokenFcm,
+                            'token_fcm' => $dataTokenFcm,
                         ]);
                         $dataCustomer = Customer::where('email', $dataEmail)->first();
                         return $this->sendMassage($dataCustomer, 200, true);
@@ -160,7 +160,7 @@ class ApiController extends Controller
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            // 'token_fcm' => 'required',
+            'token_fcm' => 'required',
         ]);
 
         $dataEmail = $request->email;
@@ -174,8 +174,8 @@ class ApiController extends Controller
                 if (Hash::check($request->password, $kurir->password)) {
                     $token = Str::random(200);
                     Kurir::where('email', $dataEmail)->update([
-                        'token' => $token
-                        // 'token_fcm' => $dataTokenFcm,
+                        'token' => $token,
+                        'token_fcm' => $dataTokenFcm,
                     ]);
                     $dataKurir = Kurir::where('email', $dataEmail)->first();
                     return $this->sendMassage($dataKurir, 200, true);
