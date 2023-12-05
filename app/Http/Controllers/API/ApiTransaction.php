@@ -498,6 +498,26 @@ class ApiTransaction extends Controller
         }
     }
 
+    public function offStatusProfile(Request $request)
+    {
+        $token = $request->bearerToken();
+        $user = Kurir::where('token', $token)->first();
+
+        if (!$user) {
+            return $this->sendMassage('Token tidak valid', 401, false);
+        }
+
+        $infoStatus = Kurir::select('status')->where('token', $token)->first();
+
+        if ($infoStatus->status == "1") {
+            Kurir::where('token', $token)->update([
+                'status' => "0"
+            ]);
+            return $this->sendMassage(0, 200, true);
+        }
+        return $this->sendMassage($infoStatus->status, 400, false);
+    }
+
     // Function Massage
     public function sendMassage($text, $kode, $status)
     {
