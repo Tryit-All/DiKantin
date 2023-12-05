@@ -408,7 +408,10 @@ class ApiTransaction extends Controller
 
         $transaksi = Transaksi::with('detail_transaksi.Menu')
             ->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
-            ->where('transaksi.id_kurir', '=', $user->id_kurir)->where('status_pengiriman', 'proses')
+            ->where('transaksi.id_kurir', '=', $user->id_kurir)
+            ->where('transaksi.status_konfirm', '1')
+            ->where('transaksi.status_pesanan', '3')
+            ->where('transaksi.status_pengiriman', 'proses')
             ->get();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -436,7 +439,6 @@ class ApiTransaction extends Controller
                 $result[] = $temp;
 
             }
-
             return $this->sendMassage($result, 200, true);
         } else {
             return $this->sendMassage([], 200, true);

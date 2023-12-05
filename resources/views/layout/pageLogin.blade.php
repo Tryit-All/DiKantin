@@ -89,7 +89,7 @@
                     Google</a>
             </div>
             <div class="flex justify-center pt-6 items-center flex-col w-96">
-                <span class="text-sm pt-3 text-center">Powered By :</span>
+                <span class="text-sm pt-3 text-center">Copyright by :</span>
                 <img src="{{ asset('/img/JTI-Nova - Full.png') }}" class="logo" alt="" width="130px">
             </div>
 
