@@ -38,6 +38,7 @@ Route::prefix('validate')->group(function () {
     // Kurir
     Route::post('/loginKurir', [ApiController::class, 'loginKurir']);
     Route::post('/editProfile', [ApiController::class, 'editProfile']);
+    Route::post('/logoutKurir', [ApiTransaction::class, 'offStatusProfile']);
 
     // Kantin
     Route::post('/loginKantin', [ApiController::class, 'login']);
