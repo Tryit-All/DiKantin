@@ -515,7 +515,7 @@ class ApiTransaction extends Controller
             ]);
             return $this->sendMassage(0, 200, true);
         }
-        return $this->sendMassage($infoStatus->status, 400, false);
+        return $this->sendMassage($infoStatus->status, 200, true);
     }
 
     // Function Massage
