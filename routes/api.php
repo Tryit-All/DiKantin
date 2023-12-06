@@ -38,6 +38,7 @@ Route::prefix('validate')->group(function () {
     // Kurir
     Route::post('/loginKurir', [ApiController::class, 'loginKurir']);
     Route::post('/editProfile', [ApiController::class, 'editProfile']);
+    Route::get('/kurirShow', [ApiController::class, 'tampilKurir']);
     Route::post('/logoutKurir', [ApiTransaction::class, 'offStatusProfile']);
 
     // Kantin
@@ -49,24 +50,24 @@ Route::prefix('validate')->group(function () {
 
 // Route Product
 Route::prefix('menu')->group(function () {
-    // List Category of Product 
+    // List Category of Product
     Route::get('/productBestToday/{searchAll?}', [ApiMenuController::class, 'productBestToday'])->where('searchAll', '.*');
     Route::get('/productWithDiscount/{searchAll?}', [ApiMenuController::class, 'productWithDiscount'])->where('searchAll', '.*');
     Route::get('/productAll/{searchAll?}', [ApiMenuController::class, 'product'])->where('searchAll', '.*');
     Route::get('/food/{searchAll?}', [ApiMenuController::class, 'product_food'])->where('searchAll', '.*');
     Route::get('/drink/{searchAll?}', [ApiMenuController::class, 'product_drink'])->where('searchAll', '.*');
 
-    // Menu Kantin 
+    // Menu Kantin
     Route::post('/apimenu', [ApiMenuController::class, 'apimenu']);
 });
 
 Route::prefix('transaction')->group(function () {
     Route::post('/', [ApiTransaction::class, 'transaksiCustomer']);
 
-    // Button Request Pesanan 
+    // Button Request Pesanan
     Route::post('/konfirmasiPesanan', [ApiController::class, 'konfirmasiPesanan']);
 
-    // List Pesanan 
+    // List Pesanan
     Route::get('/diproses', [ApiTransaction::class, 'pesananDiproses']);
     Route::get('/dikirim', [ApiTransaction::class, 'pesananDikirim']);
     Route::get('/diterima', [ApiTransaction::class, 'pesananDiterima']);
@@ -74,7 +75,7 @@ Route::prefix('transaction')->group(function () {
     Route::get('/konfirmasi', [ApiTransaction::class, 'pesananKonfirmasi']);
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
 
-    // list Orders Kantin 
+    // list Orders Kantin
     Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
 });
 
