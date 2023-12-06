@@ -622,7 +622,7 @@ class ApiController extends Controller
         $kurir = Kurir::where('token', $token)->first();
 
         if (!$token) {
-            return $this->sendMassage('Tolong masukkan token', 200, false);
+            return $this->sendMassage('Tolong masukkan token', 401, false);
         }
 
         return $this->sendMassage($kurir, 200, true);
