@@ -29,9 +29,10 @@
                             <td>{{ $m->nama }}</td>
                             <td>Rp {{ number_format($m->harga) }}</td>
                             <td>
-                                <img src="{{ url('public/storage/' . $m->foto) }}"
-                                    style="width: 70px; height: 70px;  object-fit: cover;" alt=""
+                                <img src="{{ url(public_path($m->foto)) }}"
+                                    style="width: 70px; height: 70px; object-fit: cover;" alt=""
                                     class="rounded-circle">
+
                             </td>
                             <td>{{ $m->status_stok }}</td>
                             <td>{{ $m->id_kantin }}</td>
