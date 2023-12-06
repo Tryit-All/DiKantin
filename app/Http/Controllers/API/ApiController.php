@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
 use Http;
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\Kurir;
 use App\Mail\VerifMail;
 use App\Models\Customer;
@@ -13,12 +13,13 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DetailTransaksi;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Support\Facades\Validator;
 
@@ -563,6 +564,32 @@ class ApiController extends Controller {
         }
     }
 
+    public function kurirImage(Request $request)
+    {
+        $token = $request->bearerToken();
+        $kurir = Kurir::where('token', $token)->first();
+
+        if (!$token) {
+            return $this->sendMassage('Tolong masukkan token', 401, false);
+        }
+
+        if ($request->hasFile('foto')) {
+            $oldFilePath = public_path($kurir->foto);
+            if (File::exists($oldFilePath)) {
+                File::delete($oldFilePath);
+            }
+
+            $originalFilename = $request->file('foto')->getClientOriginalName();
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            $newFilename = 'kurir' . '/' . Str::random(30) . '.' . $extension;
+            $request->file('foto')->move(public_path('kurir/'), $newFilename);
+
+            $kurir->foto = $newFilename;
+            $kurir->save();
+
+            return $this->sendMassage('Foto Profile terupdate', 200, true);
+        }
+    }
 
     public function profileImage(Request $request) {
         $token = $request->bearerToken();
@@ -580,8 +607,9 @@ class ApiController extends Controller {
 
             $originalFilename = $request->file('foto')->getClientOriginalName();
             $extension = $request->file('foto')->getClientOriginalExtension();
-            $newFilename = 'customer'.'/'.Str::random(30).'.'.$extension;
-            $request->file('foto')->move('customer/', $newFilename);
+          
+            $newFilename = 'customer' . '/' . Str::random(30) . '.' . $extension;
+            $request->file('foto')->move(public_path('customer/'), $newFilename);
 
             $user->foto = $newFilename;
             $user->save();
@@ -595,16 +623,30 @@ class ApiController extends Controller {
         $token = $request->bearerToken();
         $customer = Customer::where('token', $token)->first();
 
-        if(!$token) {
-            return $this->sendMassage('Tolong masukkan token', 200, false);
-        }
+        if (!$token) {
+            return $this->sendMassage('Customer tidak ditemukan', 400, false);
 
         return $this->sendMassage($customer, 200, true);
     }
 
-    // List orderan pada setiap kantin 
-    public function listOrdersKantin(Request $request) {
-        if($request->has('id_kantin')) {
+
+    public function tampilKurir(Request $request)
+    {
+        $token = $request->bearerToken();
+        $kurir = Kurir::where('token', $token)->first();
+
+        if (!$token) {
+            return $this->sendMassage('Kurir tidak ditemukan', 400, false);
+        }
+
+        return $this->sendMassage($kurir, 200, true);
+    }
+
+    // List orderan pada setiap kantin
+    public function listOrdersKantin(Request $request)
+    {
+        if ($request->has('id_kantin')) {
+          
             // Ambil nilai ID kantin
             $id_kantin = $request->input('id_kantin');
             $dataList = Transaksi::select(
