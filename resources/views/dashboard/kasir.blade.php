@@ -483,12 +483,20 @@
 
                 // console.log(anu);
                 console.log($('#total').attr('data-value'));
-                console.log($('#bayar').attr('data-value'));
+                console.log(details);
 
                 console.log($('#inputid').val() +
                     " aasdd");
 
-                if ($('#bayar').attr('data-value') < $('#total').attr('data-value')) {
+                if (details.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Informasi',
+                        text: 'Tidak ada data',
+                        showConfirmButton: false,
+                        timer: 2200,
+                    }).then(function() {});
+                } else if ($('#bayar').attr('data-value') < $('#total').attr('data-value')) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Informasi',
