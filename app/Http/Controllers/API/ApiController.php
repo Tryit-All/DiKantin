@@ -575,6 +575,39 @@ class ApiController extends Controller
         }
     }
 
+    public function editKurir(Request $request)
+    {
+        $token = $request->bearerToken();
+        $kurir = Kurir::where('token', $token)->first();
+
+        if ($kurir) {
+            $nama = $request->input('nama');
+            $email = $request->input('email');
+            $telepon = $request->input('telepon');
+
+            if (!empty($nama)) {
+                $kurir->nama = $nama;
+            }
+
+            if (!empty($email)) {
+                $kurir->email = $email;
+            }
+
+            if (!empty($telepon)) {
+                $kurir->telepon = $telepon;
+            }
+
+            if ($kurir->isDirty()) {
+                $kurir->save();
+                return $this->sendMassage('Data terupdate', 200, true);
+            } else {
+                return $this->sendMassage('Tidak ada perubahan data', 200, true);
+            }
+        } else {
+            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
+        }
+    }
+
 
     public function profileImage(Request $request)
     {
