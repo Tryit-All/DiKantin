@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
 use Http;
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\Kurir;
 use App\Mail\VerifMail;
 use App\Models\Customer;
@@ -13,12 +13,13 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DetailTransaksi;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Support\Facades\Validator;
 
