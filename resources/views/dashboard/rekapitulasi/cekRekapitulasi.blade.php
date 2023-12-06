@@ -27,14 +27,18 @@
                 style="height: 100% !important">
                 <thead>
                     <tr>
+                        <th>Kode transaksi</th>
                         <th>Kantin</th>
+                        <th>Metode</th>
                         <th>Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $m)
                         <tr>
+                            <td>{{ $m->kode }}</td>
                             <td>{{ $m->nama_kantin }}</td>
+                            <td>{{ $m->metode }}</td>
                             <td>Rp {{ number_format($m->total) }}</td>
                         </tr>
                     @endforeach
@@ -43,6 +47,8 @@
                     @if ($jumlah != null)
                         <tr>
                             <th colspan="1">Total Pendapatan :</th>
+                            <th></th>
+                            <th></th>
                             <th>Rp {{ number_format($sumTotal) }}</td>
                         </tr>
                     @endif

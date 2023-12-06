@@ -75,7 +75,7 @@
                             <td>{{ $m->jumlah }}</td>
                             <td>Rp {{ number_format($m->harga_satuan) }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td>{{ $m->status }}</td>
+                            <td>{{ $m->status_pengiriman }}</td>
                         </tr>
                     @endforeach
                 </tbody>

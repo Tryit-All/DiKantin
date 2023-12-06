@@ -38,34 +38,31 @@
                 style="height: 100% !important">
                 <thead class="table-dark">
                     <tr>
+                        <th>Kode transaksi</th>
                         <th>Kantin</th>
+                        <th>Metode</th>
                         <th>Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $m)
                         <tr>
-                            <td>{{ $m->kantin }}</td>
+                            <td>{{ $m->kode }}</td>
+                            <td>{{ $m->nama_kantin }}</td>
+                            <td>{{ $m->metode }}</td>
                             <td>Rp {{ number_format($m->total) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
-                    {{-- @if ($sumTotal == 0)
-                        <tr>
-                            <td colspan="8">
-                                <center><b>Data tidak Ditemukan !
-                                    </b></center>
-                            </td>
-                        </tr>
-                    @endif --}}
                     @if ($jumlah != null)
                         <tr>
                             <th colspan="1">Total Pendapatan :</th>
+                            <th></th>
+                            <th></th>
                             <th>Rp {{ number_format($sumTotal) }}</td>
                         </tr>
                     @endif
-
                 </tfoot>
             </table>
 

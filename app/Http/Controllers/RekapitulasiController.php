@@ -33,7 +33,7 @@ class RekapitulasiController extends Controller
             ->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai])
             ->where('transaksi.status_pengiriman', 'terima')
             ->selectRaw(
-                "kantin.id_kantin as id_kantin,
+                "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
         kantin.nama as nama_kantin,
         SUM(menu.harga) as harga_satuan,
         SUM(detail_transaksi.QTY) as jumlah,
@@ -42,9 +42,9 @@ class RekapitulasiController extends Controller
             menu.diskon IS NULL OR menu.diskon = 0,
             menu.harga * detail_transaksi.QTY,
             (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
-        )) as total"
+        )) as total, transaksi.model_pembayaran as metode"
             )
-            ->groupBy('kantin.id_kantin', 'kantin.nama')
+            ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
             ->get();
 
@@ -95,7 +95,7 @@ class RekapitulasiController extends Controller
             ->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai])
             ->where('transaksi.status_pengiriman', 'terima')
             ->selectRaw(
-                "kantin.id_kantin as id_kantin,
+                "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
         kantin.nama as nama_kantin,
         SUM(menu.harga) as harga_satuan,
         SUM(detail_transaksi.QTY) as jumlah,
@@ -104,9 +104,9 @@ class RekapitulasiController extends Controller
             menu.diskon IS NULL OR menu.diskon = 0,
             menu.harga * detail_transaksi.QTY,
             (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
-        )) as total"
+        )) as total, transaksi.model_pembayaran as metode"
             )
-            ->groupBy('kantin.id_kantin', 'kantin.nama')
+            ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
             ->get();
 
