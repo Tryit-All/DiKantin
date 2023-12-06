@@ -250,7 +250,7 @@
                                 <div class="col-5">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
                                         <p class="m-0">x<span class="qty">1</span></p>
-                                        <input type="number" data-id="${id}" class="form-control border-0 bg-white" placeholder="0%" onchange="discountPerItem(this)">
+                                        <input type="text" data-id="${id}" class="form-control border-0 bg-white" placeholder="0%" onchange="discountPerItem(this)">
                                     </div>
                                 </div>
                                 <div class="col-3">
@@ -312,20 +312,37 @@
             }
 
             function discountPerItem(element) {
-                let id = $(element).data('id');
+
+                let id = $(element).data('id'); // Perbaikan: Ambil data-id dari elemen element
                 let discount = $(`.cart-menu[data-id="${id}"]`).find('input').val();
-                if (discount == null || discount == NaN || !discount) {
-                    discount = 0
+
+                if (discount == null || isNaN(discount) || !discount) {
+                    discount = 0;
                 }
-                let qty = $(`.cart-menu[data-id="${id}"]`).find(`span.qty`).html()
-                let harga = $(`.cart-menu[data-id="${id}"]`).find(`.item-price`).html()
-                let subtotal = parseInt(harga) * parseInt(qty)
+
+                let qty = $(`.cart-menu[data-id="${id}"]`).find(`span.qty`).html();
+                let harga = $(`.cart-menu[data-id="${id}"]`).find(`.item-price`).html();
+                let subtotal = parseInt(harga) * parseInt(qty);
 
                 let totalDiscount = Math.ceil((parseInt(discount) / 100) * parseInt(subtotal));
 
-                $(`.cart-menu[data-id="${id}"]`).find(`.subtotal-item`).html(parseInt(subtotal) - parseInt(totalDiscount))
-                total()
+                $(`.cart-menu[data-id="${id}"]`).find(`.subtotal-item`).html(parseInt(subtotal) - parseInt(totalDiscount));
+                total();
+
+                var inputValue = element.value;
+
+                // Tambahkan '%' di belakang nilai jika belum ada
+                if (!inputValue.includes('%')) {
+                    inputValue += '%'; // Perbaikan: Menggunakan operator += untuk menambahkan '%'
+                }
+
+                console.log(inputValue + "%");
+
+                // Setel nilai input yang telah dimodifikasi
+                element.value = inputValue;
             }
+
+
 
             function total() {
                 let cart = $('.cart-menu');
@@ -440,6 +457,18 @@
                     inputNoMeja.setCustomValidity('');
                 }
 
+                console.log(idCus + "aaa");
+
+                if (idCus == "1") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Informasi',
+                        text: 'ID Customer tidak boleh kosong !!...',
+                        showConfirmButton: false,
+                        timer: 2200,
+                    }).then(function() {});
+                }
+
                 let details = [];
 
                 let cart = $('.cart-menu');
@@ -452,7 +481,6 @@
                     })
                 }
 
-
                 // console.log(anu);
                 console.log($('#total').attr('data-value'));
                 console.log($('#bayar').attr('data-value'));
@@ -460,45 +488,89 @@
                 console.log($('#inputid').val() +
                     " aasdd");
 
-                $.ajax({
-                    url: "api/kon/save",
-                    type: "POST",
-                    method: "POST",
-                    data: {
-                        id_customer: idCus,
-                        id_kasir: '{{ Auth::user()->id }}',
-                        subtotal: $('#subtotal').attr('data-value'),
-                        diskon: $('#diskon').val(),
-                        total: $('#total').attr('data-value'),
-                        bayar: $('#bayar').attr('data-value'),
-                        kembalian: $('#kembali').attr('data-value'),
-                        model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
-                        no_meja: $('input[name="no_meja"]').val(),
-                        details: details
-                    },
+                if ($('#bayar').attr('data-value') < $('#total').attr('data-value')) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Informasi',
+                        text: 'Nominal yang anda masukan kurang',
+                        showConfirmButton: false,
+                        timer: 2200,
+                    }).then(function() {});
+                } else if ($('#subtotal').attr('data-value') == $('#total').attr('data-value')) {
+                    $.ajax({
+                        url: "api/kon/save",
+                        type: "POST",
+                        method: "POST",
+                        data: {
+                            id_customer: idCus,
+                            id_kasir: '{{ Auth::user()->id }}',
+                            subtotal: $('#subtotal').attr('data-value'),
+                            diskon: $('#diskon').val(),
+                            total: $('#total').attr('data-value'),
+                            bayar: $('#bayar').attr('data-value'),
+                            kembalian: $('#kembali').attr('data-value'),
+                            model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
+                            no_meja: $('input[name="no_meja"]').val(),
+                            details: details
+                        },
 
-                    success: function(response) {
-                        console.log(response);
-                        if (response.status == true) {
-                            Swal.fire({
-                                    icon: 'success',
-                                    title: 'Transaksi Berhasil',
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 1200,
-                                })
-                                .then(function() {
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status == true) {
+                                Swal.fire({
+                                        icon: 'success',
+                                        title: 'Transaksi Berhasil',
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 1200,
+                                    })
+                                    .then(function() {
 
-                                    window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
-                                    location.reload();
-                                });
+                                        window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
+                                        location.reload();
+                                    });
+                            }
                         }
-                    }
 
-                    // console.log(data);
+                    });
+                } else if ($('#subtotal').attr('data-value') > $('#total').attr('data-value')) {
+                    $.ajax({
+                        url: "api/kon/save",
+                        type: "POST",
+                        method: "POST",
+                        data: {
+                            id_customer: idCus,
+                            id_kasir: '{{ Auth::user()->id }}',
+                            subtotal: $('#subtotal').attr('data-value'),
+                            diskon: $('#diskon').val(),
+                            total: $('#total').attr('data-value'),
+                            bayar: $('#bayar').attr('data-value'),
+                            kembalian: $('#kembali').attr('data-value'),
+                            model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
+                            no_meja: $('input[name="no_meja"]').val(),
+                            details: details
+                        },
 
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status == true) {
+                                Swal.fire({
+                                        icon: 'success',
+                                        title: 'Transaksi Berhasil',
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 1200,
+                                    })
+                                    .then(function() {
 
-                });
+                                        window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
+                                        location.reload();
+                                    });
+                            }
+                        }
+
+                    });
+                }
             }
 
 

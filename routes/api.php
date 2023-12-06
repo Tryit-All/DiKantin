@@ -73,6 +73,7 @@ Route::prefix('transaction')->group(function () {
     Route::get('/untukDikirim', [ApiTransaction::class, 'pesananUntukDikirim']);
     Route::get('/konfirmasi', [ApiTransaction::class, 'pesananKonfirmasi']);
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
+    Route::get('/riwayatKurir', [ApiTransaction::class, 'riwayatPesananKurir']);
 
     // list Orders Kantin 
     Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
