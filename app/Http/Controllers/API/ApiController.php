@@ -581,7 +581,7 @@ class ApiController extends Controller
         $kurir = Kurir::where('token', $token)->first();
 
         if (!$token) {
-            return $this->sendMassage('Tolong masukkan token', 200, false);
+            return $this->sendMassage('Tolong masukkan token', 401, false);
         }
 
         if ($request->hasFile('foto')) {
