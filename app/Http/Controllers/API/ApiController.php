@@ -22,19 +22,16 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Support\Facades\Validator;
 
-class ApiController extends Controller
-{
+class ApiController extends Controller {
 
     private VerifMail $verifMail;
     // Required apikey mobile
-    public function __construct()
-    {
+    public function __construct() {
         $this->verifMail = new VerifMail();
     }
 
     // Controller Login
-    public function loginUser(Request $request)
-    {
+    public function loginUser(Request $request) {
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -44,13 +41,13 @@ class ApiController extends Controller
         $dataEmail = $request->email;
         $dataTokenFcm = $request->token_fcm;
 
-        if ($validadte->fails()) {
+        if($validadte->fails()) {
             return $this->sendMassage($validadte->errors()->first(), 400, false);
         } else {
             $customer = Customer::where('email', $dataEmail)->first();
-            if ($customer) {
-                if ($customer->email_verified == true) {
-                    if (Hash::check($request->password, $customer->password)) {
+            if($customer) {
+                if($customer->email_verified == true) {
+                    if(Hash::check($request->password, $customer->password)) {
                         $token = Str::random(200);
                         Customer::where('email', $dataEmail)->update([
                             'token' => $token,
@@ -68,8 +65,7 @@ class ApiController extends Controller
     }
 
     // Controller Register
-    public function registerUser(Request $request)
-    {
+    public function registerUser(Request $request) {
         $validadte = Validator::make($request->all(), [
             'nama' => 'required',
             'email' => 'required|email',
@@ -78,17 +74,17 @@ class ApiController extends Controller
 
         $RandomNumber = rand(10000, 99999);
 
-        if ($validadte->fails()) {
+        if($validadte->fails()) {
             return $this->sendMassage($validadte->errors()->first(), 400, false);
         } else {
             $dataEmail = $request->input('email');
             $customer = Customer::where('email', $dataEmail)->first();
-            if ($customer) {
+            if($customer) {
                 return $this->sendMassage('Akun yang anda gunakan telah terdapat pada list, lakukan aktifasi terlebih dahulu', 400, false);
             } else {
 
                 $isRegister = Customer::create([
-                    'id_customer' => "CUST" . $RandomNumber,
+                    'id_customer' => "CUST".$RandomNumber,
                     'nama' => $request->input('nama'),
                     'no_telepon' => $request->input('no_telepon'),
                     'alamat' => $request->input('alamat'),
@@ -96,7 +92,7 @@ class ApiController extends Controller
                     'password' => Hash::make($request->input('password')),
                 ]);
 
-                if (isset($isRegister)) {
+                if(isset($isRegister)) {
 
                     $dataUser = [
                         'email' => $dataEmail,
@@ -118,14 +114,13 @@ class ApiController extends Controller
 
     }
 
-    public function verified($id)
-    {
+    public function verified($id) {
 
         $editCustomer = Customer::where("email", $id)->first()->update([
             'email_verified' => true
         ]);
 
-        if ($editCustomer) {
+        if($editCustomer) {
             $hasil = Customer::where("email", $id)->first();
             return view('email.notifikasiEmail', compact('hasil'))->with([
                 'data' => $hasil->email_verified,
@@ -155,8 +150,7 @@ class ApiController extends Controller
     }
 
     // Controller Kurir
-    public function loginKurir(Request $request)
-    {
+    public function loginKurir(Request $request) {
         $validadte = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -166,12 +160,12 @@ class ApiController extends Controller
         $dataEmail = $request->email;
         $dataTokenFcm = $request->token_fcm;
 
-        if ($validadte->fails()) {
+        if($validadte->fails()) {
             return $this->sendMassage($validadte->errors()->first(), 400, false);
         } else {
             $kurir = Kurir::where('email', $dataEmail)->first();
-            if ($kurir) {
-                if (Hash::check($request->password, $kurir->password)) {
+            if($kurir) {
+                if(Hash::check($request->password, $kurir->password)) {
                     $token = Str::random(200);
                     Kurir::where('email', $dataEmail)->update([
                         'token' => $token,
@@ -187,14 +181,13 @@ class ApiController extends Controller
     }
 
     // Controller Kantin
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         // return 'anu';
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        if(Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->id_kantin !== null) {
+            if($user->id_kantin !== null) {
                 return response()->json(['user' => $user], 200);
             } else {
                 return response()->json(['user' => $user], 200);
@@ -206,22 +199,20 @@ class ApiController extends Controller
         }
     }
 
-    public function logout(Request $request)
-    {
+    public function logout(Request $request) {
         Auth::logout();
         return response()->json(['message' => 'Logout successful'], 200);
     }
 
-    public function editProfile(Request $request)
-    {
+    public function editProfile(Request $request) {
         $token = $request->bearerToken();
 
         $kurir = Kurir::where('token', $token)->first();
 
         $dataEmail = $kurir->email;
 
-        if (isset($kurir)) {
-            if ($kurir->status == true) {
+        if(isset($kurir)) {
+            if($kurir->status == true) {
                 Kurir::where('email', $dataEmail)->update([
                     'status' => false
                 ]);
@@ -236,8 +227,7 @@ class ApiController extends Controller
     }
     // End Controller Kantin
 
-    public function konfirmasiPesanan(Request $request)
-    {
+    public function konfirmasiPesanan(Request $request) {
 
         $kode = $request->kode;
         $kantin = $request->kantin;
@@ -252,13 +242,13 @@ class ApiController extends Controller
         $valid = false;
         $valid2 = false;
 
-        if ($kode == '0') {
+        if($kode == '0') {
 
             $statusPesanan = $transaksi->status_pesanan;
             $statusKonfirm = $transaksi->status_konfirm;
 
-            if ($statusKonfirm != '2' && $statusKonfirm != '3' && $statusPesanan != '2' && $statusPesanan != '3') {
-                if (isset($customer)) {
+            if($statusKonfirm != '2' && $statusKonfirm != '3' && $statusPesanan != '2' && $statusPesanan != '3') {
+                if(isset($customer)) {
                     Transaksi::where('id_customer', $customer)->where('kode_tr', $kodeTransaksi)->delete();
                     return $this->sendMassage("Kode transaksi $kodeTransaksi telah berhasil di hapus", 200, true);
                 }
@@ -266,9 +256,9 @@ class ApiController extends Controller
             }
             return $this->sendMassage('error validasi', 400, false);
 
-        } elseif ($kode == '1') {
+        } elseif($kode == '1') {
 
-            if (isset($kantin, $kodeMenu, $kodeTransaksi)) {
+            if(isset($kantin, $kodeMenu, $kodeTransaksi)) {
                 $statusKonfirm = DetailTransaksi::join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
                     ->select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu', 'menu.id_kantin')
                     ->where('detail_transaksi.kode_tr', $kodeTransaksi)
@@ -276,12 +266,12 @@ class ApiController extends Controller
                     ->where('detail_transaksi.kode_menu', $kodeMenu)
                     ->first();
 
-                if (isset($statusKonfirm)) {
+                if(isset($statusKonfirm)) {
                     $kodeIdKantin = $statusKonfirm->id_kantin;
                     $kodeMenu = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
 
-                    if ($status == "menunggu" && $kodeIdKantin == $kantin) {
+                    if($status == "menunggu" && $kodeIdKantin == $kantin) {
                         $konfirm_status = "memasak";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
@@ -296,9 +286,9 @@ class ApiController extends Controller
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
 
-            foreach ($validatePesanan as $key => $value) {
-                if ($value['status_konfirm'] != null) {
-                    if ($value['status_konfirm'] == 'memasak') {
+            foreach($validatePesanan as $key => $value) {
+                if($value['status_konfirm'] != null) {
+                    if($value['status_konfirm'] == 'memasak') {
                         $valid = true;
                     } else {
                         $valid = false;
@@ -316,7 +306,7 @@ class ApiController extends Controller
 
             array_push($validatePesanan, $temp);
 
-            if ($valid == true) {
+            if($valid == true) {
                 Transaksi::where('kode_tr', $kodeTransaksi)->update([
                     'status_pesanan' => '2',
                 ]);
@@ -324,7 +314,7 @@ class ApiController extends Controller
 
             return $validatePesanan;
             // return $this->sendMassage('status konfirm = 1, status pesanan = 2, status pengiriman = proses', 200, true);
-        } elseif ($kode == '2') {
+        } elseif($kode == '2') {
 
             $listKodeMenu = collect($transaksi['detail_transaksi'])->pluck('kode_menu')->toArray();
 
@@ -332,10 +322,10 @@ class ApiController extends Controller
             $listIdkantin = Menu::select('id_kantin')->whereIn('id_menu', $listKodeMenu)->get();
 
             // return $this->sendMassage($listIdkantin, 200, true);
-            foreach ($listIdkantin as $key => $value) {
+            foreach($listIdkantin as $key => $value) {
                 $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
 
-                if ($value->id_kantin == $kantin) {
+                if($value->id_kantin == $kantin) {
                     $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
                         ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
                         ->join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
@@ -346,7 +336,7 @@ class ApiController extends Controller
                     $kodeMenu = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
                     // return $kodeMenu;
-                    if ($status == 'memasak') {
+                    if($status == 'memasak') {
                         $konfirm_status = "selesai";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
@@ -368,9 +358,9 @@ class ApiController extends Controller
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
 
-            foreach ($validatePesanan as $key => $value) {
-                if ($value['status_konfirm'] != null) {
-                    if ($value['status_konfirm'] == 'selesai') {
+            foreach($validatePesanan as $key => $value) {
+                if($value['status_konfirm'] != null) {
+                    if($value['status_konfirm'] == 'selesai') {
                         $valid2 = true;
                     } else {
                         $valid2 = false;
@@ -388,24 +378,24 @@ class ApiController extends Controller
 
             array_push($validatePesanan, $temp);
 
-            foreach ($selectKurir as $key => $value) {
+            foreach($selectKurir as $key => $value) {
                 $kurirFree = Kurir::select('kurir.id_kurir')->join('transaksi', 'kurir.id_kurir', '=', 'transaksi.id_kurir')->where('transaksi.id_kurir', $value['id_kurir'])->get();
 
-                if ($kurirFree->isEmpty()) {
+                if($kurirFree->isEmpty()) {
                     $status = 'free';
                 } else {
                     $kurirAfterTransaction = Transaksi::with('detail_transaksi.Menu')->where('id_kurir', $value['id_kurir'])->get();
 
-                    if (sizeof($kurirAfterTransaction) != 0) {
+                    if(sizeof($kurirAfterTransaction) != 0) {
 
-                        foreach ($kurirAfterTransaction as $key => $value) {
+                        foreach($kurirAfterTransaction as $key => $value) {
                             $status_konfirm = $value['status_konfirm'];
                             $status_pesanan = $value['status_pesanan'];
                             $status_pengiriman = $value['status_pengiriman'];
 
                             $status = null;
 
-                            if ($status_konfirm == '3' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
+                            if($status_konfirm == '3' && $status_pesanan == '3' && $status_pengiriman == 'terima') {
                                 $status = 'sudah mendapatkan transaksi';
                             } else {
                                 $status = 'busy';
@@ -425,8 +415,8 @@ class ApiController extends Controller
             }
 
 
-            foreach ($listKurir as $key => $value) {
-                if ($value['status'] == 'free') {
+            foreach($listKurir as $key => $value) {
+                if($value['status'] == 'free') {
                     $temp = [
                         'id_kurir' => $value['id_kurir'],
                         'status' => $value['status'],
@@ -436,8 +426,8 @@ class ApiController extends Controller
                 }
             }
 
-            foreach ($listKurir as $key => $value) {
-                if ($value['status'] == 'sudah mendapatkan transaksi') {
+            foreach($listKurir as $key => $value) {
+                if($value['status'] == 'sudah mendapatkan transaksi') {
 
                     $temp = [
                         'id_kurir' => $value['id_kurir'],
@@ -449,8 +439,8 @@ class ApiController extends Controller
             }
 
 
-            if (sizeof($listKurirPakai) != 0 || sizeof($listKurirPakaiDahulu) != 0) {
-                if (sizeof($listKurirPakaiDahulu) != 0) {
+            if(sizeof($listKurirPakai) != 0 || sizeof($listKurirPakaiDahulu) != 0) {
+                if(sizeof($listKurirPakaiDahulu) != 0) {
                     $kurirTerpilih = Arr::get($listKurirPakaiDahulu, array_rand($listKurirPakaiDahulu, 1));
                 } else {
                     $kurirTerpilih = Arr::get($listKurirPakai, array_rand($listKurirPakai, 1));
@@ -459,7 +449,7 @@ class ApiController extends Controller
                 return $this->sendMassage('Tidak ada Kurir', 400, false);
             }
 
-            if ($valid2 == true) {
+            if($valid2 == true) {
                 Transaksi::where('kode_tr', $kodeTransaksi)->update([
                     'id_kurir' => $kurirTerpilih['id_kurir'],
                     'status_pesanan' => '3',
@@ -468,7 +458,7 @@ class ApiController extends Controller
 
             return $validatePesanan;
             // return $this->sendMassage('status konfirm = 1, status pesanan = 3, status pengiriman = proses', 400, true);
-        } elseif ($kode == '3') {
+        } elseif($kode == '3') {
 
             $kode_tr = $transaksi->kode_tr;
             $statusPesanan = $transaksi->status_pesanan;
@@ -478,8 +468,8 @@ class ApiController extends Controller
             $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
             $kurir2 = $idKurir2->id_kurir; // sementara bolo
 
-            if ($kode_tr == $kodeTransaksi) {
-                if ($idKurir == $kurir2 && $statusKonfirm == '1' && $statusPesanan == '3') {
+            if($kode_tr == $kodeTransaksi) {
+                if($idKurir == $kurir2 && $statusKonfirm == '1' && $statusPesanan == '3') {
 
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
                         'status_konfirm' => '2',
@@ -491,7 +481,7 @@ class ApiController extends Controller
                 return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = kirim', 400, true);
-        } elseif ($kode == '4') {
+        } elseif($kode == '4') {
 
             $kode_tr = $transaksi->kode_tr;
             // return $kode_tr;
@@ -502,8 +492,8 @@ class ApiController extends Controller
             $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
             $kurir2 = $idKurir2->id_kurir; // sementara bolo
 
-            if ($kode_tr == $kodeTransaksi) {
-                if ($idKurir == $kurir2 && $statusKonfirm == '2' && $statusPesanan == '3') {
+            if($kode_tr == $kodeTransaksi) {
+                if($idKurir == $kurir2 && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
                         'status_konfirm' => '2',
                         'status_pengiriman' => 'terima',
@@ -514,14 +504,14 @@ class ApiController extends Controller
                 return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = terima', 400, true);
-        } elseif ($kode == '5') {
+        } elseif($kode == '5') {
 
             $kode_tr = $transaksi->kode_tr;
             $statusPesanan = $transaksi->status_pesanan;
             $statusKonfirm = $transaksi->status_konfirm;
 
-            if ($kode_tr == $kodeTransaksi) {
-                if ($kode_tr == $buktiPengiriman && $statusKonfirm == '2' && $statusPesanan == '3') {
+            if($kode_tr == $kodeTransaksi) {
+                if($kode_tr == $buktiPengiriman && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
                         'status_konfirm' => '3',
                     ]);
@@ -533,37 +523,36 @@ class ApiController extends Controller
         }
     }
 
-    public function editCustomer(Request $request)
-    {
+    public function editCustomer(Request $request) {
         // Mencari user dari token yang didapatkan dari request
         $token = $request->bearerToken();
         $user = Customer::where('token', $token)->first();
 
-        if ($user) {
+        if($user) {
             // Periksa apakah ada perubahan nilai sebelum menyimpan
             $nama = $request->input('nama');
             $email = $request->input('email');
             $no_telepon = $request->input('no_telepon');
             $alamat = $request->input('alamat');
 
-            if (!empty($nama)) {
+            if(!empty($nama)) {
                 $user->nama = $nama;
             }
 
-            if (!empty($email)) {
+            if(!empty($email)) {
                 $user->email = $email;
             }
 
-            if (!empty($no_telepon)) {
+            if(!empty($no_telepon)) {
                 $user->no_telepon = $no_telepon;
             }
 
-            if (!empty($alamat)) {
+            if(!empty($alamat)) {
                 $user->alamat = $alamat;
             }
 
             // Simpan hanya jika ada perubahan nilai
-            if ($user->isDirty()) {
+            if($user->isDirty()) {
                 $user->save();
                 return $this->sendMassage('Data terupdate', 200, true);
             } else {
@@ -575,24 +564,23 @@ class ApiController extends Controller
     }
 
 
-    public function profileImage(Request $request)
-    {
+    public function profileImage(Request $request) {
         $token = $request->bearerToken();
         $user = Customer::where('token', $token)->first();
 
-        if (!$token) {
+        if(!$token) {
             return $this->sendMassage('Tolong masukkan token', 200, false);
         }
 
-        if ($request->hasFile('foto')) {
+        if($request->hasFile('foto')) {
             $oldFilePath = public_path($user->foto);
-            if (File::exists($oldFilePath)) {
+            if(File::exists($oldFilePath)) {
                 File::delete($oldFilePath);
             }
 
             $originalFilename = $request->file('foto')->getClientOriginalName();
             $extension = $request->file('foto')->getClientOriginalExtension();
-            $newFilename = 'customer' . '/' . Str::random(30) . '.' . $extension;
+            $newFilename = 'customer'.'/'.Str::random(30).'.'.$extension;
             $request->file('foto')->move('customer/', $newFilename);
 
             $user->foto = $newFilename;
@@ -602,13 +590,12 @@ class ApiController extends Controller
         }
     }
 
-    public function tampilCustomer(Request $request)
-    {
+    public function tampilCustomer(Request $request) {
 
         $token = $request->bearerToken();
         $customer = Customer::where('token', $token)->first();
 
-        if (!$token) {
+        if(!$token) {
             return $this->sendMassage('Tolong masukkan token', 200, false);
         }
 
@@ -616,9 +603,8 @@ class ApiController extends Controller
     }
 
     // List orderan pada setiap kantin 
-    public function listOrdersKantin(Request $request)
-    {
-        if ($request->has('id_kantin')) {
+    public function listOrdersKantin(Request $request) {
+        if($request->has('id_kantin')) {
             // Ambil nilai ID kantin
             $id_kantin = $request->input('id_kantin');
             $dataList = Transaksi::select(
@@ -648,7 +634,7 @@ class ApiController extends Controller
                 ->get();
 
             // Konversi data menjadi format JSON dan kembalikan
-            return response()->json($dataList);
+            return $this->sendMassage($dataList, 200, true);
         } else {
             // Jika parameter ID kantin tidak diberikan, kirimkan pesan kesalahan
             return response()->json(['error' => 'Parameter ID kantin tidak diberikan']);
@@ -656,15 +642,14 @@ class ApiController extends Controller
     }
 
     // Kantin
-    public function updateprofile(Request $request)
-    {
+    public function updateprofile(Request $request) {
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:users,id',
             'username' => 'required|string|max:255',
             'foto' => 'nullable|image|max:2048'
         ]);
 
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
@@ -672,10 +657,10 @@ class ApiController extends Controller
 
         $user->username = $request->input('username');
 
-        if ($request->hasFile('foto')) {
+        if($request->hasFile('foto')) {
             // hapus foto terdahulu jika ada
-            if ($user->foto) {
-                Storage::delete('public/' . $user->foto);
+            if($user->foto) {
+                Storage::delete('public/'.$user->foto);
             }
 
             // simpan foto baru
@@ -689,15 +674,13 @@ class ApiController extends Controller
         return response()->json(['message' => 'User updated successfully.', 'data' => $user]);
     }
 
-    public function ubahprofile(Request $request, )
-    {
+    public function ubahprofile(Request $request, ) {
         $user = User::findOrFail($request->id);
 
         return response()->json($user);
     }
 
-    public function sendMassage($text, $kode, $status)
-    {
+    public function sendMassage($text, $kode, $status) {
         return response()->json([
             'data' => $text,
             'code' => $kode,
