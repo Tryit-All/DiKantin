@@ -564,24 +564,23 @@ class ApiController extends Controller {
         }
     }
 
-    public function kurirImage(Request $request)
-    {
+    public function kurirImage(Request $request) {
         $token = $request->bearerToken();
         $kurir = Kurir::where('token', $token)->first();
 
-        if (!$token) {
+        if(!$token) {
             return $this->sendMassage('Tolong masukkan token', 401, false);
         }
 
-        if ($request->hasFile('foto')) {
+        if($request->hasFile('foto')) {
             $oldFilePath = public_path($kurir->foto);
-            if (File::exists($oldFilePath)) {
+            if(File::exists($oldFilePath)) {
                 File::delete($oldFilePath);
             }
 
             $originalFilename = $request->file('foto')->getClientOriginalName();
             $extension = $request->file('foto')->getClientOriginalExtension();
-            $newFilename = 'kurir' . '/' . Str::random(30) . '.' . $extension;
+            $newFilename = 'kurir'.'/'.Str::random(30).'.'.$extension;
             $request->file('foto')->move(public_path('kurir/'), $newFilename);
 
             $kurir->foto = $newFilename;
@@ -607,8 +606,8 @@ class ApiController extends Controller {
 
             $originalFilename = $request->file('foto')->getClientOriginalName();
             $extension = $request->file('foto')->getClientOriginalExtension();
-          
-            $newFilename = 'customer' . '/' . Str::random(30) . '.' . $extension;
+
+            $newFilename = 'customer'.'/'.Str::random(30).'.'.$extension;
             $request->file('foto')->move(public_path('customer/'), $newFilename);
 
             $user->foto = $newFilename;
@@ -623,19 +622,18 @@ class ApiController extends Controller {
         $token = $request->bearerToken();
         $customer = Customer::where('token', $token)->first();
 
-        if (!$token) {
+        if(!$token) {
             return $this->sendMassage('Customer tidak ditemukan', 400, false);
-
+        }
         return $this->sendMassage($customer, 200, true);
     }
 
 
-    public function tampilKurir(Request $request)
-    {
+    public function tampilKurir(Request $request) {
         $token = $request->bearerToken();
         $kurir = Kurir::where('token', $token)->first();
 
-        if (!$token) {
+        if(!$token) {
             return $this->sendMassage('Kurir tidak ditemukan', 400, false);
         }
 
@@ -643,10 +641,9 @@ class ApiController extends Controller {
     }
 
     // List orderan pada setiap kantin
-    public function listOrdersKantin(Request $request)
-    {
-        if ($request->has('id_kantin')) {
-          
+    public function listOrdersKantin(Request $request) {
+        if($request->has('id_kantin')) {
+
             // Ambil nilai ID kantin
             $id_kantin = $request->input('id_kantin');
             $dataList = Transaksi::select(
