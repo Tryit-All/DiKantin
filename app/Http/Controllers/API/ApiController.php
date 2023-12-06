@@ -575,39 +575,32 @@ class ApiController extends Controller
         }
     }
 
-    public function editKurir(Request $request)
+    public function kurirImage(Request $request)
     {
         $token = $request->bearerToken();
         $kurir = Kurir::where('token', $token)->first();
 
-        if ($kurir) {
-            $nama = $request->input('nama');
-            $email = $request->input('email');
-            $telepon = $request->input('telepon');
+        if (!$token) {
+            return $this->sendMassage('Tolong masukkan token', 200, false);
+        }
 
-            if (!empty($nama)) {
-                $kurir->nama = $nama;
+        if ($request->hasFile('foto')) {
+            $oldFilePath = public_path($kurir->foto);
+            if (File::exists($oldFilePath)) {
+                File::delete($oldFilePath);
             }
 
-            if (!empty($email)) {
-                $kurir->email = $email;
-            }
+            $originalFilename = $request->file('foto')->getClientOriginalName();
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            $newFilename = 'kurir' . '/' . Str::random(30) . '.' . $extension;
+            $request->file('foto')->move(public_path('kurir/'), $newFilename);
 
-            if (!empty($telepon)) {
-                $kurir->telepon = $telepon;
-            }
+            $kurir->foto = $newFilename;
+            $kurir->save();
 
-            if ($kurir->isDirty()) {
-                $kurir->save();
-                return $this->sendMassage('Data terupdate', 200, true);
-            } else {
-                return $this->sendMassage('Tidak ada perubahan data', 200, true);
-            }
-        } else {
-            return $this->sendMassage('Pelanggan tidak ditemukan', 400, false);
+            return $this->sendMassage('Foto Profile terupdate', 200, true);
         }
     }
-
 
     public function profileImage(Request $request)
     {
