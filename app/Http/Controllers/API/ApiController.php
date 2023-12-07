@@ -279,12 +279,12 @@ class ApiController extends Controller
 
                 if (isset($statusKonfirm)) {
                     $kodeIdKantin = $statusKonfirm->id_kantin;
-                    $kodeMenu = $statusKonfirm->kode_menu;
+                    $kodeMenus = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
 
                     if ($status == "menunggu" && $kodeIdKantin == $kantin) {
                         $konfirm_status = "memasak";
-                        DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
+                        DetailTransaksi::where('kode_menu', $kodeMenus)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
                         ]);
                     } else {
@@ -329,7 +329,7 @@ class ApiController extends Controller
 
             $listKodeMenu = collect($transaksi['detail_transaksi'])->pluck('kode_menu')->toArray();
 
-            // return $this->sendMassage($transaksi, 200, true);
+            // return $this->sendMassage($listKodeMenu, 200, true);
             $listIdkantin = Menu::select('id_kantin')->whereIn('id_menu', $listKodeMenu)->get();
 
             // return $this->sendMassage($listIdkantin, 200, true);
@@ -342,12 +342,15 @@ class ApiController extends Controller
                         ->join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
                         ->where('detail_transaksi.kode_tr', $kodeTransaksi)
                         ->where('kantin.id_kantin', $kantin)
+                        ->where('detail_transaksi.kode_menu', $kodeMenu)
                         ->first();
 
-                    $kodeMenu = $statusKonfirm->kode_menu;
+                    // return $statusKonfirm;
+
+                    // $kodeMenus = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
                     // return $kodeMenu;
-                    if ($status == 'memasak') {
+                    if ($status == 'menunggu') {
                         $konfirm_status = "selesai";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
