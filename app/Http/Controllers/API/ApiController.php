@@ -347,10 +347,10 @@ class ApiController extends Controller
 
                     // return $statusKonfirm;
 
-                    // $kodeMenus = $statusKonfirm->kode_menu;
+                    $kodeMenus = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
                     // return $kodeMenu;
-                    if ($status == 'menunggu') {
+                    if ($status == 'memasak' && $kodeMenus == $kodeMenu) {
                         $konfirm_status = "selesai";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
@@ -360,7 +360,7 @@ class ApiController extends Controller
                         // DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                         //     'status_konfirm' => $konfirm_status,
                         // ]);
-                        return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
+                        // return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
                     }
                 }
             }
