@@ -531,6 +531,66 @@ class ApiController extends Controller
                 return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);
             }
             // return $this->sendMassage('status konfirm = 3, status pesanan = 3, status pengiriman = terima', 400, true);
+        } elseif ($kode == '6') {
+
+            if (isset($kantin, $kodeMenu, $kodeTransaksi)) {
+                $statusKonfirm = DetailTransaksi::join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
+                    ->select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu', 'menu.id_kantin')
+                    ->where('detail_transaksi.kode_tr', $kodeTransaksi)
+                    ->where('menu.id_kantin', $kantin)
+                    ->where('detail_transaksi.kode_menu', $kodeMenu)
+                    ->first();
+
+                if (isset($statusKonfirm)) {
+                    $kodeIdKantin = $statusKonfirm->id_kantin;
+                    $kodeMenu = $statusKonfirm->kode_menu;
+                    $status = $statusKonfirm->status_konfirm;
+
+                    if ($status == "memasak" && $kodeIdKantin == $kantin) {
+                        $konfirm_status = "selesai";
+                        DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
+                            'status_konfirm' => $konfirm_status,
+                        ]);
+                    } else {
+                        return $this->sendMassage('Anda sudah memproses pesanan', 400, false);
+                    }
+                }
+                // return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
+
+            }
+
+            $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
+
+            foreach ($validatePesanan as $key => $value) {
+                if ($value['status_konfirm'] != null) {
+                    if ($value['status_konfirm'] == 'selesai') {
+                        $valid = true;
+                    } else {
+                        $valid = false;
+                        break;
+                    }
+                } else {
+                    $valid = false;
+                    break;
+                }
+            }
+
+            $temp = [
+                'valid' => $valid
+            ];
+
+            array_push($validatePesanan, $temp);
+
+            if ($valid == true) {
+                Transaksi::where('kode_tr', $kodeTransaksi)->update([
+                    'status_pesanan' => '3',
+                    'status_konfirm' => '3',
+                    'status_pengiriman' => 'terima'
+                ]);
+            }
+
+            return $validatePesanan;
+            // return $this->sendMassage('status konfirm = 3, status pesanan = 3, status pengiriman = terima', 400, true);
         }
     }
 
