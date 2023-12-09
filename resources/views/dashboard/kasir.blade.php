@@ -128,6 +128,7 @@
                                 <input type="text" name="kembali" id="kembali"
                                     class="form-control input-bayar text-black bg-white" readonly placeholder="Rp.0">
                             </div>
+                         
                             <button type="submit" class="btn btn-simpan form-control text-white fw-bold" id="btn_save"
                                 onclick="simpanAll()">Simpan</button>
                             <a href="javascript:void(0);" id="linkhapussemua"
@@ -247,11 +248,10 @@
                                     <p class="m-0 text-secondary subtotal-item">${harga}</p>
                                     <p class="d-none item-price">${harga}</p>
                                 </div>
-                                <div class="col-5">
-                                    <div class="d-flex align-items-center justify-content-end gap-3">
+                                <div class="col-5 mb-2">
+                                
                                         <p class="m-0">x<span class="qty">1</span></p>
-                                        <input type="text" data-id="${id}" class="form-control border-0 bg-white" placeholder="0%" onchange="discountPerItem(this)">
-                                    </div>
+                                
                                 </div>
                                 <div class="col-3">
                                     <div class="d-flex align-items-center justify-content-end gap-1">
@@ -384,9 +384,13 @@
                 } else {
                     bayar = digitOnly;
                     total = $('#total').attr('data-value');
-                    kembalian = bayar - total;
-                    $('#kembali').attr('data-value', kembalian);
-                    $('#kembali').val(formatRupiah(kembalian));
+                
+                        kembalian = bayar - total;
+                        $('#kembali').attr('data-value', kembalian);
+                        $('#kembali').val(formatRupiah(kembalian));
+               
+                    
+
                 }
             }
 
@@ -496,7 +500,7 @@
                         showConfirmButton: false,
                         timer: 2200,
                     }).then(function() {});
-                } else if ($('#bayar').attr('data-value') < $('#total').attr('data-value')) {
+                } else if (parseInt($('#bayar').attr('data-value')) < parseInt($('#total').attr('data-value'))) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Informasi',

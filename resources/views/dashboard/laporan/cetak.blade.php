@@ -53,9 +53,9 @@
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Kantin</th>
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Menu</th>
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Jumlah</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Harga</th>
+                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Status</th>
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Diskon</th>
-                        <th style="border-right: 1px solid #ccc; white-space: normal; vertical-align: middle;">Status
+                        <th style="border-right: 1px solid #ccc; white-space: normal; vertical-align: middle;">Harga
                         </th>
                     </tr>
                 </thead>
@@ -69,9 +69,10 @@
                             <td>{{ $m->kantin }}</td>
                             <td>{{ $m->pesanan }}</td>
                             <td>{{ $m->jumlah }}</td>
-                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
+                            <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td style="border-right: 1px solid #ccc;">{{ $m->status_pengiriman }}</td>
+                            <td style="border-right: 1px solid #ccc;">
+                                Rp {{ number_format($m->harga_satuan) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

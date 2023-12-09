@@ -39,6 +39,7 @@
 
     <!--   Begin page -->
     <div class="wrapper">
+          @include('sweetalert::alert')
         <!-- ========== Left Sidebar Start ========== -->
         <div class="leftside-menu">
             <!-- LOGO -->
