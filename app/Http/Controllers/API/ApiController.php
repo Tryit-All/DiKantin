@@ -204,8 +204,8 @@ class ApiController extends Controller
             return $this->sendMassage($validadte->errors()->first(), 400, false);
         } else {
             $kantin = User::where('email', $dataEmail)->first();
-            if ($kantin->id_role == 3) {
-                if ($kantin) {
+            if ($kantin) {
+                if ($kantin->id_role == 3) {
                     if (Hash::check($request->password, $kantin->password)) {
                         $token = Str::random(200);
                         User::where('email', $dataEmail)->update([
@@ -217,9 +217,9 @@ class ApiController extends Controller
                     }
                     return $this->sendMassage('Password salah', 400, false);
                 }
-                return $this->sendMassage('User salah', 401, false);
+                return $this->sendMassage('Tidak sesuai roles', 403, false);
             }
-            return $this->sendMassage('tidak sesuai roles', 400, false);
+            return $this->sendMassage('Email atau password anda salah', 401, false);
         }
     }
 
