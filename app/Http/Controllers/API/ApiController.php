@@ -720,7 +720,6 @@ class ApiController extends Controller
         return $this->sendMassage($customer, 200, true);
     }
 
-
     public function tampilKurir(Request $request)
     {
         $token = $request->bearerToken();
