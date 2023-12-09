@@ -27,6 +27,7 @@ class User extends Authenticatable
         'google_id',
         'created_at',
         'updated_at',
+        'fcm_token' 
     ];
 
     /**
