@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\NotificationCotroller;
 use App\Http\Controllers\orderController;
 use App\Http\Controllers\OrderDetailTransaksiController;
 use App\Http\Controllers\OrderTransaksiController;
@@ -108,3 +109,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get("notif" , [NotificationCotroller::class , "send"]);

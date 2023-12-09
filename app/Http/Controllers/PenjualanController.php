@@ -6,11 +6,21 @@ use App\Events\OrderNotification;
 use App\Models\DetailTransaksi;
 use App\Models\Menu;
 use App\Models\Transaksi;
+use App\Models\User;
+use App\Service\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class PenjualanController extends Controller
 {
+
+    private NotificationService $service;
+
+    public function __construct()
+    {
+        $this->service = new NotificationService();
+    }
+
     public function allData(Request $req)
     {
 
@@ -84,15 +94,12 @@ class PenjualanController extends Controller
         $detail = DetailTransaksi::find($request->id)->delete();
         return response(true);
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         // return $request->all();
+        // dd($request->all());
+
         $dataDetailOrderan = $request->details;
         $idCust = $request->id_customer;
         $total_bayar = $request->bayar;
@@ -122,6 +129,10 @@ class PenjualanController extends Controller
         $Transaksi->save();
 
         foreach ($dataDetailOrderan as $key => $value) {
+            $kantinMenu = Menu::find($value['id_menu'])->with('Kantin')->first();
+            $kantin = $kantinMenu->Kantin;
+            $userKantin = User::where('id_kantin', $kantin->id)->first();
+
             $jumlah = $value['jumlah'];
             $hargaBarang = $value['harga'];
             $subTotal = $jumlah * $hargaBarang;
@@ -132,10 +143,12 @@ class PenjualanController extends Controller
             $detail->QTY = $value['jumlah'];
             $detail->subtotal_bayar = $subTotal;
             $detail->save();
+            $this->service->sendNotifToSpesidicToken($userKantin->fcm_token, [
+                'Pesanan Baru', 'Ada Pesanan Baru',
+            ], [
+                'detail' => $detail
+            ]);
         }
-
-        // dd($request);
-        // kayane wis bener, tinggal buat request ajaxnya ke route yang dideifinisikan
 
         return response()->json([
             'status' => true,

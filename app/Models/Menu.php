@@ -22,6 +22,6 @@ class Menu extends Model
 
     public function Kantin()
     {
-        return $this->belongsTo(Menu::class, 'id_kantin', 'id_kantin');
+        return $this->belongsTo(Kantin::class, 'id_kantin', 'id_kantin');
     }
 }

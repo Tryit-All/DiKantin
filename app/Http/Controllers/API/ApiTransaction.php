@@ -228,6 +228,8 @@ class ApiTransaction extends Controller {
             $detail->subtotal_bayar = $value['total_harga_barang'];
             $detail->save();
         }
+        // send message to customer
+
 
         return $this->sendMassage("Data berhasil di tambahkan", 200, true);
     }
