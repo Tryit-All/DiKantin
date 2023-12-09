@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\DetailTransaksi;
 use App\Models\Menu;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -156,47 +157,6 @@ class ApiDikantinOld extends Controller
                 ->get();
 
             return response()->json($data);
-        } else {
-            return response()->json(['error' => 'Parameter ID kantin tidak diberikan']);
-        }
-    }
-
-    public function api_jumlah_penjualan_bulan_ini(Request $request)
-    {
-        if ($request->has('id_kantin')) {
-            $id_kantin = $request->input('id_kantin');
-
-            $data = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
-                ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-                ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-                ->where('menu.id_kantin', '=', $id_kantin)
-                ->where('transaksi.status_pengiriman', 'terima')
-                ->whereMonth('transaksi.created_at', Carbon::now()->format('m'))
-                ->whereYear('transaksi.created_at', Carbon::now()->format('Y'))
-                ->selectRaw('SUM(detail_transaksi.subtotal_bayar) as total')
-                ->value('total');
-
-            return response()->json(['jumlah_penjualan' => (string) $data]);
-        } else {
-            return response()->json(['error' => 'Parameter ID kantin tidak diberikan']);
-        }
-    }
-
-    public function api_jumlah_penjualan_hari_ini(Request $request)
-    {
-        if ($request->has('id_kantin')) {
-            $id_kantin = $request->input('id_kantin');
-
-            $data = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
-                ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-                ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-                ->where('menu.id_kantin', '=', $id_kantin)
-                ->where('transaksi.status_pengiriman', 'terima')
-                ->whereDate('transaksi.created_at', Carbon::now()->format('d'))
-                ->selectRaw('SUM(detail_transaksi.subtotal_bayar) as total')
-                ->value('total');
-
-            return response()->json(['jumlah_penjualan' => (string) $data]);
         } else {
             return response()->json(['error' => 'Parameter ID kantin tidak diberikan']);
         }
@@ -359,15 +319,6 @@ class ApiDikantinOld extends Controller
         return response()->json($dataBarang);
     }
 
-    public function sendMassage($text, $kode, $status)
-    {
-        return response()->json([
-            'data' => $text,
-            'code' => $kode,
-            'status' => $status
-        ], $kode);
-    }
-
     public function showByIdCustomer(Request $req)
     {
 
@@ -384,6 +335,35 @@ class ApiDikantinOld extends Controller
         }
     }
 
+    public function dashboardPenjualan(Request $request)
+    {
+        $token = $request->bearerToken();
+        $kantin = User::where('token', $token)->first();
+
+        $dataPenjualanBulanIni = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('menu.id_kantin', '=', $kantin->id_kantin)
+            ->where('transaksi.status_pengiriman', 'terima')
+            ->whereMonth('transaksi.created_at', Carbon::now()->format('m'))
+            ->whereYear('transaksi.created_at', Carbon::now()->format('Y'))
+            ->selectRaw('SUM(detail_transaksi.subtotal_bayar) as total')
+            ->value('total');
+
+        $dataPenujualanHariIni = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('menu.id_kantin', '=', $kantin->id_kantin)
+            ->where('transaksi.status_pengiriman', 'terima')
+            ->whereDate('transaksi.created_at', Carbon::now()->format('Y-m-d'))
+            ->selectRaw('SUM(detail_transaksi.subtotal_bayar) as total')
+            ->value('total');
+
+        return $this->sendMassage([
+            "penjualanBulanIni" => (string) $dataPenjualanBulanIni,
+            'penjualanHariIni' => (string) $dataPenujualanHariIni
+        ], 200, true);
+    }
 
     public function countTransaction(Request $request)
     {
@@ -410,14 +390,19 @@ class ApiDikantinOld extends Controller
             ->whereDate('transaksi.created_at', Carbon::now()->format('Y-m-d'))
             ->orderBy('transaksi.created_at', 'desc')
             ->count();
-        return response()->json(
-            [
-                "data" => [
-                    "selesai" => $terima,
-                    'dilayani' => $proces
-                ],
-                'code' => 200
-            ]
-        );
+
+        return $this->sendMassage([
+            "selesai" => $terima,
+            'dilayani' => $proces
+        ], 200, true);
+    }
+
+    public function sendMassage($text, $kode, $status)
+    {
+        return response()->json([
+            'data' => $text,
+            'code' => $kode,
+            'status' => $status
+        ], $kode);
     }
 }

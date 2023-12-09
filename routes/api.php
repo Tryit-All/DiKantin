@@ -89,11 +89,10 @@ Route::post('/api-riwayat', [ApiDikantinOld::class, 'api_riwayat']);
 Route::post('/apisucces-date', [ApiDikantinOld::class, 'apisucces_date']);
 Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
 
-Route::post("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
 
 // Isi Dashboard Kantin
+Route::post("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
 Route::get('/dataPenjualan', [ApiDikantinOld::class, 'dashboardPenjualan']);
-Route::post('/hargaharian', [ApiDikantinOld::class, 'api_jumlah_penjualan_hari_ini']);
 Route::post('/statistik', [ApiDikantinOld::class, 'Statistik']);
 Route::post('/rentangpendapatan', [ApiDikantinOld::class, 'rentangPendapatan']);
 Route::post('/menuTerlaris', [ApiDikantinOld::class, 'menuTerlaris']);
@@ -130,7 +129,7 @@ Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->
 
 
 Route::post("/auth/kantin/sign", [KantinController::class, "login"]);
-Route::put("/kantin/fcmtoken" , [KantinController::class , "updateFcmToken"]);
+Route::put("/kantin/fcmtoken", [KantinController::class, "updateFcmToken"]);
 
 
 
