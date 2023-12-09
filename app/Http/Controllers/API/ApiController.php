@@ -188,22 +188,38 @@ class ApiController extends Controller
     }
 
     // Controller Kantin
-    public function login(Request $request)
+    public function loginKantin(Request $request)
     {
         // return 'anu';
-        $credentials = $request->only('email', 'password');
+        $validadte = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+            'token_fcm' => 'required',
+        ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            if ($user->id_kantin !== null) {
-                return response()->json(['user' => $user], 200);
-            } else {
-                return response()->json(['user' => $user], 200);
-                // Auth::logout();
-                // return response()->json(['error' => 'You are not authorized to access this resource'], 401);
-            }
+        $dataEmail = $request->email;
+        $dataTokenFcm = $request->token_fcm;
+
+        if ($validadte->fails()) {
+            return $this->sendMassage($validadte->errors()->first(), 400, false);
         } else {
-            return response()->json(['error' => 'Invalid email or password'], 401);
+            $kantin = User::where('email', $dataEmail)->first();
+            if ($kantin) {
+                if ($kantin->id_role == 3) {
+                    if (Hash::check($request->password, $kantin->password)) {
+                        $token = Str::random(200);
+                        User::where('email', $dataEmail)->update([
+                            'token' => $token,
+                            'token_fcm' => $dataTokenFcm,
+                        ]);
+                        $dataKurir = User::where('email', $dataEmail)->first();
+                        return $this->sendMassage($dataKurir, 200, true);
+                    }
+                    return $this->sendMassage('Password salah', 400, false);
+                }
+                return $this->sendMassage('Tidak sesuai roles', 403, false);
+            }
+            return $this->sendMassage('Email atau password anda salah', 401, false);
         }
     }
 
@@ -451,7 +467,6 @@ class ApiController extends Controller
                     $listKurirPakai[] = $temp;
                 }
             }
-
 
             if (sizeof($listKurirPakai) != 0 || sizeof($listKurirPakaiDahulu) != 0) {
                 if (sizeof($listKurirPakaiDahulu) != 0) {

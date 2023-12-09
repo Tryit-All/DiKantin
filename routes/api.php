@@ -44,7 +44,7 @@ Route::prefix('validate')->group(function () {
     Route::post('/logoutKurir', [ApiTransaction::class, 'offStatusProfile']);
 
     // Kantin
-    Route::post('/loginKantin', [ApiController::class, 'login']);
+    Route::post('/loginKantin', [ApiController::class, 'loginKantin']);
     Route::post('/logoutKantin', [ApiController::class, 'logout']);
     Route::post('/updateprofile', [ApiController::class, 'updateprofile']);
     Route::post('/userprofile', [ApiController::class, 'ubahprofile']);
@@ -92,7 +92,7 @@ Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
 Route::post("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
 
 // Isi Dashboard Kantin
-Route::post('/hargabulanan', [ApiDikantinOld::class, 'api_jumlah_penjualan_bulan_ini']);
+Route::get('/dataPenjualan', [ApiDikantinOld::class, 'dashboardPenjualan']);
 Route::post('/hargaharian', [ApiDikantinOld::class, 'api_jumlah_penjualan_hari_ini']);
 Route::post('/statistik', [ApiDikantinOld::class, 'Statistik']);
 Route::post('/rentangpendapatan', [ApiDikantinOld::class, 'rentangPendapatan']);
