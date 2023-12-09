@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Service\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Kreait\Firebase\Messaging\Notification;
 
 class PenjualanController extends Controller
 {
@@ -143,9 +144,9 @@ class PenjualanController extends Controller
             $detail->QTY = $value['jumlah'];
             $detail->subtotal_bayar = $subTotal;
             $detail->save();
-            $this->service->sendNotifToSpesidicToken($userKantin->fcm_token, [
-                'Pesanan Baru', 'Ada Pesanan Baru',
-            ], [
+            $this->service->sendNotifToSpesidicToken('ezYwXua7R7a5HoDD_S3jir:APA91bEF0K5RqbkzM53kizHx0y42Mo9CcASKkXk6UzeFiSSeNSA03FmayQDbCZ1eQly6mjPXmAjvBXc7AEKQzZEWOvgH9S-6t_kPAZlu1kCoP4FysJClrMxvuarEMPy2JEi96tEW-8s_', 
+            Notification::create('Pesanan Baru' , 'Ada Pesanan Baru nih')
+            , [
                 'detail' => $detail
             ]);
         }

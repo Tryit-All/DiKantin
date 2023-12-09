@@ -14,8 +14,5 @@ class NotificationCotroller extends Controller
         $this->service = new NotificationService();
     }
 
-    public function send()
-    {
-        $this->service->sendAll();
-    }
+ 
 }
