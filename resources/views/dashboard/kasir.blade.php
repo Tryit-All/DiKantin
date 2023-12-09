@@ -138,6 +138,7 @@
                 </div>
             </div>
         </div>
+
     @endsection
 
     @push('script')
@@ -496,7 +497,11 @@
                         showConfirmButton: false,
                         timer: 2200,
                     }).then(function() {});
-                } else if ($('#bayar').attr('data-value') < $('#total').attr('data-value')) {
+                } else if (parseInt($('#bayar').attr('data-value')) < parseInt($('#total').attr('data-value'))) {
+                    var bayar = $('#bayar').attr('data-value');
+                    console.log('total > ');
+                    console.log($('#total').attr('data-value'));
+                    console.log(bayar);
                     Swal.fire({
                         icon: 'warning',
                         title: 'Informasi',
@@ -505,6 +510,25 @@
                         timer: 2200,
                     }).then(function() {});
                 } else if ($('#subtotal').attr('data-value') == $('#total').attr('data-value')) {
+
+
+                  
+                    const data = {
+                        id_customer: idCus,
+                        id_kasir: '{{ Auth::user()->id }}',
+                        subtotal: $('#subtotal').attr('data-value'),
+                        diskon: $('#diskon').val(),
+                        total: $('#total').attr('data-value'),
+                        bayar: $('#bayar').attr('data-value'),
+                        kembalian: $('#kembali').attr('data-value'),
+                        model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
+                        no_meja: $('input[name="no_meja"]').val(),
+                        details: details
+                    };
+
+                    console.log(data);
+                    alert(data);
+
                     $.ajax({
                         url: "api/kon/save",
                         type: "POST",
@@ -542,23 +566,27 @@
 
                     });
                 } else if ($('#subtotal').attr('data-value') > $('#total').attr('data-value')) {
+                    alert('yaaa');
+                    const data = {
+                        id_customer: idCus,
+                        id_kasir: '{{ Auth::user()->id }}',
+                        subtotal: $('#subtotal').attr('data-value'),
+                        diskon: $('#diskon').val(),
+                        total: $('#total').attr('data-value'),
+                        bayar: $('#bayar').attr('data-value'),
+                        kembalian: $('#kembali').attr('data-value'),
+                        model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
+                        no_meja: $('input[name="no_meja"]').val(),
+                        details: details
+                    };
+
+                    alert(data);
+
                     $.ajax({
                         url: "api/kon/save",
                         type: "POST",
                         method: "POST",
-                        data: {
-                            id_customer: idCus,
-                            id_kasir: '{{ Auth::user()->id }}',
-                            subtotal: $('#subtotal').attr('data-value'),
-                            diskon: $('#diskon').val(),
-                            total: $('#total').attr('data-value'),
-                            bayar: $('#bayar').attr('data-value'),
-                            kembalian: $('#kembali').attr('data-value'),
-                            model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
-                            no_meja: $('input[name="no_meja"]').val(),
-                            details: details
-                        },
-
+                        data: data,
                         success: function(response) {
                             console.log(response);
                             if (response.status == true) {

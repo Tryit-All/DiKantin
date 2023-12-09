@@ -6,6 +6,7 @@ use App\Http\Controllers\API\ApiDikantinOld;
 use App\Http\Controllers\API\ApiMenuController;
 
 use App\Http\Controllers\API\ApiTransaction;
+use App\Http\Controllers\KantinController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Http\Request;
@@ -88,6 +89,8 @@ Route::post('/api-riwayat', [ApiDikantinOld::class, 'api_riwayat']);
 Route::post('/apisucces-date', [ApiDikantinOld::class, 'apisucces_date']);
 Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
 
+Route::post("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
+
 // Isi Dashboard Kantin
 Route::get('/dataPenjualan', [ApiDikantinOld::class, 'dashboardPenjualan']);
 Route::post('/hargaharian', [ApiDikantinOld::class, 'api_jumlah_penjualan_hari_ini']);
@@ -123,6 +126,12 @@ Route::post('/kon/save', [PenjualanController::class, 'store'])->name('penjualan
 Route::post('/penjualan/tambahJumlah', [PenjualanController::class, 'tambahJumlah'])->name('penjualan.tambahJumlah');
 Route::post('/penjualan/kurangJumlah', [PenjualanController::class, 'kurangJumlah'])->name('penjualan.kurangJumlah');
 Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->name('penjualan.hapusItem');
+
+
+
+Route::post("/auth/kantin/sign", [KantinController::class, "login"]);
+Route::put("/kantin/fcmtoken" , [KantinController::class , "updateFcmToken"]);
+
 
 
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);
