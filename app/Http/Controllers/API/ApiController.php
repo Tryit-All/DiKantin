@@ -21,16 +21,20 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\ApiKeyMiddleware;
+use App\Service\NotificationService;
 use Illuminate\Support\Facades\Validator;
+use Kreait\Firebase\Messaging\Notification;
 
 class ApiController extends Controller
 {
 
     private VerifMail $verifMail;
+    private NotificationService $service;
     // Required apikey mobile
     public function __construct()
     {
         $this->verifMail = new VerifMail();
+        $this->service = new NotificationService();
     }
 
     // Controller Login
@@ -255,6 +259,7 @@ class ApiController extends Controller
 
     public function konfirmasiPesanan(Request $request)
     {
+        // dd("konfirm");
 
         $kode = $request->kode;
         $kantin = $request->kantin;
@@ -266,10 +271,13 @@ class ApiController extends Controller
 
         $transaksi = Transaksi::with('detail_transaksi.Menu.Kantin')->where('kode_tr', $kodeTransaksi)->first();
 
+        $transaksiCustomer = Transaksi::with('Customer')->where('kode_tr', $kodeTransaksi)->first();
+
         $valid = false;
         $valid2 = false;
 
         if ($kode == '0') {
+            // 
 
             $statusPesanan = $transaksi->status_pesanan;
             $statusKonfirm = $transaksi->status_konfirm;
@@ -284,7 +292,6 @@ class ApiController extends Controller
             return $this->sendMassage('error validasi', 400, false);
 
         } elseif ($kode == '1') {
-
             if (isset($kantin, $kodeMenu, $kodeTransaksi)) {
                 $statusKonfirm = DetailTransaksi::join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
                     ->select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu', 'menu.id_kantin')
@@ -292,7 +299,7 @@ class ApiController extends Controller
                     ->where('menu.id_kantin', $kantin)
                     ->where('detail_transaksi.kode_menu', $kodeMenu)
                     ->first();
-
+                // dd($statusKonfirm);
                 if (isset($statusKonfirm)) {
                     $kodeIdKantin = $statusKonfirm->id_kantin;
                     $kodeMenus = $statusKonfirm->kode_menu;
@@ -303,12 +310,20 @@ class ApiController extends Controller
                         DetailTransaksi::where('kode_menu', $kodeMenus)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
                         ]);
+                        if (isset($transaksiCustomer->Customer->token_fcm)) {
+                            $this->service->sendNotifToSpesidicToken($transaksi->Customer->token_fcm, Notification::create("Pesanan sedang diproses", "Kantin Sedang memasak pesanan kamu"), [
+                                'kode_tr' => $kodeTransaksi,
+                            ]);
+                        } else {
+                            // user belum memiliki token
+                        }
+                        // kirim notif ke customer menjadi memasak
+                        return $this->sendMassage("Pesanan Sedang diproses", 200, true);
                     } else {
                         return $this->sendMassage('Anda sudah memproses pesanan', 400, false);
                     }
                 }
-                // return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
-
+                return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
             }
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
@@ -347,38 +362,37 @@ class ApiController extends Controller
 
             // return $this->sendMassage($listKodeMenu, 200, true);
             $listIdkantin = Menu::select('id_kantin')->whereIn('id_menu', $listKodeMenu)->get();
-
             // return $this->sendMassage($listIdkantin, 200, true);
+            $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
+
+
             foreach ($listIdkantin as $key => $value) {
-                $selectKurir = Kurir::select('kurir.id_kurir')->where('status', 1)->get()->toArray();
-
-                if ($value->id_kantin == $kantin) {
-                    $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
-                        ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
-                        ->join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
-                        ->where('detail_transaksi.kode_tr', $kodeTransaksi)
-                        ->where('kantin.id_kantin', $kantin)
-                        ->where('detail_transaksi.kode_menu', $kodeMenu)
-                        ->first();
-
-                    // return $statusKonfirm;
-
-                    $kodeMenus = $statusKonfirm->kode_menu;
-                    $status = $statusKonfirm->status_konfirm;
-                    // return $kodeMenu;
-                    if ($status == 'memasak' && $kodeMenus == $kodeMenu) {
-                        $konfirm_status = "selesai";
-                        DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
-                            'status_konfirm' => $konfirm_status,
-                        ]);
-                    } else {
-                        // $konfirm_status = "menunggu";
-                        // DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
-                        //     'status_konfirm' => $konfirm_status,
-                        // ]);
-                        // return $this->sendMassage('Anda sudah menyelesaikan pesanan', 200, true);
-                    }
+                # code...
+                $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
+                    ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
+                    ->join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
+                    ->where('detail_transaksi.kode_tr', $kodeTransaksi)
+                    ->where('kantin.id_kantin', $value->id_kantin)
+                    ->where('detail_transaksi.kode_menu', $kodeMenu)
+                    ->first();
+                if (strtolower($statusKonfirm->status_konfirm) != 'memasak' && strtolower($statusKonfirm->status_konfirm) != 'selesai' ) {
+                    return $this->sendMassage("Pesanan Ada yang belum memasak", 400, false);
                 }
+            }
+
+            $statusKonfirm = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')
+                ->join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
+                ->join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
+                ->where('detail_transaksi.kode_tr', $kodeTransaksi)
+                ->where('kantin.id_kantin', $kantin)
+                ->where('detail_transaksi.kode_menu', $kodeMenu)
+                ->first();
+            if ($statusKonfirm->status_konfirm == 'selesai') {
+                return $this->sendMassage("Kamu sudah menyelesaikan pesanan ini", 400, false);
+            } else {
+                DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
+                    'status_konfirm' => 'selesai',
+                ]);
             }
 
             $listKurir = [];
@@ -483,6 +497,13 @@ class ApiController extends Controller
                     'id_kurir' => $kurirTerpilih['id_kurir'],
                     'status_pesanan' => '3',
                 ]);
+                if (isset($transaksiCustomer->Customer->token_fcm)) {
+                    $this->service->sendNotifToSpesidicToken($transaksi->Customer->token_fcm, Notification::create("Pesanan Sudah Dimasak", "Pesananmu Sedang Menunggu Kurir mohon bersabar"), [
+                        'kode_tr' => $kodeTransaksi,
+                    ]);
+                } else {
+                    // user belum memiliki token
+                }
             }
 
             return $validatePesanan;
@@ -505,9 +526,17 @@ class ApiController extends Controller
                         'status_pengiriman' => 'kirim'
                     ]);
 
+                    if (isset($transaksiCustomer->Customer->token_fcm)) {
+                        $this->service->sendNotifToSpesidicToken($transaksi->Customer->token_fcm, Notification::create("Pesanan Selesai", "Pesananmu Sedang Menunggu Kurir mohon bersabar"), [
+                            'kode_tr' => $kodeTransaksi,
+                        ]);
+                    } else {
+                        // user belum memiliki token
+                    }
+
                     return $this->sendMassage('Pesanan dikirim', 200, true);
                 }
-                return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);
+                return $this->sendMassage('Kode transaksi tidak sesuai', 400, true);
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = kirim', 400, true);
         } elseif ($kode == '4') {
@@ -520,7 +549,7 @@ class ApiController extends Controller
             $idKurir = $transaksi->id_kurir;
             $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
             $kurir2 = $idKurir2->id_kurir; // sementara bolo
-
+            $kantinData = User::where('id_kantin', $kantin)->first();
             if ($kode_tr == $kodeTransaksi) {
                 if ($idKurir == $kurir2 && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
@@ -528,9 +557,17 @@ class ApiController extends Controller
                         'status_pengiriman' => 'terima',
                         'bukti_pengiriman' => $buktiPengiriman
                     ]);
+
+                    if (isset($kantinData->fcm_token)) {
+                        $this->service->sendNotifToSpesidicToken($kantinData->fcm_token, Notification::create("Pesanan Diterima", "Pesananmu Sudah diterima oleh customer"), [
+                            'kode_tr' => $kodeTransaksi,
+                        ]);
+                    } else {
+                        // user belum memiliki token
+                    }
                     return $this->sendMassage('Pesanan diterima', 200, true);
                 }
-                return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);
+                return $this->sendMassage('Kode transaksi tidak sesuai', 400, true);
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = terima', 400, true);
         } elseif ($kode == '5') {
@@ -546,7 +583,7 @@ class ApiController extends Controller
                     ]);
                     return $this->sendMassage('Pesanan selesai', 200, true);
                 }
-                return $this->sendMassage('Kode transaksi tidak sesuai', 200, true);
+                return $this->sendMassage('Kode transaksi tidak sesuai', 400, false);
             }
             // return $this->sendMassage('status konfirm = 3, status pesanan = 3, status pengiriman = terima', 400, true);
         } elseif ($kode == '6') {
