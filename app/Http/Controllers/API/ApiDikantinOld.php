@@ -360,21 +360,22 @@ class ApiDikantinOld extends Controller
             ->value('total');
 
         return $this->sendMassage([
-            "penjualanBulanIni" => (string) $dataPenjualanBulanIni,
-            'penjualanHariIni' => (string) $dataPenujualanHariIni
+            "penjualanBulanIni" => (int) $dataPenjualanBulanIni,
+            'penjualanHariIni' => (int) $dataPenujualanHariIni
         ], 200, true);
     }
 
     public function countTransaction(Request $request)
     {
-        $id_kantin = $request->input('id_kantin');
+        $token = $request->bearerToken();
+        $kantin = User::where('token', $token)->first();
 
         $proces = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->where('kantin.id_kantin', $id_kantin)
+            ->where('kantin.id_kantin', $kantin->id_kantin)
             ->where('status_pengiriman', 'proses')
             ->whereDate('transaksi.created_at', Carbon::now()->format('Y-m-d'))
             ->orderBy('transaksi.created_at', 'desc')
@@ -385,7 +386,7 @@ class ApiDikantinOld extends Controller
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->where('kantin.id_kantin', $id_kantin)
+            ->where('kantin.id_kantin', $kantin->id_kantin)
             ->where('status_pengiriman', 'terima')
             ->whereDate('transaksi.created_at', Carbon::now()->format('Y-m-d'))
             ->orderBy('transaksi.created_at', 'desc')
