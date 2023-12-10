@@ -128,7 +128,7 @@
                                 <input type="text" name="kembali" id="kembali"
                                     class="form-control input-bayar text-black bg-white" readonly placeholder="Rp.0">
                             </div>
-                         
+
                             <button type="submit" class="btn btn-simpan form-control text-white fw-bold" id="btn_save"
                                 onclick="simpanAll()">Simpan</button>
                             <a href="javascript:void(0);" id="linkhapussemua"
@@ -385,12 +385,12 @@
                 } else {
                     bayar = digitOnly;
                     total = $('#total').attr('data-value');
-                
-                        kembalian = bayar - total;
-                        $('#kembali').attr('data-value', kembalian);
-                        $('#kembali').val(formatRupiah(kembalian));
-               
-                    
+
+                    kembalian = bayar - total;
+                    $('#kembali').attr('data-value', kembalian);
+                    $('#kembali').val(formatRupiah(kembalian));
+
+
 
                 }
             }
@@ -516,7 +516,7 @@
                 } else if ($('#subtotal').attr('data-value') == $('#total').attr('data-value')) {
 
 
-                  
+
                     const data = {
                         id_customer: idCus,
                         id_kasir: '{{ Auth::user()->id }}',
@@ -530,8 +530,8 @@
                         details: details
                     };
 
-                    console.log(data);
-                    alert(data);
+                    // console.log(data);
+                    // alert(data);
 
                     $.ajax({
                         url: "api/kon/save",
