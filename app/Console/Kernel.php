@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:update-otomatis')->everyFifteenSeconds();
+        $schedule->command('app:update-otomatis')->everyTwoSeconds();
     }
 
     /**

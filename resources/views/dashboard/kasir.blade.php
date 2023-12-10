@@ -566,7 +566,6 @@
 
                     });
                 } else if ($('#subtotal').attr('data-value') > $('#total').attr('data-value')) {
-                    alert('yaaa');
                     const data = {
                         id_customer: idCus,
                         id_kasir: '{{ Auth::user()->id }}',
@@ -588,7 +587,6 @@
                         method: "POST",
                         data: data,
                         success: function(response) {
-                            console.log(response);
                             if (response.status == true) {
                                 Swal.fire({
                                         icon: 'success',
