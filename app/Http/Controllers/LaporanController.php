@@ -89,8 +89,6 @@ class LaporanController extends Controller
             (menu.harga*QTY) - (menu.diskon/100*(menu.harga*QTY))
         )) as total')->value('total');
 
-        // dd($sumTotal);
-
         return view('dashboard.laporan.cekLaporan', [
             'data' => $data,
             'sumTotal' => $sumTotal,
