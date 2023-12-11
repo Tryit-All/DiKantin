@@ -25,144 +25,144 @@ class LaporanController extends Controller
     public function cekLaporan($tglMulai, $tglSelesai, $idKantin, $status)
     {
         $data = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
-    ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
-    ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
-    ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-    ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-    ->where('kantin.id_kantin', $idKantin)
-    ->where('transaksi.status_pengiriman', $status)
-    ->select(
-        'transaksi.created_at as tanggal',
-        'transaksi.kode_tr',
-        'customer.nama as pembeli',
-        'user.username as kasir',
-        'kantin.nama as kantin',
-        'menu.nama as pesanan',
-        'menu.harga as harga_satuan',
-        'detail_transaksi.QTY as jumlah',
-        'menu.diskon as diskon',
-        'status_pengiriman'
-    )
-    ->orderBy('transaksi.kode_tr', 'desc');
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
+            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('kantin.id_kantin', $idKantin)
+            ->where('transaksi.status_pengiriman', $status)
+            ->select(
+                'transaksi.created_at as tanggal',
+                'transaksi.kode_tr',
+                'customer.nama as pembeli',
+                'user.username as kasir',
+                'kantin.nama as kantin',
+                'menu.nama as pesanan',
+                'menu.harga as harga_satuan',
+                'detail_transaksi.QTY as jumlah',
+                'menu.diskon as diskon',
+                'status_pengiriman'
+            )
+            ->orderBy('transaksi.kode_tr', 'desc');
 
-if ($tglMulai == $tglSelesai) {
-    $data->whereDate('transaksi.created_at', $tglMulai);
-} else {
-    $data->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
-}
+        if ($tglMulai == $tglSelesai) {
+            $data->whereDate('transaksi.created_at', $tglMulai);
+        } else {
+            $data->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
 
-$data = $data->get();
+        $data = $data->get();
 
-$jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
-    ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
-    ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
-    ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-    ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-    ->where('kantin.id_kantin', $idKantin)
-    ->where('transaksi.status_pengiriman', $status)
-    ->select('detail_transaksi.QTY as jumlah')
-    ->orderBy('transaksi.kode_tr', 'desc');
+        $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
+            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('kantin.id_kantin', $idKantin)
+            ->where('transaksi.status_pengiriman', $status)
+            ->select('detail_transaksi.QTY as jumlah')
+            ->orderBy('transaksi.kode_tr', 'desc');
 
-if ($tglMulai == $tglSelesai) {
-    $jumlah->whereDate('transaksi.created_at', $tglMulai);
-} else {
-    $jumlah->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
-}
+        if ($tglMulai == $tglSelesai) {
+            $jumlah->whereDate('transaksi.created_at', $tglMulai);
+        } else {
+            $jumlah->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
 
-$jumlah = $jumlah->sum('detail_transaksi.QTY');
+        $jumlah = $jumlah->sum('detail_transaksi.QTY');
 
-$sumTotal = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-    ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-    ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-    ->where('kantin.id_kantin', $idKantin)
-    ->where('transaksi.status_pengiriman', $status);
+        $sumTotal = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
+            ->where('kantin.id_kantin', $idKantin)
+            ->where('transaksi.status_pengiriman', $status);
 
-if ($tglMulai == $tglSelesai) {
-    $sumTotal->whereDate('detail_transaksi.created_at', $tglMulai);
-} else {
-    $sumTotal->whereRaw("detail_transaksi.created_at BETWEEN '" . $tglMulai . "' AND '" . $tglSelesai . "'");
-}
+        if ($tglMulai == $tglSelesai) {
+            $sumTotal->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $sumTotal->whereRaw("detail_transaksi.created_at BETWEEN '" . $tglMulai . "' AND '" . $tglSelesai . "'");
+        }
 
-$sumTotal = $sumTotal->selectRaw('SUM(if(
+        $sumTotal = $sumTotal->selectRaw('SUM(if(
             menu.diskon IS NULL OR menu.diskon = 0,
             menu.harga*QTY,
             (menu.harga*QTY) - (menu.diskon/100*(menu.harga*QTY))
         )) as total')->value('total');
 
-return view('dashboard.laporan.cekLaporan', [
-    'data' => $data,
-    'sumTotal' => $sumTotal,
-    'jumlah' => $jumlah,
-    'tglMulai' => $tglMulai,
-    'tglSelesai' => $tglSelesai,
-    'idKantin' => $idKantin,
-    'status' => $status
-]);
+        return view('dashboard.laporan.cekLaporan', [
+            'data' => $data,
+            'sumTotal' => $sumTotal,
+            'jumlah' => $jumlah,
+            'tglMulai' => $tglMulai,
+            'tglSelesai' => $tglSelesai,
+            'idKantin' => $idKantin,
+            'status' => $status
+        ]);
 
     }
 
     public function cetak($tglMulai, $tglSelesai, $idKantin, $status)
     {
         $data = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
-    ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
-    ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
-    ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-    ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-    ->where('kantin.id_kantin', $idKantin)
-    ->where('transaksi.status_pengiriman', $status)
-    ->select(
-        'transaksi.created_at as tanggal',
-        'transaksi.kode_tr',
-        'customer.nama as pembeli',
-        'user.username as kasir',
-        'kantin.nama as kantin',
-        'menu.nama as pesanan',
-        'menu.harga as harga_satuan',
-        'detail_transaksi.QTY as jumlah',
-        'menu.diskon as diskon',
-        'status_pengiriman'
-    )
-    ->orderBy('transaksi.kode_tr', 'desc');
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
+            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('kantin.id_kantin', $idKantin)
+            ->where('transaksi.status_pengiriman', $status)
+            ->select(
+                'transaksi.created_at as tanggal',
+                'transaksi.kode_tr',
+                'customer.nama as pembeli',
+                'user.username as kasir',
+                'kantin.nama as kantin',
+                'menu.nama as pesanan',
+                'menu.harga as harga_satuan',
+                'detail_transaksi.QTY as jumlah',
+                'menu.diskon as diskon',
+                'status_pengiriman'
+            )
+            ->orderBy('transaksi.kode_tr', 'desc');
 
-if ($tglMulai == $tglSelesai) {
-    $data->whereDate('transaksi.created_at', $tglMulai);
-} else {
-    $data->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
-}
+        if ($tglMulai == $tglSelesai) {
+            $data->whereDate('transaksi.created_at', $tglMulai);
+        } else {
+            $data->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
 
-$data = $data->get();
+        $data = $data->get();
 
-$jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
-    ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
-    ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
-    ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-    ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-    ->where('kantin.id_kantin', $idKantin)
-    ->where('transaksi.status_pengiriman', $status)
-    ->select('detail_transaksi.QTY as jumlah')
-    ->orderBy('transaksi.kode_tr', 'desc');
+        $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
+            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('kantin.id_kantin', $idKantin)
+            ->where('transaksi.status_pengiriman', $status)
+            ->select('detail_transaksi.QTY as jumlah')
+            ->orderBy('transaksi.kode_tr', 'desc');
 
-if ($tglMulai == $tglSelesai) {
-    $jumlah->whereDate('transaksi.created_at', $tglMulai);
-} else {
-    $jumlah->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
-}
+        if ($tglMulai == $tglSelesai) {
+            $jumlah->whereDate('transaksi.created_at', $tglMulai);
+        } else {
+            $jumlah->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
 
-$jumlah = $jumlah->sum('detail_transaksi.QTY');
+        $jumlah = $jumlah->sum('detail_transaksi.QTY');
 
-$sumTotal = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-    ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-    ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-    ->where('kantin.id_kantin', $idKantin)
-    ->where('transaksi.status_pengiriman', $status);
+        $sumTotal = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
+            ->where('kantin.id_kantin', $idKantin)
+            ->where('transaksi.status_pengiriman', $status);
 
-if ($tglMulai == $tglSelesai) {
-    $sumTotal->whereDate('detail_transaksi.created_at', $tglMulai);
-} else {
-    $sumTotal->whereRaw("detail_transaksi.created_at BETWEEN '" . $tglMulai . "' AND '" . $tglSelesai . "'");
-}
+        if ($tglMulai == $tglSelesai) {
+            $sumTotal->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $sumTotal->whereRaw("detail_transaksi.created_at BETWEEN '" . $tglMulai . "' AND '" . $tglSelesai . "'");
+        }
 
-$sumTotal = $sumTotal->selectRaw('SUM(if(
+        $sumTotal = $sumTotal->selectRaw('SUM(if(
             menu.diskon IS NULL OR menu.diskon = 0,
             menu.harga*QTY,
             (menu.harga*QTY) - (menu.diskon/100*(menu.harga*QTY))

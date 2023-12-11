@@ -517,6 +517,7 @@
 
 
 
+
                     const data = {
                         id_customer: idCus,
                         id_kasir: '{{ Auth::user()->id }}',
@@ -530,6 +531,8 @@
                         details: details
                     };
 
+                    // console.log(data);
+                    // alert(data);
 
                     $.ajax({
                         url: "/api/kon/save",
@@ -590,7 +593,6 @@
                         method: "POST",
                         data: data,
                         success: function(response) {
-                            console.log(response);
                             if (response.status == true) {
                                 Swal.fire({
                                         icon: 'success',
