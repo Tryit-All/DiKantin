@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/laporan', [LaporanController::class, 'index']);
     Route::get('/ceklaporan/cetak/{tglMulai}/{tglSelesai}/{idKantin}/{status}', [LaporanController::class, 'cekLaporan']);
     Route::get('/laporan/cetak/{tglMulai}/{tglSelesai}/{idKantin}/{status}', [LaporanController::class, 'cetak']);
-
+ 
     Route::get('/rekapitulasi', [RekapitulasiController::class, 'index']);
     Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
     Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
