@@ -94,7 +94,7 @@ Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
 
 
 // Isi Dashboard Kantin
-Route::post("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
+Route::get("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
 Route::get('/dataPenjualan', [ApiDikantinOld::class, 'dashboardPenjualan']);
 Route::post('/statistik', [ApiDikantinOld::class, 'Statistik']);
 Route::post('/rentangpendapatan', [ApiDikantinOld::class, 'rentangPendapatan']);
