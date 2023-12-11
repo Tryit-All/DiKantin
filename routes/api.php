@@ -78,8 +78,11 @@ Route::prefix('transaction')->group(function () {
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
     Route::get('/riwayatKurir', [ApiTransaction::class, 'riwayatPesananKurir']);
 
-    // list Orders Kantin
+    // list Orders Kantin and History Knatin
     Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
+    Route::get('/riwayatKantin', [ApiDikantinOld::class, 'riwayatKantin']);
+    Route::get('/RPH', [ApiDikantinOld::class, 'rekapPendapatanHarian']);
+    Route::get('/RHP', [ApiDikantinOld::class, 'rekapHarianPerbarang']);
 });
 
 // List Riwayat Kantin
@@ -130,7 +133,6 @@ Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->
 
 Route::post("/auth/kantin/sign", [KantinController::class, "login"]);
 Route::put("/kantin/fcmtoken", [KantinController::class, "updateFcmToken"]);
-
 
 
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);

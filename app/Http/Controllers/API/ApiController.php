@@ -375,7 +375,7 @@ class ApiController extends Controller
                     ->where('kantin.id_kantin', $value->id_kantin)
                     ->where('detail_transaksi.kode_menu', $kodeMenu)
                     ->first();
-                if (strtolower($statusKonfirm->status_konfirm) != 'memasak' && strtolower($statusKonfirm->status_konfirm) != 'selesai' ) {
+                if (strtolower($statusKonfirm->status_konfirm) != 'memasak' && strtolower($statusKonfirm->status_konfirm) != 'selesai') {
                     return $this->sendMassage("Pesanan Ada yang belum memasak", 400, false);
                 }
             }
