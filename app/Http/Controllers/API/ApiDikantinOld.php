@@ -454,6 +454,8 @@ class ApiDikantinOld extends Controller
             return $this->sendMassage(["dataRiwayat" => $dataRiwayat, "dataTotal" => $dataTotal], 200, true);
         }
 
+        return $this->sendMassage("Tidak menemukan User", 400, false);
+
     }
 
     public function rekapPendapatanHarian(Request $request)
@@ -506,6 +508,7 @@ class ApiDikantinOld extends Controller
 
             return $this->sendMassage(["RPH" => $dataRPH, "dataTotal" => $dataTotal], 200, true);
         }
+        return $this->sendMassage("Tidak menemukan User", 400, false);
 
     }
 
@@ -557,6 +560,7 @@ class ApiDikantinOld extends Controller
 
             return $this->sendMassage(["RHP" => $dataRHP, "dataTotal" => $dataTotal], 200, true);
         }
+        return $this->sendMassage("Tidak menemukan User", 400, false);
 
     }
 
