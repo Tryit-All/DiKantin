@@ -44,7 +44,7 @@ Route::prefix('validate')->group(function () {
     Route::post('/logoutKurir', [ApiTransaction::class, 'offStatusProfile']);
 
     // Kantin
-    Route::post('/loginKantin', [ApiController::class, 'login']);
+    Route::post('/loginKantin', [ApiController::class, 'loginKantin']);
     Route::post('/logoutKantin', [ApiController::class, 'logout']);
     Route::post('/updateprofile', [ApiController::class, 'updateprofile']);
     Route::post('/userprofile', [ApiController::class, 'ubahprofile']);
@@ -78,8 +78,11 @@ Route::prefix('transaction')->group(function () {
     Route::get('/riwayatTransaction', [ApiTransaction::class, 'riwayatCustomer']);
     Route::get('/riwayatKurir', [ApiTransaction::class, 'riwayatPesananKurir']);
 
-    // list Orders Kantin
+    // list Orders Kantin and History Knatin
     Route::post('/listOrderKantin', [ApiController::class, 'listOrdersKantin']);
+    Route::get('/riwayatKantin', [ApiDikantinOld::class, 'riwayatKantin']);
+    Route::get('/RPH', [ApiDikantinOld::class, 'rekapPendapatanHarian']);
+    Route::get('/RHP', [ApiDikantinOld::class, 'rekapHarianPerbarang']);
 });
 
 // List Riwayat Kantin
@@ -89,11 +92,10 @@ Route::post('/api-riwayat', [ApiDikantinOld::class, 'api_riwayat']);
 Route::post('/apisucces-date', [ApiDikantinOld::class, 'apisucces_date']);
 Route::post('/apiproses-date', [ApiDikantinOld::class, 'apiproses_date']);
 
-Route::post("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
 
 // Isi Dashboard Kantin
-Route::post('/hargabulanan', [ApiDikantinOld::class, 'api_jumlah_penjualan_bulan_ini']);
-Route::post('/hargaharian', [ApiDikantinOld::class, 'api_jumlah_penjualan_hari_ini']);
+Route::get("/transaction/count", [ApiDikantinOld::class, "countTransaction"]);
+Route::get('/dataPenjualan', [ApiDikantinOld::class, 'dashboardPenjualan']);
 Route::post('/statistik', [ApiDikantinOld::class, 'Statistik']);
 Route::post('/rentangpendapatan', [ApiDikantinOld::class, 'rentangPendapatan']);
 Route::post('/menuTerlaris', [ApiDikantinOld::class, 'menuTerlaris']);
@@ -130,8 +132,7 @@ Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->
 
 
 Route::post("/auth/kantin/sign", [KantinController::class, "login"]);
-Route::put("/kantin/fcmtoken" , [KantinController::class , "updateFcmToken"]);
-
+Route::put("/kantin/fcmtoken", [KantinController::class, "updateFcmToken"]);
 
 
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);

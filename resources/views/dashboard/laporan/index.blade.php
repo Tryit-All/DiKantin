@@ -58,9 +58,9 @@
                         <th>Kantin</th>
                         <th>Menu</th>
                         <th>Jumlah</th>
-                        <th>Harga</th>
-                        <th>Diskon</th>
                         <th>Status</th>
+                        <th>Diskon</th>
+                        <th>Harga</th>
 
                     </tr>
                 </thead>

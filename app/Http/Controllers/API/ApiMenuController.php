@@ -149,10 +149,7 @@ class ApiMenuController extends Controller
         $menu = Menu::where('id_kantin', $validatedData['id_kantin'])->get();
 
         // Kirimkan data menu dalam format JSON sebagai respons
-        return response()->json(
-            $menu,
-            // 'message' => 'Berhasil menampilkan data menu berdasarkan id_kantin'
-        );
+        return $this->sendMassage($menu, 200, true);
     }
 
     // Function Massage

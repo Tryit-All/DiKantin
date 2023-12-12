@@ -47,9 +47,9 @@
                 @endforeach
             </div>
             <div class="diskon">
-                <p class="fw-bold mb-0">Diskon</p>
+                <p class="fw-bold mb-0">Kantin</p>
                 @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->menu->diskon }}</p>
+                    <p class="mb-0" style="text-align: center;">{{ $item->menu->id_kantin }}</p>
                 @endforeach
             </div>
             <div class="harga">

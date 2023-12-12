@@ -57,9 +57,9 @@
                         <th>Kantin</th>
                         <th>Menu</th>
                         <th>Jumlah</th>
-                        <th>Harga</th>
-                        <th>Diskon</th>
                         <th>Status</th>
+                        <th>Diskon</th>
+                        <th>Harga</th>
 
                     </tr>
                 </thead>
@@ -73,9 +73,10 @@
                             <td>{{ $m->kantin }}</td>
                             <td>{{ $m->pesanan }}</td>
                             <td>{{ $m->jumlah }}</td>
-                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
-                            <td>{{ $m->diskon }}</td>
                             <td>{{ $m->status_pengiriman }}</td>
+                            <td>{{ $m->diskon }}</td>
+                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
+                           
                         </tr>
                     @endforeach
                 </tbody>

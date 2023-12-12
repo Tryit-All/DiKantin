@@ -2,11 +2,11 @@
 @section('title', 'Tambah Customer')
 @section('content')
     <div class="container mt-3">
-        <form class="bg-white p-4" method="POST" action="/customerPost" style="border-radius: 20px;">
+        <form class="bg-white p-4" method="POST" action="/prosesCustomer" style="border-radius: 20px;">
             @csrf
             <div class="mb-2">
                 <label for="id_customer" class="form-label">ID Customer</label>
-                <input type="text" class="form-control" id="id_customer" name="id_customer" required>
+                <input type="text" class="form-control" id="id_customer" name="id_customer"readonly value="{{ $newId }}" required>
             </div>
             <div class="mb-2">
                 <label for="nama" class="form-label">Nama</label>

@@ -24,45 +24,85 @@ class RekapitulasiController extends Controller
 
     public function cekRekapitulasi($tglMulai, $tglSelesai)
     {
-        $data = DetailTransaksi::with([
+        // $data = DetailTransaksi::with([
+        //     'Menu.Kantin:id,nama_kantin',
+        // ])
+        //     ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+        //     ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+        //     ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
+        //     ->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai])
+        //     ->where('transaksi.status_pengiriman', 'terima')
+        //     ->selectRaw(
+        //         "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
+        // kantin.nama as nama_kantin,
+        // SUM(menu.harga) as harga_satuan,
+        // SUM(detail_transaksi.QTY) as jumlah,
+        // SUM(menu.diskon) as diskon,
+        // SUM(if(
+        //     menu.diskon IS NULL OR menu.diskon = 0,
+        //     menu.harga * detail_transaksi.QTY,
+        //     (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
+        // )) as total, transaksi.model_pembayaran as metode"
+        //     )
+        //     ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
+        //     ->orderBy('kantin.id_kantin', 'asc')
+        //     ->get();
+        $dataQuery = DetailTransaksi::with([
             'Menu.Kantin:id,nama_kantin',
         ])
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-            ->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai])
-            ->where('transaksi.status_pengiriman', 'terima')
-            ->selectRaw(
-                "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
-        kantin.nama as nama_kantin,
-        SUM(menu.harga) as harga_satuan,
-        SUM(detail_transaksi.QTY) as jumlah,
-        SUM(menu.diskon) as diskon,
-        SUM(if(
-            menu.diskon IS NULL OR menu.diskon = 0,
-            menu.harga * detail_transaksi.QTY,
-            (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
-        )) as total, transaksi.model_pembayaran as metode"
-            )
+            ->leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->where('transaksi.status_pengiriman', 'terima');
+
+        if ($tglMulai === $tglSelesai) {
+            $dataQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $dataQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+
+        $data = $dataQuery->selectRaw(
+            "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
+            kantin.nama as nama_kantin,
+            SUM(menu.harga) as harga_satuan,
+            SUM(detail_transaksi.QTY) as jumlah,
+            SUM(menu.diskon) as diskon,
+            SUM(if(
+                menu.diskon IS NULL OR menu.diskon = 0,
+                menu.harga * detail_transaksi.QTY,
+                (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
+            )) as total, transaksi.model_pembayaran as metode"
+        )
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
             ->get();
 
-        $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+        $jumlahQuery = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai])
-            ->where('transaksi.status_pengiriman', 'terima')
+            ->where('transaksi.status_pengiriman', 'terima');
+
+        if ($tglMulai === $tglSelesai) {
+            $jumlahQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $jumlahQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+        $jumlah = $jumlahQuery
             ->selectRaw('SUM(detail_transaksi.QTY) as jumlah')
             ->orderBy('transaksi.kode_tr', 'asc')
             ->value('jumlah');
 
-        $sumTotal = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+        $sumTotalQuery = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-            ->where('transaksi.status_pengiriman', 'terima')
-            ->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai])
+            ->where('transaksi.status_pengiriman', 'terima');
+            if ($tglMulai === $tglSelesai) {
+                $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+            } else {
+                $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+            }
+            $sumTotal=$sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
@@ -86,45 +126,62 @@ class RekapitulasiController extends Controller
 
     public function cetak($tglMulai, $tglSelesai)
     {
-        $data = DetailTransaksi::with([
+        $dataQuery = DetailTransaksi::with([
             'Menu.Kantin:id,nama_kantin',
         ])
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-            ->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai])
-            ->where('transaksi.status_pengiriman', 'terima')
-            ->selectRaw(
-                "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
-        kantin.nama as nama_kantin,
-        SUM(menu.harga) as harga_satuan,
-        SUM(detail_transaksi.QTY) as jumlah,
-        SUM(menu.diskon) as diskon,
-        SUM(if(
-            menu.diskon IS NULL OR menu.diskon = 0,
-            menu.harga * detail_transaksi.QTY,
-            (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
-        )) as total, transaksi.model_pembayaran as metode"
-            )
+            ->leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->where('transaksi.status_pengiriman', 'terima');
+
+        if ($tglMulai === $tglSelesai) {
+            $dataQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $dataQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+
+        $data = $dataQuery->selectRaw(
+            "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
+            kantin.nama as nama_kantin,
+            SUM(menu.harga) as harga_satuan,
+            SUM(detail_transaksi.QTY) as jumlah,
+            SUM(menu.diskon) as diskon,
+            SUM(if(
+                menu.diskon IS NULL OR menu.diskon = 0,
+                menu.harga * detail_transaksi.QTY,
+                (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
+            )) as total, transaksi.model_pembayaran as metode"
+        )
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
             ->get();
 
-        $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+        $jumlahQuery = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai])
-            ->where('transaksi.status_pengiriman', 'terima')
+            ->where('transaksi.status_pengiriman', 'terima');
+
+        if ($tglMulai === $tglSelesai) {
+            $jumlahQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $jumlahQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+        $jumlah = $jumlahQuery
             ->selectRaw('SUM(detail_transaksi.QTY) as jumlah')
             ->orderBy('transaksi.kode_tr', 'asc')
             ->value('jumlah');
 
-        $sumTotal = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+        $sumTotalQuery = DetailTransaksi::leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-            ->where('transaksi.status_pengiriman', 'terima')
-            ->whereBetween('transaksi.created_at', [$tglMulai, $tglSelesai])
+            ->where('transaksi.status_pengiriman', 'terima');
+            if ($tglMulai === $tglSelesai) {
+                $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+            } else {
+                $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+            }
+            $sumTotal=$sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use RealRashid\SweetAlert\Facades\Alert; 
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -38,7 +38,20 @@ class CustomerController extends Controller
     public function create()
     {
         $title = 'Add Customer';
-        return view('dashboard.customer.create', compact('title'));
+        $lastCustomer = Customer::latest()->first();
+
+        $newId = 'CUST00001'; // ID default jika tabel kosong
+
+        if ($lastCustomer) {
+            // Jika ada data sebelumnya, ambil ID terakhir
+            $lastId = $lastCustomer->id_customer;
+
+            // Ambil angka dari ID terakhir, tambahkan 1, dan format ulang
+            $number = intval(substr($lastId, 4)) + 1;
+            $newId = 'CUST' . str_pad($number, 5, '0', STR_PAD_LEFT);
+        }
+
+        return view('dashboard.customer.create', compact('title','newId'));
     }
 
     /**
@@ -55,6 +68,8 @@ class CustomerController extends Controller
         ]);
         // Customer::insert($data);
         Customer::create($request->all());
+        Alert::success('Success', 'Berhasil Tambah Data');
+
         return redirect('/pelanggan');
     }
 

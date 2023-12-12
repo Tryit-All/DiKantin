@@ -128,6 +128,7 @@
                                 <input type="text" name="kembali" id="kembali"
                                     class="form-control input-bayar text-black bg-white" readonly placeholder="Rp.0">
                             </div>
+
                             <button type="submit" class="btn btn-simpan form-control text-white fw-bold" id="btn_save"
                                 onclick="simpanAll()">Simpan</button>
                             <a href="javascript:void(0);" id="linkhapussemua"
@@ -248,11 +249,10 @@
                                     <p class="m-0 text-secondary subtotal-item">${harga}</p>
                                     <p class="d-none item-price">${harga}</p>
                                 </div>
-                                <div class="col-5">
-                                    <div class="d-flex align-items-center justify-content-end gap-3">
+                                <div class="col-5 mb-2">
+                                
                                         <p class="m-0">x<span class="qty">1</span></p>
-                                        <input type="text" data-id="${id}" class="form-control border-0 bg-white" placeholder="0%" onchange="discountPerItem(this)">
-                                    </div>
+                                
                                 </div>
                                 <div class="col-3">
                                     <div class="d-flex align-items-center justify-content-end gap-1">
@@ -385,9 +385,13 @@
                 } else {
                     bayar = digitOnly;
                     total = $('#total').attr('data-value');
+
                     kembalian = bayar - total;
                     $('#kembali').attr('data-value', kembalian);
                     $('#kembali').val(formatRupiah(kembalian));
+
+
+
                 }
             }
 
@@ -512,7 +516,7 @@
                 } else if ($('#subtotal').attr('data-value') == $('#total').attr('data-value')) {
 
 
-                  
+
                     const data = {
                         id_customer: idCus,
                         id_kasir: '{{ Auth::user()->id }}',
@@ -526,8 +530,8 @@
                         details: details
                     };
 
-                    console.log(data);
-                    alert(data);
+                    // console.log(data);
+                    // alert(data);
 
                     $.ajax({
                         url: "api/kon/save",
