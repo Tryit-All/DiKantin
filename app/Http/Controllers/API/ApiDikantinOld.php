@@ -403,8 +403,11 @@ class ApiDikantinOld extends Controller
     public function riwayatKantin(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
@@ -456,8 +459,11 @@ class ApiDikantinOld extends Controller
     public function rekapPendapatanHarian(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
@@ -506,8 +512,11 @@ class ApiDikantinOld extends Controller
     public function rekapHarianPerbarang(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
