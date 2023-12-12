@@ -403,8 +403,11 @@ class ApiDikantinOld extends Controller
     public function riwayatKantin(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
@@ -451,13 +454,18 @@ class ApiDikantinOld extends Controller
             return $this->sendMassage(["dataRiwayat" => $dataRiwayat, "dataTotal" => $dataTotal], 200, true);
         }
 
+        return $this->sendMassage("Tidak menemukan User", 400, false);
+
     }
 
     public function rekapPendapatanHarian(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
@@ -500,48 +508,59 @@ class ApiDikantinOld extends Controller
 
             return $this->sendMassage(["RPH" => $dataRPH, "dataTotal" => $dataTotal], 200, true);
         }
+        return $this->sendMassage("Tidak menemukan User", 400, false);
 
     }
 
     public function rekapHarianPerbarang(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
             $searchTo = $request->get('searchTo');
 
-            $dataRPH = Transaksi::select(
-            )->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            $dataRHP = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
                 ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
                 ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
                 ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select(
+                    'menu.id_menu',
+                    'menu.nama',
+                    'menu.harga',
+                    DB::raw('SUM(detail_transaksi.QTY) as total_qty'),
+                    DB::raw('SUM(detail_transaksi.subtotal_bayar) as total_pendapatan')
+                )
                 ->where('kantin.id_kantin', $idkatin)
                 ->where('transaksi.status_pengiriman', 'terima')
-                ->groupBy(DB::raw('DATE(detail_transaksi.created_at)')) // Menggunakan fungsi DATE() untuk dikelompokkan per hari
-                ->orderBy(DB::raw('DATE(detail_transaksi.created_at)'), 'desc');
+                ->groupBy('menu.id_menu', 'menu.nama', 'menu.harga')
+                ->orderBy('menu.id_menu', 'DESC');
 
             if ($searchFrom && $searchTo) {
                 if ($searchFrom == $searchTo) {
-                    $dataRPH->whereDate('detail_transaksi.created_at', $searchFrom);
+                    $dataRHP->whereDate('detail_transaksi.created_at', $searchFrom);
                 } else {
-                    $dataRPH->whereBetween('detail_transaksi.created_at', [$searchFrom, $searchTo]);
+                    $dataRHP->whereBetween('detail_transaksi.created_at', [$searchFrom, $searchTo]);
                 }
             }
 
-            $dataRPH = $dataRPH->get();
+            $dataRHP = $dataRHP->get();
 
             $dataTotal = 0;
 
-            foreach ($dataRPH as $RPH) {
-                $dataTotal += $RPH->total_pendapatan;
+            foreach ($dataRHP as $RHP) {
+                $dataTotal += $RHP->total_pendapatan;
             }
 
-            return $this->sendMassage(["RPH" => $dataRPH, "dataTotal" => $dataTotal], 200, true);
+            return $this->sendMassage(["RHP" => $dataRHP, "dataTotal" => $dataTotal], 200, true);
         }
+        return $this->sendMassage("Tidak menemukan User", 400, false);
 
     }
 
