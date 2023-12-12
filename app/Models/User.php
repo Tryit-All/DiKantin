@@ -29,7 +29,15 @@ class User extends Authenticatable
         'updated_at',
         'fcm_token'
     ];
-
+    
+    public function Transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'id_kasir', 'id_user');
+    }
+    public function Kantin()
+    {
+        return $this->belongsTo(Kantin::class, 'id_kantin', 'id_kantin');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

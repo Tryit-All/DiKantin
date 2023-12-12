@@ -497,7 +497,7 @@
                     Swal.fire({
                         icon: 'warning',
                         title: 'Informasi',
-                        text: 'Tidak ada data',
+                        text: 'Ti dak ada data',
                         showConfirmButton: false,
                         timer: 2200,
                     }).then(function() {});
@@ -513,7 +513,8 @@
                         showConfirmButton: false,
                         timer: 2200,
                     }).then(function() {});
-                } else if ($('#subtotal').attr('data-value') == $('#total').attr('data-value')) {
+                } else if (parseInt($('#subtotal').attr('data-value')) == parseInt($('#total').attr('data-value'))) {
+
 
 
 
@@ -534,7 +535,7 @@
                     // alert(data);
 
                     $.ajax({
-                        url: "api/kon/save",
+                        url: "/api/kon/save",
                         type: "POST",
                         method: "POST",
                         data: {
@@ -569,7 +570,8 @@
                         }
 
                     });
-                } else if ($('#subtotal').attr('data-value') > $('#total').attr('data-value')) {
+                } else if (parseInt($('#subtotal').attr('data-value')) > parseInt($('#total').attr('data-value'))) {
+
                     const data = {
                         id_customer: idCus,
                         id_kasir: '{{ Auth::user()->id }}',
@@ -583,7 +585,7 @@
                         details: details
                     };
 
-                    alert(data);
+
 
                     $.ajax({
                         url: "api/kon/save",
@@ -608,6 +610,7 @@
                         }
 
                     });
+                    
                 }
             }
 

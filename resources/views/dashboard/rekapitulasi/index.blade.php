@@ -26,23 +26,34 @@
                 style="height: 100% !important">
                 <thead>
                     <tr>
+                        <th>Kode transaksi</th>
                         <th>Kantin</th>
+                        <th>Metode</th>
                         <th>Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    @foreach ($data as $m)
+                    <tr>
+                        <td>{{ $m->kode }}</td>
+                        <td>{{ $m->nama_kantin }}</td>
+                        <td>{{ $m->metode }}</td>
+                        <td>Rp {{ number_format($m->total) }}</td>
+                    </tr>
+                @endforeach
                 </tbody>
                 <tfoot>
+                    @if ($jumlah != null)
                     <tr>
                         <th colspan="1">Total Pendapatan :</th>
-                        {{-- <th>{{ $sumTotal }}</td> --}}
+                        <th></th>
+                        <th></th>
+                        <th>Rp {{ number_format($sumTotal) }}</td>
                     </tr>
-                    {{-- @endif --}}
+                @endif
                 </tfoot>
             </table>
-            <a href="" class="btn btn-primary" id="btn-cetak" targe="_blank"
-                onclick="this.href='/rekapitulasi/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value ">Cetak
+            <a href="/rekapitulasi/cetak-semua" class="btn btn-primary" id="btn-cetak" targe="_blank">Cetak
                 Rekapitulasi</a>
         </div>
 

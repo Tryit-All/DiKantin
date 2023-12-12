@@ -18,4 +18,8 @@ class Kantin extends Model
     {
         return $this->hasOne(Kantin::class, 'id_kantin', 'id_kantin');
     }
+    public function User()
+    {
+        return $this->belongsTo(Kantin::class, 'id_kantin', 'id_kantin');
+    }
 }
