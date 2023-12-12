@@ -540,7 +540,7 @@ class ApiDikantinOld extends Controller
                     'menu.nama',
                     'menu.harga',
                     DB::raw('SUM(detail_transaksi.QTY) as total_qty'),
-                    DB::raw('SUM(detail_transaksi.subtotal_bayar) as total_pendapatan')
+                    (int) DB::raw('SUM(detail_transaksi.subtotal_bayar) as total_pendapatan')
                 )
                 ->where('kantin.id_kantin', $idkatin)
                 ->where('transaksi.status_pengiriman', 'terima')
