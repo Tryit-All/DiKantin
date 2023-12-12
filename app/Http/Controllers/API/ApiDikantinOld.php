@@ -506,7 +506,12 @@ class ApiDikantinOld extends Controller
                 $dataTotal += $RPH->total_pendapatan;
             }
 
-            return $this->sendMassage(["RPH" => $dataRPH, "dataTotal" => $dataTotal], 200, true);
+            return response()->json([
+                'data' => $dataRPH,
+                'data2' => $dataTotal,
+                'code' => 200,
+                'status' => true
+            ], 200);
         }
         return $this->sendMassage("Tidak menemukan User", 400, false);
 
@@ -558,7 +563,13 @@ class ApiDikantinOld extends Controller
                 $dataTotal += $RHP->total_pendapatan;
             }
 
-            return $this->sendMassage(["RHP" => $dataRHP, "dataTotal" => $dataTotal], 200, true);
+            return response()->json([
+                'data' => $dataRHP,
+                'data2' => $dataTotal,
+                'code' => 200,
+                'status' => true
+            ], 200);
+
         }
         return $this->sendMassage("Tidak menemukan User", 400, false);
 
