@@ -20,7 +20,7 @@
                     <label for="kantin" class="form-label">Kantin</label>
                     <select class="form-select" aria-label="Default select example" name="id_kantin" required
                         id="idKantin">
-                        <option value="">Pilih Kantin</option>
+                        <option value="p">Pilih Kantin</option>
                         <option value="1">Kantin 1</option>
                         <option value="2">Kantin 2</option>
                         <option value="3">Kantin 3</option>
@@ -35,9 +35,9 @@
                 <div class="col-md-2">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" aria-label="Default select example" name="status" required id="statuss">
-                        <option value="">Pilih Status</option>
+                        <option value="p">Pilih Status</option>
                         <option value="proses">Proses</option>
-                        <option value="dikirim">Dikirim</option>
+                        <option value="kirim">Dikirim</option>
                         <option value="terima">Selesai</option>
                     </select>
                 </div>
@@ -65,36 +65,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($data as $m)
+                    @foreach ($data as $m)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ date('d F Y', strtotime($m->tanggal)) }}</td>
+                            <td>{{ $m->tanggal }}</td>
                             <td>{{ $m->pembeli }}</td>
                             <td>{{ $m->kasir }}</td>
                             <td>{{ $m->kantin }}</td>
                             <td>{{ $m->pesanan }}</td>
                             <td>{{ $m->jumlah }}</td>
-                            <td>{{ $m->harga_satuan }}</td>
+                            <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td>{{ $m->status }}</td>
+                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
+                           
                         </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
                 <tfoot>
-                    {{-- @if ($sumTotal == 0)
-                        <tr>
-                            <td colspan="8">
-                                <center><b>Data tidak Ditemukan !
-                                    </b></center>
-                            </td>
-                        </tr>
-                    @endif --}}
-                    {{-- @if ($jumlah != null) --}}
+               
+                    @if ($jumlah != null)
                     <tr>
                         <th colspan="9">Total Pendapatan :</th>
-                        {{-- <th>{{ $sumTotal }}</td> --}}
+                        <th>Rp {{ number_format($sumTotal) }}</td>
                     </tr>
-                    {{-- @endif --}}
+                @endif
 
                 </tfoot>
             </table>
