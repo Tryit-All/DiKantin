@@ -20,23 +20,25 @@
                     <label for="kantin" class="form-label">Kantin</label>
                     <select class="form-select" aria-label="Default select example" name="id_kantin" required
                         id="idKantin">
-                        <option selected>{{ $idKantin }}</option>
-                        <option value="1">Kantin 1</option>
-                        <option value="2">Kantin 2</option>
-                        <option value="3">Kantin 3</option>
-                        <option value="4">Kantin 4</option>
-                        <option value="5">Kantin 5</option>
-                        <option value="6">Kantin 6</option>
-                        <option value="7">Kantin 7</option>
-                        <option value="8">Kantin 8</option>
-                        <option value="9">Kantin 9</option>
+                  
+                        <option value="p"{{ $idKantin == "p" ? 'selected' : '' }}>Semua Kantin</option>
+                        <option value="1"{{ $idKantin == 1 ? 'selected' : '' }}>Kantin 1</option>
+                        <option value="2"{{ $idKantin == 2 ? 'selected' : '' }}>Kantin 2</option>
+                        <option value="3"{{ $idKantin == 3 ? 'selected' : '' }}>Kantin 3</option>
+                        <option value="4"{{ $idKantin == 4 ? 'selected' : '' }}>Kantin 4</option>
+                        <option value="5"{{ $idKantin == 5 ? 'selected' : '' }}>Kantin 5</option>
+                        <option value="6"{{ $idKantin == 6 ? 'selected' : '' }}>Kantin 6</option>
+                        <option value="7"{{ $idKantin == 7 ? 'selected' : '' }}>Kantin 7</option>
+                        <option value="8"{{ $idKantin == 8 ? 'selected' : '' }}>Kantin 8</option>
+                        <option value="9"{{ $idKantin == 9 ? 'selected' : '' }}>Kantin 9</option>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" aria-label="Default select example" name="status" required id="statuss">
+                        <option value="p" {{ $status == "p" ? 'selected' : '' }}>Semua  Status</option>
                         <option value="proses" {{ $status == 'proses' ? 'selected' : '' }}>Proses</option>
-                        <option value="dikirim" {{ $status == 'terima' ? 'selected' : '' }}>Dikirim</option>
+                        <option value="kirim" {{ $status == 'kirim' ? 'selected' : '' }}>Dikirim</option>
                         <option value="terima" {{ $status == 'terima' ? 'selected' : '' }}>Selesai</option>
                     </select>
                 </div>

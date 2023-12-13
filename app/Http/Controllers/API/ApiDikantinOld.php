@@ -406,6 +406,7 @@ class ApiDikantinOld extends Controller
         if (!isset($token)) {
             return $this->sendMassage("Unauthenticated", 401, false);
         }
+
         $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
@@ -453,13 +454,18 @@ class ApiDikantinOld extends Controller
             return $this->sendMassage(["dataRiwayat" => $dataRiwayat, "dataTotal" => $dataTotal], 200, true);
         }
 
+        return $this->sendMassage("Tidak menemukan User", 400, false);
+
     }
 
     public function rekapPendapatanHarian(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
@@ -500,16 +506,25 @@ class ApiDikantinOld extends Controller
                 $dataTotal += $RPH->total_pendapatan;
             }
 
-            return $this->sendMassage(["RPH" => $dataRPH, "dataTotal" => $dataTotal], 200, true);
+            return response()->json([
+                'data' => $dataRPH,
+                'data2' => $dataTotal,
+                'code' => 200,
+                'status' => true
+            ], 200);
         }
+        return $this->sendMassage("Tidak menemukan User", 400, false);
 
     }
 
     public function rekapHarianPerbarang(Request $request)
     {
         $token = $request->bearerToken();
-        $user = User::where('token', $token)->first();
+        if (!isset($token)) {
+            return $this->sendMassage("Unauthenticated", 401, false);
+        }
 
+        $user = User::where('token', $token)->first();
         if (isset($user)) {
             $idkatin = $user->id_kantin;
             $searchFrom = $request->get('searchFrom');
@@ -548,8 +563,15 @@ class ApiDikantinOld extends Controller
                 $dataTotal += $RHP->total_pendapatan;
             }
 
-            return $this->sendMassage(["RHP" => $dataRHP, "dataTotal" => $dataTotal], 200, true);
+            return response()->json([
+                'data' => $dataRHP,
+                'data2' => $dataTotal,
+                'code' => 200,
+                'status' => true
+            ], 200);
+
         }
+        return $this->sendMassage("Tidak menemukan User", 400, false);
 
     }
 

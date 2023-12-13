@@ -1,6 +1,10 @@
 @extends('layout.main')
 @section('title', 'Rekapitulasi Laporan Pendapatan')
 @section('content')
+    @php
+        $jsonContent = json_encode($data);
+        // dd($jsonContent);
+    @endphp
     <div class="container-fluid mt-3">
         {{-- <a href="/menu/create" class="btn text-white" style="padding: 7px; border-radius:10px; background: #51AADD">
             + Create New
@@ -21,7 +25,8 @@
                     <a href="" class="btn btn-primary" id="btn-cetak"
                         onclick="this.href='/cekRekapitulasi/cetak/'+document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value">Proses</a>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn-cetak btn btn-warning" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
                         Cetak Excel
                     </button>
 
@@ -34,23 +39,35 @@
                 style="height: 100% !important">
                 <thead>
                     <tr>
+                        <th>Kode transaksi</th>
                         <th>Kantin</th>
+                        <th>Metode</th>
                         <th>Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                
+                    @foreach ($data as $m)
+                        <tr>
+                            <td>{{ $m['kode'] }}</td>
+                            <td>{{ $m['nama_kantin'] }}</td>
+                            <td>{{ $m['metode'] }}</td>
+                            <td>Rp {{ number_format($m['total']) }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <th colspan="1">Total Pendapatan :</th>
-                        {{-- <th>{{ $sumTotal }}</td> --}}
-                    </tr>
-                    {{-- @endif --}}
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="1">Total Pendapatan :</th>
+                            <th></th>
+                            <th></th>
+                            <th>Rp {{ number_format($sumTotal) }}</td>
+                        </tr>
+                    @endif
                 </tfoot>
             </table>
-            <a href="" class="btn btn-primary" id="btn-cetak" targe="_blank"
-                onclick="this.href='/rekapitulasi/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value ">Cetak
+            <a href="/rekapitulasi/cetak-semua" class="btn btn-primary" id="btn-cetak" targe="_blank">Cetak
                 Rekapitulasi</a>
         </div>
 
@@ -64,12 +81,14 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="post">
+                <form action="{{ route('rekapitulasi-excel') }}" method="post">
+                    @csrf
                     <div class="modal-body">
                         <label for="format">Format Excel</label>
-                        <select class="form-select" id="format" aria-label="Default select example">
+                        <select class="form-select" id="format" aria-label="Default select example" name="type">
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
+                            <input type="text" id="id_data" name="data" hidden>
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -88,6 +107,12 @@
     <script>
         $(document).ready(function() {
             $('#table-rekapitulasi').DataTable();
+
+            $(document).on('click', '.btn-cetak', function() {
+                var data = {!!json_encode($jsonContent)!!}
+                $('#id_data').val(data);
+            });
+
         });
     </script>
 @endpush

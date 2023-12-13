@@ -18,6 +18,11 @@ class Transaksi extends Model
     {
         return $this->hasMany(DetailTransaksi::class, 'kode_tr', 'kode_tr');
     }
+    // public function User()
+    // {
+    //     return $this->hasOne(User::class, 'id_user', 'id_kasir');
+    // }
+
 
     public function Customer()
     {

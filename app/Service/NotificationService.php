@@ -42,7 +42,7 @@ class NotificationService
             return;
         } catch (\Throwable $th) {
             //throw $th;
-            dd($th->getMessage());
+            // dd($th->getMessage());
         }
     }
 
