@@ -108,6 +108,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/customer/{id}', [CustomerController::class, 'update']);
     Route::post('/deleteCustomer/{id}', [CustomerController::class, 'destroy'])->name('deleteCustomer');
 
+    Route::post("/laporan/cetak/excel", [LaporanController::class, "cetakExcel"])->name('laporan-excel');
+
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

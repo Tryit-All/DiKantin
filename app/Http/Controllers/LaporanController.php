@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanExport;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
@@ -106,13 +108,13 @@ class LaporanController extends Controller
             'data' => $data,
             'sumTotal' => $sumTotal,
             'jumlah' => $jumlah,
-            
+
         ]);
     }
 
     public function cekLaporan($tglMulai, $tglSelesai, $idKantin, $status)
     {
-        
+
         if (($idKantin != 'p') && ($status != 'p')) {
             # code
 
@@ -337,7 +339,7 @@ class LaporanController extends Controller
                 'idKantin' => $idKantin,
                 'status' => $status
             ]);
-        } elseif (($idKantin !== 'p')&&($status == 'p')) {
+        } elseif (($idKantin !== 'p') && ($status == 'p')) {
             $data = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
                 ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -779,5 +781,10 @@ class LaporanController extends Controller
         //     'tglMulai' => $tglMulai,
         //     'tglSelesai' => $tglSelesai,
         // ]);
+    }
+
+    public function cetakExcel(Request $request)
+    {
+        return Excel::download(new LaporanExport(), "laporan." . $request->input('type'));
     }
 }
