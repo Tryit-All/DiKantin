@@ -2,15 +2,16 @@
 
 namespace App\Exports;
 
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class LaporanExport implements FromCollection
+class LaporanExport implements FromView
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+
+    public function view(): View
     {
-        //
+        //r
+        return view("exports.laporan");
     }
 }
