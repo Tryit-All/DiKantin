@@ -19,6 +19,8 @@ class RekapitulasiController extends Controller
 
     public function index()
     {
+        $data = DetailTransaksi::with('Transaksi')->get();
+        // dd($data);
         return view('dashboard.rekapitulasi.index');
     }
 
@@ -97,12 +99,12 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
-            if ($tglMulai === $tglSelesai) {
-                $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
-            } else {
-                $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
-            }
-            $sumTotal=$sumTotalQuery
+        if ($tglMulai === $tglSelesai) {
+            $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+        $sumTotal = $sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
@@ -176,12 +178,12 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
-            if ($tglMulai === $tglSelesai) {
-                $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
-            } else {
-                $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
-            }
-            $sumTotal=$sumTotalQuery
+        if ($tglMulai === $tglSelesai) {
+            $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+        $sumTotal = $sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
