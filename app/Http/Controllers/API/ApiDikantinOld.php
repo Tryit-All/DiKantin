@@ -479,7 +479,7 @@ class ApiDikantinOld extends Controller
                 DB::raw('SUM(CASE WHEN transaksi.model_pembayaran = "gopay" THEN 1 ELSE 0 END) as gopay'),
                 DB::raw('SUM(CASE WHEN transaksi.model_pembayaran = "polijepay" THEN 1 ELSE 0 END) as polijepay'),
                 DB::raw('SUM(CASE WHEN transaksi.model_pembayaran = "tranfer bank" THEN 1 ELSE 0 END) as transferbank'),
-                DB::raw('CONVERT(SUM(detail_transaksi.subtotal_bayar), UNSIGNED) as total_pendapatan')
+                (int) DB::raw('CONVERT(SUM(detail_transaksi.subtotal_bayar), UNSIGNED) as total_pendapatan')
             )->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
                 ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')

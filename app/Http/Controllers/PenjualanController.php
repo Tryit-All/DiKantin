@@ -130,9 +130,8 @@ class PenjualanController extends Controller
         $Transaksi->save();
 
         foreach ($dataDetailOrderan as $key => $value) {
-            $kantinMenu = Menu::find($value['id_menu'])->with('Kantin')->first();
-            $kantin = $kantinMenu->Kantin;
-            $userKantin = User::where('id_kantin', $kantin->id)->first();
+            $kantinMenu = Menu::find($value['id_menu']);
+            $userKantin = User::where('id_kantin', $kantinMenu->id_kantin)->first();
 
             $jumlah = $value['jumlah'];
             $hargaBarang = $value['harga'];
@@ -142,9 +141,11 @@ class PenjualanController extends Controller
             $detail->kode_tr = $kodeTr;
             $detail->kode_menu = $value['id_menu'];
             $detail->QTY = $value['jumlah'];
+            $detail->status_konfirm = 'menunggu';
             $detail->subtotal_bayar = $subTotal;
             $detail->save();
-            $this->service->sendNotifToSpesidicToken($userKantin->fcm_token,
+
+            $this->service->sendNotifToSpesidicToken($userKantin->token_fcm,
                 Notification::create('Pesanan Baru', 'Ada Pesanan Baru nih')
                 , [
                     'detail' => $detail
