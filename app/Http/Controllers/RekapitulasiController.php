@@ -27,7 +27,7 @@ class RekapitulasiController extends Controller
             ->leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
 
-   
+
 
         $data = $dataQuery->selectRaw(
             "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
@@ -51,7 +51,7 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->where('transaksi.status_pengiriman', 'terima');
 
-    
+
         $jumlah = $jumlahQuery
             ->selectRaw('SUM(detail_transaksi.QTY) as jumlah')
             ->orderBy('transaksi.kode_tr', 'asc')
@@ -61,15 +61,15 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
-          
-            $sumTotal=$sumTotalQuery
+
+        $sumTotal = $sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
                 (menu.harga*QTY) - (menu.diskon/100*(menu.harga*QTY))
             )) as total')
             ->value('total');
-        return view('dashboard.rekapitulasi.index',compact(['data','jumlah','sumTotal']));
+        return view('dashboard.rekapitulasi.index', compact(['data', 'jumlah', 'sumTotal']));
     }
 
     public function cekRekapitulasi($tglMulai, $tglSelesai)
@@ -147,12 +147,12 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
-            if ($tglMulai === $tglSelesai) {
-                $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
-            } else {
-                $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
-            }
-            $sumTotal=$sumTotalQuery
+        if ($tglMulai === $tglSelesai) {
+            $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+        $sumTotal = $sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
@@ -226,12 +226,12 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
-            if ($tglMulai === $tglSelesai) {
-                $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
-            } else {
-                $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
-            }
-            $sumTotal=$sumTotalQuery
+        if ($tglMulai === $tglSelesai) {
+            $sumTotalQuery->whereDate('detail_transaksi.created_at', $tglMulai);
+        } else {
+            $sumTotalQuery->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai]);
+        }
+        $sumTotal = $sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
@@ -250,7 +250,8 @@ class RekapitulasiController extends Controller
             ]
         );
     }
-    public function cetakSemua(){
+    public function cetakSemua()
+    {
         $dataQuery = DetailTransaksi::with([
             'Menu.Kantin:id,nama_kantin',
         ])
@@ -259,7 +260,7 @@ class RekapitulasiController extends Controller
             ->leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
 
-   
+
 
         $data = $dataQuery->selectRaw(
             "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
@@ -283,7 +284,7 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->where('transaksi.status_pengiriman', 'terima');
 
-    
+
         $jumlah = $jumlahQuery
             ->selectRaw('SUM(detail_transaksi.QTY) as jumlah')
             ->orderBy('transaksi.kode_tr', 'asc')
@@ -293,22 +294,22 @@ class RekapitulasiController extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
             ->where('transaksi.status_pengiriman', 'terima');
-          
-            $sumTotal=$sumTotalQuery
+
+        $sumTotal = $sumTotalQuery
             ->selectRaw('SUM(if(
                 menu.diskon IS NULL OR menu.diskon = 0,
                 menu.harga*QTY,
                 (menu.harga*QTY) - (menu.diskon/100*(menu.harga*QTY))
             )) as total')
             ->value('total');
-            return view(
-                'dashboard.rekapitulasi.cetaksemua',
-                [
-                    'data' => $data,
-                    'sumTotal' => $sumTotal,
-                    'jumlah' => $jumlah,
-                 
-                ]
-            );
+        return view(
+            'dashboard.rekapitulasi.cetaksemua',
+            [
+                'data' => $data,
+                'sumTotal' => $sumTotal,
+                'jumlah' => $jumlah,
+
+            ]
+        );
     }
 }
