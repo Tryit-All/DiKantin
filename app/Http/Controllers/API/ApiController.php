@@ -621,9 +621,9 @@ class ApiController extends Controller
             if ($kode_tr == $kodeTransaksi) {
                 if ($idKurir == $kurir2 && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
-                        'status_konfirm' => '2',
+                        'status_konfirm' => '3',
                         'status_pengiriman' => 'terima',
-                        'bukti_pengiriman' => $buktiPengiriman
+                        'bukti_pengiriman' => 'Done'
                     ]);
 
                     if (isset($kantinData->fcm_token)) {
