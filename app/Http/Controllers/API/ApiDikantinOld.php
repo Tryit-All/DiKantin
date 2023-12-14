@@ -349,7 +349,7 @@ class ApiDikantinOld extends Controller
             ->where('transaksi.status_pengiriman', 'terima')
             ->whereMonth('transaksi.created_at', Carbon::now()->format('m'))
             ->whereYear('transaksi.created_at', Carbon::now()->format('Y'))
-            ->selectRaw('SUM(detail_transaksi.subtotal_bayar) as total')
+            ->selectRaw('SUM(detail_transaksi.subtotal_hargapokok) as total')
             ->value('total');
 
         $dataPenujualanHariIni = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -358,7 +358,7 @@ class ApiDikantinOld extends Controller
             ->where('menu.id_kantin', '=', $kantin->id_kantin)
             ->where('transaksi.status_pengiriman', 'terima')
             ->whereDate('transaksi.created_at', Carbon::now()->format('Y-m-d'))
-            ->selectRaw('SUM(detail_transaksi.subtotal_bayar) as total')
+            ->selectRaw('SUM(detail_transaksi.subtotal_hargapokok) as total')
             ->value('total');
 
         return $this->sendMassage([
