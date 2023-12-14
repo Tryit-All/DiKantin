@@ -106,14 +106,130 @@ class MenuController extends Controller
 
     public function searchProduct(Request $req)
     {
-        $builder = Menu::orderBy('id_kantin', 'asc')
-            ->where('status_stok', 'ada');
-        if ($req->q) {
-            $builder = $builder->where('nama_menu', 'like', "%$req->q%");
-        }
-        $menu = $builder->get();
 
-        return response()->json(['message' => 'success', 'data' => $menu]);
+        if ($req->kantin && $req->makanan && $req->minuman) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('id_kantin', 'like', "%$req->kantin%")
+                ->where(function ($query) use ($req) {
+                    $query->where('kategori', $req->makanan)
+                        ->orWhere('kategori', $req->minuman);
+                });
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->kantin == '' && $req->makanan == '' && $req->minuman == '') {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada');
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->kantin && $req->makanan) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('id_kantin', 'like', "%$req->kantin%")
+                ->where('kategori', $req->makanan);
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->kantin && $req->minuman) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('id_kantin', 'like', "%$req->kantin%")
+                ->where('kategori', $req->minuman);
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->makanan && $req->minuman) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('kategori', $req->makanan)
+                ->where('kategori', $req->minuma);
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->kantin) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('id_kantin', 'like', "%$req->kantin%");
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->makanan) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('kategori', $req->makanan);
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        if ($req->minuman) {
+            $builder = Menu::orderBy('id_kantin', 'asc')
+                ->where('status_stok', 'ada')
+                ->where('kategori', $req->minuman);
+            $menu = $builder->get();
+            // return $menu;
+
+            return response()->json([
+                'data' => $menu,
+                'code' => 200,
+                'status' => true
+            ], 200);
+        }
+
+        return response()->json([
+            'data' => [],
+            'code' => 400,
+            'status' => false
+        ], 400);
     }
 
 }

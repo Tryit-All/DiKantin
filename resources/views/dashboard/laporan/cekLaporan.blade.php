@@ -1,6 +1,10 @@
 @extends('layout.main')
 @section('title', 'Cek Laporan')
 @section('content')
+    @php
+        $jsonContent = json_encode($data);
+        // dd($jsonContent);
+    @endphp
     <div class="container-fluid mt-3">
         {{-- <a href="/menu/create" class="btn text-white" style="padding: 7px; border-radius:10px; background: #51AADD">
             + Create New
@@ -42,10 +46,14 @@
                         <option value="terima" {{ $status == 'terima' ? 'selected' : '' }}>Selesai</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label for="btn-cetak" class="form-label">&nbsp;</label><br>
                     <a href="" class="btn btn-primary" id="btn-cetak"
                         onclick="this.href='/ceklaporan/cetak/'+document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value + '/' + document.getElementById('idKantin').value + '/' + document.getElementById('statuss').value">Proses</a>
+                    <button type="button" class="btn-cetak btn btn-warning" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Cetak Excel
+                    </button>
                 </div>
             </div>
             <table class="table table-striped table-hover w-100 nowrap" width="100%" id="table-menu"
@@ -141,15 +149,21 @@
             </table>
             {{-- <a href="" class="btn btn-primary" id="btn-cetak" target="_blank"
                 onclick="this.href='/laporan/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value + '/' + document.getElementById('idKantin').value + '/' + document.getElementById('statuss').value">Cetak
-                Laporan</a> --}}
+                Laporan</a> --}} --}}
         </div>
     </div>
+
+
 @endsection
 
 @push('script')
     <script>
         $(document).ready(function() {
             $('#table-menu').DataTable();
+        });
+        $(document).on('click', '.btn-cetak', function() {
+            var data = {!! json_encode($jsonContent) !!}
+            $('#id_data').val(data);
         });
     </script>
 @endpush
