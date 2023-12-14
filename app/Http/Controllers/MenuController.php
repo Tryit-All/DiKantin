@@ -44,7 +44,7 @@ class MenuController extends Controller
     {
         $data = $request->all();
         // dd($data);
-        $data['foto'] = $request->file('foto')->store('menu', 'public');
+        $data['foto'] = $request->file('foto')->move('menu', $request->file('foto')->getClientOriginalName().".".$request->file("foto")->getClientOriginalExtension());
         $data['harga'] = str_replace('.', '', $data['harga']);
         $data['harga_pokok'] = str_replace('.', '', $data['harga_pokok']);
         Menu::create($data);
@@ -67,7 +67,7 @@ class MenuController extends Controller
         $data = $request->all();
 
         if (!empty($data['foto'])) {
-            $data['foto'] = $request->file('foto')->store('menu', 'public');
+            $data['foto'] = $request->file('foto')->move('menu', $request->file('foto')->getClientOriginalName().".".$request->file("foto")->getClientOriginalExtension());
         } else {
             unset($data['foto']);
         }
