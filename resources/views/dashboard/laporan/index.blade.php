@@ -68,8 +68,12 @@
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Diskon</th>
-                        <th>Harga Jual</th>
                         <th>Harga Pokok</th>
+                        <th>Harga Jual </th>
+                        <th>Subtotal Harga  Pokok</th>
+                        <th>Subtotal Harga Jual </th>
+                 
+                 
 
                     </tr>
                 </thead>
@@ -85,8 +89,10 @@
                             <td>{{ $m->jumlah }}</td>
                             <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
                             <td>Rp {{ number_format($m->harga_pokok) }}</td>
+                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
+                            <td>Rp {{ number_format($m->subtotalpokok) }}</td>
+                            <td>Rp {{ number_format($m->subtotal) }}</td>
                            
                         </tr>
                     @endforeach
@@ -103,7 +109,7 @@
                     @if ($jumlah != null)
                         <tr>
                         
-                            <th colspan="9"></th>
+                            <th colspan="11"></th>
                             <th>Total Penndapatan</th>
                             <th>Rp {{ number_format($pendapatan) }}</th>
                   
@@ -122,7 +128,7 @@
 
                     @if ($jumlah != null)
                         <tr>
-                            <th colspan="9">Total</th>
+                            <th colspan="11">Total</th>
                             <th>Rp {{ number_format($sumTotal) }}</th>
                             <th>Rp {{ number_format($sumTotalPokok) }}</th>
                         </tr>

@@ -6,11 +6,16 @@
             <div class="col-md-8 m-0">
                 <div class="row mt-2">
                     <div class="col-md-3">
-                        <input type="text" placeholder="ID Customer" class="form-control" name="id_customer"
-                            style="border-radius: 10px;" id="id_customer">
+                        {{-- <input type="text" placeholder="ID Customer" class="form-control" name="id_customer"
+                            style="border-radius: 10px;" id="id_customer"> --}}
 
-
+                        <select class="js-example-basic-single" name="id_customer" id="id_customer">
+                            @foreach ($customer as $item => $value)
+                                <option value="{{ $value->id_customer }}">{{ $value->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <input type="hidden" id="inputid">
                     <div class="col-md-3"><input type="text" placeholder="Nama" class="form-control" id="inputnama"
                             class="form-control bg-lingkaran" readonly style="border-radius: 10px;"></div>
@@ -168,6 +173,12 @@
             </div>
         </div>
 
+        <script>
+            // In your Javascript (external .js resource or <script> tag)
+            $(document).ready(function() {
+                $('.js-example-basic-single').select2();
+            });
+        </script>
     @endsection
 
     @push('script')

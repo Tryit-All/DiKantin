@@ -69,8 +69,12 @@
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Diskon</th>
-                        <th>Harga Jual</th>
                         <th>Harga Pokok</th>
+                        <th>Harga Jual </th>
+                        <th>Subtotal Harga  Pokok</th>
+                        <th>Subtotal Harga Jual </th>
+                 
+                 
 
                     </tr>
                 </thead>
@@ -86,13 +90,14 @@
                             <td>{{ $m->jumlah }}</td>
                             <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
-                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
                             <td>Rp {{ number_format($m->harga_pokok) }}</td>
-
+                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
+                            <td>Rp {{ number_format($m->subtotalpokok) }}</td>
+                            <td>Rp {{ number_format($m->subtotal) }}</td>
+                           
                         </tr>
                     @endforeach
                 </tbody>
-       
                 <tfoot>
                     {{-- @if ($sumTotal == 0)
                         <tr>
@@ -105,16 +110,15 @@
                     @if ($jumlah != null)
                         <tr>
                         
-                            <th colspan="9"></th>
+                            <th colspan="11"></th>
                             <th>Total Penndapatan</th>
                             <th>Rp {{ number_format($pendapatan) }}</th>
                   
                         </tr>
                     @endif
-
                 </tfoot>
-
-                {{-- @if ($sumTotal == 0)
+                <tfoot>
+                    {{-- @if ($sumTotal == 0)
                         <tr>
                             <td colspan="8">
                                 <center><b>Data tidak Ditemukan !
@@ -123,25 +127,15 @@
                         </tr>
                     @endif --}}
 
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="11">Total</th>
+                            <th>Rp {{ number_format($sumTotal) }}</th>
+                            <th>Rp {{ number_format($sumTotalPokok) }}</th>
+                        </tr>
+                    @endif
 
-                    <tfoot>
-                        {{-- @if ($sumTotal == 0)
-                            <tr>
-                                <td colspan="8">
-                                    <center><b>Data tidak Ditemukan !
-                                        </b></center>
-                                </td>
-                            </tr>
-                        @endif --}}
-                        @if ($jumlah != null)
-                            <tr>
-                                <th colspan="9">Total</th>
-                                <th>Rp {{ number_format($sumTotal) }}</th>
-                                <th>Rp {{ number_format($sumTotalPokok) }}</th>
-                            </tr>
-                        @endif
-    
-                    </tfoot>
+                </tfoot>
 
 
 
