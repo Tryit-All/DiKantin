@@ -60,7 +60,8 @@
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Diskon</th>
-                        <th>Harga</th>
+                        <th>Harga Jual</th>
+                        <th>Harga Pokok</th>
 
                     </tr>
                 </thead>
@@ -77,24 +78,52 @@
                             <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
                             <td>Rp {{ number_format($m->harga_satuan) }}</td>
+                            <td>Rp {{ number_format($m->harga_pokok) }}</td>
                            
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
-               
+                    {{-- @if ($sumTotal == 0)
+                        <tr>
+                            <td colspan="8">
+                                <center><b>Data tidak Ditemukan !
+                                    </b></center>
+                            </td>
+                        </tr>
+                    @endif --}}
                     @if ($jumlah != null)
-                    <tr>
-                        <th colspan="9">Total Pendapatan :</th>
-                        <th>Rp {{ number_format($sumTotal) }}</td>
-                    </tr>
-                @endif
+                        <tr>
+                        
+                            <th colspan="9"></th>
+                            <th>Total Penndapatan</th>
+                            <th>Rp {{ number_format($pendapatan) }}</th>
+                  
+                        </tr>
+                    @endif
+                </tfoot>
+                <tfoot>
+                    {{-- @if ($sumTotal == 0)
+                        <tr>
+                            <td colspan="8">
+                                <center><b>Data tidak Ditemukan !
+                                    </b></center>
+                            </td>
+                        </tr>
+                    @endif --}}
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="9">Total</th>
+                            <th>Rp {{ number_format($sumTotal) }}</th>
+                            <th>Rp {{ number_format($sumTotalPokok) }}</th>
+                        </tr>
+                    @endif
 
                 </tfoot>
+
             </table>
-            <a href="" class="btn btn-primary" id="btn-cetak" targe="_blank"
-                onclick="this.href='/laporan/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value + '/' + document.getElementById('idKantin').value + '/' + document.getElementById('statuss').value">Cetak
-                Laporan</a>
+            {{-- <a href="/laporan/cetakSemua" class="btn btn-primary" id="btn-cetak" targe="_blank">Cetak
+                Laporan</a> --}}
         </div>
     </div>
 @endsection

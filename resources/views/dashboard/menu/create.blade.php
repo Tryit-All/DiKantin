@@ -10,8 +10,12 @@
                 <input type="text" class="form-control" id="nama_menu" name="nama" required>
             </div>
             <div class="mb-2">
-                <label for="harga" class="form-label">Harga</label>
-                <input type="number" class="form-control" id="harga" name="harga" required>
+                <label for="harga" class="form-label">Harga jual</label>
+                <input type="text" class="form-control" id="harga" name="harga" oninput="formatCurrency(this)" required>
+            </div>
+            <div class="mb-2">
+                <label for="harga" class="form-label">Harga pokok</label>
+                <input type="text" class="form-control" id="hargapokok" name="harga_pokok"  oninput="formatCurrency(this)" required>
             </div>
             <div class="mb-2">
                 <label for="foto" class="form-label">Foto</label>
@@ -46,4 +50,16 @@
             </div>
         </form>
     </div>
+    <script>
+function formatCurrency(input) {
+    // Hapus tanda titik atau koma jika ada
+    let valueWithoutCommas = input.value.replace(/[,.]/g, '');
+
+    // Format angka dengan tanda titik sebagai pemisah ribuan
+    let formattedValue = new Intl.NumberFormat('id-ID').format(valueWithoutCommas);
+
+    // Tampilkan nilai yang diformat pada input
+    input.value = formattedValue;
+}
+    </script>
 @endsection

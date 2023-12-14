@@ -13,12 +13,12 @@
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="" class="form-label">Dari Tanggal</label>
-                    <input type="date" class="form-control" name="dariTanggal" id="tglMulai" value="{{ date('Y-m-d') }}">
+                    <input type="date" class="form-control" name="dariTanggal" id="tglMulai" value="{{ date('Y-m-d') }}" required>
                 </div>
                 <div class="col-md-4">
                     <label for="" class="form-label">Sampai Tanggal</label>
                     <input type="date" class="form-control" name="sampaiTanggal" id="tglSelesai"
-                        value="{{ date('Y-m-d') }}">
+                        value="{{ date('Y-m-d') }}" required>
                 </div>
                 <div class="col-md-4">
                     <label for="btn-cetak" class="form-label">&nbsp;</label><br>
@@ -42,7 +42,8 @@
                         <th>Kode transaksi</th>
                         <th>Kantin</th>
                         <th>Metode</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Harga Jual</th>
+                        <th>Jumlah Harga Pokok</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,19 +54,33 @@
                             <td>{{ $m['nama_kantin'] }}</td>
                             <td>{{ $m['metode'] }}</td>
                             <td>Rp {{ number_format($m['total']) }}</td>
+                            <td>Rp {{ number_format($m['total_hargapokok']) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     @if ($jumlah != null)
                         <tr>
-                            <th colspan="1">Total Pendapatan :</th>
+                            <th colspan="1"></th>
                             <th></th>
                             <th></th>
-                            <th>Rp {{ number_format($sumTotal) }}</td>
+                            <th>Pendapatan</td>
+                            <th>Rp {{ number_format($pendapatan) }}</td>
                         </tr>
                     @endif
                 </tfoot>
+                <tfoot>
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="1">Total :</th>
+                            <th></th>
+                            <th></th>
+                            <th>Rp {{ number_format($sumTotal) }}</td>
+                            <th>Rp {{ number_format($sumTotalPokok) }}</td>
+                        </tr>
+                    @endif
+                </tfoot>
+       
             </table>
             <a href="/rekapitulasi/cetak-semua" class="btn btn-primary" id="btn-cetak" targe="_blank">Cetak
                 Rekapitulasi</a>
@@ -114,5 +129,6 @@
             });
 
         });
+        
     </script>
 @endpush

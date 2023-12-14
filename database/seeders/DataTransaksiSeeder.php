@@ -16,14 +16,14 @@ class DataTransaksiSeeder extends Seeder
         $data = [
             array(
                 "kode_tr" => "TRDKN9272",
-                "status_konfirm" => "1",
-                "status_pesanan" => "1",
+                "status_konfirm" => "3",
+                "status_pesanan" => "3",
                 "tanggal" => "2023-10-21 09:32:59",
                 "id_customer" => "CUST98273",
                 "total_bayar" => "50000",
                 "total_harga" => "30000",
                 "kembalian" => "20000",
-                "status_pengiriman" => "proses",
+                "status_pengiriman" => "terima",
                 "bukti_pengiriman" => "fefawsdfasd",
                 "no_meja" => "0",
                 "model_pembayaran" => "cash",

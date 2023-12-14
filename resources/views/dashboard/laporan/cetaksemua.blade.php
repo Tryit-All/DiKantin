@@ -52,7 +52,9 @@
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Jumlah</th>
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Status</th>
                         <th style="text-align: center; white-space: normal; vertical-align: middle;">Diskon</th>
-                        <th style="border-right: 1px solid #ccc; white-space: normal; vertical-align: middle;">Harga
+                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Harga Jual</th>
+                   
+                        <th style="border-right: 1px solid #ccc; white-space: normal; vertical-align: middle;">Harga Pokok
                         </th>
                     </tr>
                 </thead>
@@ -68,8 +70,10 @@
                             <td>{{ $m->jumlah }}</td>
                             <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
+                            <td> Rp {{ number_format($m->harga_satuan) }}</td>
+                         
                             <td style="border-right: 1px solid #ccc;">
-                                Rp {{ number_format($m->harga_satuan) }}</td>
+                                Rp {{ number_format($m->harga_pokok) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -84,9 +88,16 @@
                     @endif --}}
                     @if ($jumlah != null)
                         <tr>
-                            <th style="text-align: left; border-left: 1px solid #ccc;" colspan="9">Total Pendapatan :
+                            <th style="text-align: left; border-left: 1px solid #ccc;" colspan="9">Total :
                             </th>
                             <th style="border-right: 1px solid #ccc;">Rp {{ number_format($sumTotal) }}</td>
+                            <th style="border-right: 1px solid #ccc;">Rp {{ number_format($sumTotalPokok) }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; border-left: 1px solid #ccc;" colspan="9">
+                            </th>
+                            <th style="border-right: 1px solid #ccc;">Total Pendapatan:</td>
+                            <th style="border-right: 1px solid #ccc;">Rp {{ number_format($pendapatan) }}</td> 
                         </tr>
                     @endif
 

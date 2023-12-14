@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->string('kode_tr', 9);
             $table->integer('QTY');
             $table->integer('subtotal_bayar');
+            $table->integer('subtotal_hargapokok');
             $table->integer('kode_menu');
             $table->enum('status_konfirm', ['menunggu', 'memasak', 'selesai'])->nullable(true);
             $table->foreign('kode_tr')->references('kode_tr')->on('transaksi')->cascadeOnDelete()->cascadeOnUpdate();

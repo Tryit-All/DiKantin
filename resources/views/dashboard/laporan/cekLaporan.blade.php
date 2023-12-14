@@ -20,8 +20,8 @@
                     <label for="kantin" class="form-label">Kantin</label>
                     <select class="form-select" aria-label="Default select example" name="id_kantin" required
                         id="idKantin">
-                  
-                        <option value="p"{{ $idKantin == "p" ? 'selected' : '' }}>Semua Kantin</option>
+
+                        <option value="p"{{ $idKantin == 'p' ? 'selected' : '' }}>Semua Kantin</option>
                         <option value="1"{{ $idKantin == 1 ? 'selected' : '' }}>Kantin 1</option>
                         <option value="2"{{ $idKantin == 2 ? 'selected' : '' }}>Kantin 2</option>
                         <option value="3"{{ $idKantin == 3 ? 'selected' : '' }}>Kantin 3</option>
@@ -36,7 +36,7 @@
                 <div class="col-md-2">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" aria-label="Default select example" name="status" required id="statuss">
-                        <option value="p" {{ $status == "p" ? 'selected' : '' }}>Semua  Status</option>
+                        <option value="p" {{ $status == 'p' ? 'selected' : '' }}>Semua Status</option>
                         <option value="proses" {{ $status == 'proses' ? 'selected' : '' }}>Proses</option>
                         <option value="kirim" {{ $status == 'kirim' ? 'selected' : '' }}>Dikirim</option>
                         <option value="terima" {{ $status == 'terima' ? 'selected' : '' }}>Selesai</option>
@@ -61,7 +61,8 @@
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Diskon</th>
-                        <th>Harga</th>
+                        <th>Harga Jual</th>
+                        <th>Harga Pokok</th>
 
                     </tr>
                 </thead>
@@ -78,10 +79,12 @@
                             <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
                             <td>Rp {{ number_format($m->harga_satuan) }}</td>
-                           
+                            <td>Rp {{ number_format($m->harga_pokok) }}</td>
+
                         </tr>
                     @endforeach
                 </tbody>
+       
                 <tfoot>
                     {{-- @if ($sumTotal == 0)
                         <tr>
@@ -93,16 +96,52 @@
                     @endif --}}
                     @if ($jumlah != null)
                         <tr>
-                            <th colspan="9">Total Pendapatan :</th>
-                            <th>Rp {{ number_format($sumTotal) }}</td>
+                        
+                            <th colspan="9"></th>
+                            <th>Total Penndapatan</th>
+                            <th>Rp {{ number_format($pendapatan) }}</th>
+                  
                         </tr>
                     @endif
 
                 </tfoot>
+
+                {{-- @if ($sumTotal == 0)
+                        <tr>
+                            <td colspan="8">
+                                <center><b>Data tidak Ditemukan !
+                                    </b></center>
+                            </td>
+                        </tr>
+                    @endif --}}
+
+
+                    <tfoot>
+                        {{-- @if ($sumTotal == 0)
+                            <tr>
+                                <td colspan="8">
+                                    <center><b>Data tidak Ditemukan !
+                                        </b></center>
+                                </td>
+                            </tr>
+                        @endif --}}
+                        @if ($jumlah != null)
+                            <tr>
+                                <th colspan="9">Total</th>
+                                <th>Rp {{ number_format($sumTotal) }}</th>
+                                <th>Rp {{ number_format($sumTotalPokok) }}</th>
+                            </tr>
+                        @endif
+    
+                    </tfoot>
+
+
+
+
             </table>
-            <a href="" class="btn btn-primary" id="btn-cetak" target="_blank"
+            {{-- <a href="" class="btn btn-primary" id="btn-cetak" target="_blank"
                 onclick="this.href='/laporan/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value + '/' + document.getElementById('idKantin').value + '/' + document.getElementById('statuss').value">Cetak
-                Laporan</a>
+                Laporan</a> --}}
         </div>
     </div>
 @endsection

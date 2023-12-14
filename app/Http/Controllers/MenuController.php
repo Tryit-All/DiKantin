@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use RealRashid\SweetAlert\Facades\Alert; 
 use App\Models\Menu;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,8 +45,10 @@ class MenuController extends Controller
         $data = $request->all();
         // dd($data);
         $data['foto'] = $request->file('foto')->store('menu', 'public');
+        $data['harga'] = str_replace('.', '', $data['harga']);
+        $data['harga_pokok'] = str_replace('.', '', $data['harga_pokok']);
         Menu::create($data);
-
+        Alert::success('Success', 'Berhasil Tambah Data');
         return redirect('/menuAll');
     }
 
