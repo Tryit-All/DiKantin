@@ -32,10 +32,8 @@
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                @if (!empty($user->getRoleNames()))
-                                    @foreach ($user->getRoleNames() as $v)
-                                        <label class="badge badge-success" style="color:#514D4E;">{{ $v }}</label>
-                                    @endforeach
+                                @if (!empty($user->role->name))
+                                    <label class="badge badge-success" style="color:#514D4E;">{{ $user->role->name }}</label>
                                 @endif
                             </td>
                             <td>{{ $user->username }}</td>

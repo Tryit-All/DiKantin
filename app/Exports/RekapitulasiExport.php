@@ -13,9 +13,13 @@ class RekapitulasiExport implements FromView, WithEvents
 {
 
     private $data;
-    public function __construct($data)
+    private $totalPokok;
+    private $pendapatan;
+    public function __construct($data, $totalPokok, $pendapatan)
     {
         $this->data = $data;
+        $this->totalPokok = $totalPokok;
+        $this->pendapatan = $pendapatan;
     }
 
     /**
@@ -24,7 +28,7 @@ class RekapitulasiExport implements FromView, WithEvents
     public function view(): View
     {
         //
-        return view("exports.rekapitulasi", ['data' => $this->data]);
+        return view("exports.rekapitulasi", ['data' => $this->data, 'totalPokok' => $this->totalPokok, 'pendapatan' => $this->pendapatan]);
     }
 
     public function registerEvents(): array

@@ -36,10 +36,12 @@ class LaporanController extends Controller
                 'menu.harga_pokok as harga_pokok',
                 'detail_transaksi.QTY as jumlah',
                 'menu.diskon as diskon',
-                'status_pengiriman'
+                'status_pengiriman',
+                'detail_transaksi.subtotal_bayar as subtotal',
+                'detail_transaksi.subtotal_hargapokok as subtotalpokok'
             )
             ->orderBy('transaksi.created_at', 'desc')->whereDate('transaksi.created_at', now()->toDateString())
-            ->get();
+            ->get()->toArray();
         $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
             ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -176,7 +178,9 @@ class LaporanController extends Controller
                     'menu.harga_pokok as harga_pokok',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -273,7 +277,9 @@ class LaporanController extends Controller
                     'menu.harga_pokok as harga_pokok',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -368,7 +374,9 @@ class LaporanController extends Controller
                     'menu.harga as harga_satuan',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -463,7 +471,9 @@ class LaporanController extends Controller
                     'menu.harga as harga_satuan',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -920,7 +930,7 @@ class LaporanController extends Controller
     )) as total')->value('total');
             $pendapatan = $sumTotal - $sumTotalPokok;
             $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
-$tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
+            $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
             return view('dashboard.laporan.cetak', [
                 'data' => $data,
                 'sumTotal' => $sumTotal,
@@ -1009,6 +1019,7 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
 
     public function cetakExcel(Request $request)
     {
-        return Excel::download(new LaporanExport(), "laporan." . $request->input('type'));
+
+        return Excel::download(new LaporanExport($request->input('data'), $request->input('total_pokok'), $request->input('pendapatan'), $request->input('totalJual')), "laporan." . $request->input('type'));
     }
 }

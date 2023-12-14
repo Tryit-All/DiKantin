@@ -39,7 +39,7 @@
 
     <!--   Begin page -->
     <div class="wrapper">
-          @include('sweetalert::alert')
+        @include('sweetalert::alert')
         <!-- ========== Left Sidebar Start ========== -->
         <div class="leftside-menu">
             <!-- LOGO -->
@@ -319,7 +319,51 @@
                             </form>
                         </li>
                     </ul>
+                @elseif(auth()->user()->id_role == 5)
+                    <ul class="side-nav">
+                        
+                        <li class="side-nav-item text-white">
+                            <a href="/laporan" class="side-nav-link text-white fw-bold">
+                                <i class="uil-chart"></i>
+                                <span> Laporan </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item text-white">
+                            <a href="/rekapitulasi" class="side-nav-link text-white fw-bold">
+                                <i class="uil-file"></i>
+                                <span> Rekapitulasi</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item text-red">
+
+                            <a class="side-nav-link fw-bold text-red" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                        Swal.fire({
+                            title: '<span>Apakah Ingin Logout?</span>',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'YA',
+                            cancelButtonText: 'BATAL',
+                            width:'400px'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('logout-form').submit();
+                            }
+                        });">
+                                <i class="mdi mdi-logout me-1"></i>
+                                <span>Logout</span>
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
                 @endif
+
 
                 <!-- End Sidebar -->
             </div>
@@ -436,7 +480,8 @@
 
     <!-- bundle -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ URL::asset('assets/js/vendor.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/app.min.js') }}"></script>
 

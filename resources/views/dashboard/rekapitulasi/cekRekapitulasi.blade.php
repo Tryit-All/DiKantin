@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                
+
                     @foreach ($data as $m)
                         <tr>
                             <td>{{ $m['kode'] }}</td>
@@ -101,6 +101,9 @@
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
                             <input type="text" id="id_data" name="data" hidden>
+                            <input type="text" name="sum_total_pokok" id="total_pokok" hidden>
+                            <input type="text" name="pendapatan" id="pendapatan" hidden>
+
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -122,6 +125,10 @@
         $(document).on('click', '.btn-cetak', function() {
             var data = {!! json_encode($jsonContent) !!}
             $('#id_data').val(data);
+            $('#total_pokok').val('{{ $sumTotalPokok }}');
+            $('#pendapatan').val('{{ $pendapatan }}');
+
+
         });
     </script>
 @endpush

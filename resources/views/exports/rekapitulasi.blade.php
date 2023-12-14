@@ -30,6 +30,7 @@
 </head>
 
 <body>
+  
     <table>
         <thead>
             <tr>
@@ -75,14 +76,14 @@
                 <td></td>
                 <td></td>
                 <td style="text-align: end; ">Total Harga Pokok</td>
-                <td style="text-align: end; ">{{ number_format($totalJual) }}</td>
+                <td style="text-align: end; ">{{ number_format($totalPokok) }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td style="text-align: end; ">Total Keuntungan</td>
-                <td style="text-align: end; ">{{ number_format($totalJual) }}</td>
+                <td style="text-align: end; ">{{ number_format($pendapatan) }}</td>
             </tr>
         </tbody>
     </table>
