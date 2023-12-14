@@ -92,8 +92,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/laporan/cetakSemua', [LaporanController::class, 'cetakSemua']);
 
     Route::post("/rekapitulasi/excel", [RekapitulasiController::class, "excel"])->name('rekapitulasi-excel');
-
-
     Route::get('/rekapitulasi', [RekapitulasiController::class, 'index']);
     Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
     Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
