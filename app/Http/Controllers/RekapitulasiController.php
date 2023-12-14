@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RekapitulasiExport;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 
 class RekapitulasiController extends Controller
 {
@@ -43,7 +46,7 @@ class RekapitulasiController extends Controller
         )
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
-            ->get();
+            ->get()->toArray();
 
         $jumlahQuery = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -74,29 +77,6 @@ class RekapitulasiController extends Controller
 
     public function cekRekapitulasi($tglMulai, $tglSelesai)
     {
-        // $data = DetailTransaksi::with([
-        //     'Menu.Kantin:id,nama_kantin',
-        // ])
-        //     ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-        //     ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-        //     ->leftJoin('transaksi', 'transaksi.kode_tr', "=", 'detail_transaksi.kode_tr')
-        //     ->whereBetween('detail_transaksi.created_at', [$tglMulai, $tglSelesai])
-        //     ->where('transaksi.status_pengiriman', 'terima')
-        //     ->selectRaw(
-        //         "transaksi.kode_tr as kode, kantin.id_kantin as id_kantin,
-        // kantin.nama as nama_kantin,
-        // SUM(menu.harga) as harga_satuan,
-        // SUM(detail_transaksi.QTY) as jumlah,
-        // SUM(menu.diskon) as diskon,
-        // SUM(if(
-        //     menu.diskon IS NULL OR menu.diskon = 0,
-        //     menu.harga * detail_transaksi.QTY,
-        //     (menu.harga * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga * detail_transaksi.QTY))
-        // )) as total, transaksi.model_pembayaran as metode"
-        //     )
-        //     ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
-        //     ->orderBy('kantin.id_kantin', 'asc')
-        //     ->get();
         $dataQuery = DetailTransaksi::with([
             'Menu.Kantin:id,nama_kantin',
         ])
@@ -125,7 +105,8 @@ class RekapitulasiController extends Controller
         )
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
-            ->get();
+            ->get()->toArray();
+        
 
         $jumlahQuery = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -312,4 +293,13 @@ class RekapitulasiController extends Controller
             ]
         );
     }
+
+
+    public function excel(Request $request)
+    {
+        $data = $request->input('data');
+        $dataAsArray = json_decode($data);
+        return FacadesExcel::download(new RekapitulasiExport($dataAsArray), "rekapitulasi." . $request->input('type'));
+    }
+
 }
