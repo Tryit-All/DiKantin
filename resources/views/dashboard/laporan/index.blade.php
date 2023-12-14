@@ -81,18 +81,18 @@
                     @foreach ($data as $m)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $m->tanggal }}</td>
-                            <td>{{ $m->pembeli }}</td>
-                            <td>{{ $m->kasir }}</td>
-                            <td>{{ $m->kantin }}</td>
-                            <td>{{ $m->pesanan }}</td>
-                            <td>{{ $m->jumlah }}</td>
-                            <td>{{ $m->status_pengiriman }}</td>
-                            <td>{{ $m->diskon }}</td>
-                            <td>Rp {{ number_format($m->harga_pokok) }}</td>
-                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
-                            <td>Rp {{ number_format($m->subtotalpokok) }}</td>
-                            <td>Rp {{ number_format($m->subtotal) }}</td>
+                            <td>{{ $m['tanggal'] }}</td>
+                            <td>{{ $m['pembeli'] }}</td>
+                            <td>{{ $m['kasir'] }}</td>
+                            <td>{{ $m['kantin'] }}</td>
+                            <td>{{ $m['pesanan'] }}</td>
+                            <td>{{ $m['jumlah'] }}</td>
+                            <td>{{ $m['status_pengiriman'] }}</td>
+                            <td>{{ $m['diskon'] }}</td>
+                            <td>Rp {{ number_format($m['harga_pokok']) }}</td>
+                            <td>Rp {{ number_format($m['harga_satuan']) }}</td>
+                            <td>Rp {{ number_format($m['subtotalpokok']) }}</td>
+                            <td>Rp {{ number_format($m['subtotal']) }}</td>
                            
                         </tr>
                     @endforeach
