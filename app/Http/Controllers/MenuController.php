@@ -169,7 +169,7 @@ class MenuController extends Controller
             $builder = Menu::orderBy('id_kantin', 'asc')
                 ->where('status_stok', 'ada')
                 ->where('kategori', $req->makanan)
-                ->where('kategori', $req->minuma);
+                ->where('kategori', $req->minuman);
             $menu = $builder->get();
             // return $menu;
 

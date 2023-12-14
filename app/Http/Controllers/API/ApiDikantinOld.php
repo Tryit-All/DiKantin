@@ -415,7 +415,7 @@ class ApiDikantinOld extends Controller
 
             $dataRiwayat = Transaksi::select(
                 'transaksi.kode_tr',
-                'transaksi.created_at',
+                DB::raw('DATE(detail_transaksi.created_at) as created_at'),
                 'menu.nama',
                 'menu.harga_pokok as harga',
                 'detail_transaksi.QTY',
@@ -562,6 +562,7 @@ class ApiDikantinOld extends Controller
             $dataTotal = 0;
 
             foreach ($dataRHP as $key => $RHP) {
+
                 $dataTotal += $RHP->total_pendapatan;
 
                 $dataRHP[$key]['total_pendapatan'] = intval($dataTotal);
