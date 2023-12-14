@@ -22,7 +22,7 @@ class AuthLoginController extends Controller
     public function loginUser(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+        
         if (Auth::attempt($credentials)) {
 
             return redirect()->intended('/dashboard');

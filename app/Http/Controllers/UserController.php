@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Roles::pluck('name', 'name')->all();
+        $roles = Roles::pluck('name', 'id')->all();
         return view('user.create', compact('roles'));
     }
 
@@ -45,6 +45,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         // $this->validate($request, [
         //     'name' => 'required',
         //     'email' => 'required|email|unique:users,email',
@@ -57,13 +58,13 @@ class UserController extends Controller
         if ($request->hasFile('foto')) {
             $input = $request->all();
             $input['foto'] = $request->file('foto')->store('profile', 'public');
-            $input['password'] = Hash::make($input['password']);
             User::create([
                 'username' => $input['username'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'id_kantin' => $input['id_kantin'],
-                'id_role' => $input['roles'][0]
+                'id_role' => $input['roles'][0],
+                'foto' => $input['foto']
             ]);
             // $user = User::create($input);
             // $user->assignRole($request->input('roles'));
@@ -71,7 +72,6 @@ class UserController extends Controller
         } else {
             $input = $request->all();
             // dd($input['roles'][0]);
-            $input['password'] = Hash::make($input['password']);
             // $user = User::create($input);
             User::create([
                 'username' => $input['username'],
