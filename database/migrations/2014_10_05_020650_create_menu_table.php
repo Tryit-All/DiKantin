@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->integer('id_menu')->autoIncrement();
             $table->string('nama', 100);
             $table->integer('harga');
+            $table->integer('harga_pokok');
             $table->string('foto', 255);
             $table->enum('status_stok', ['ada', 'tidak ada']);
             $table->enum('kategori', ['makanan', 'minuman']);

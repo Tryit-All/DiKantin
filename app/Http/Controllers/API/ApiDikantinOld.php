@@ -417,7 +417,7 @@ class ApiDikantinOld extends Controller
                 'transaksi.kode_tr',
                 'transaksi.created_at',
                 'menu.nama',
-                'menu.harga',
+                'menu.harga_pokok as harga',
                 'detail_transaksi.QTY',
                 'detail_transaksi.subtotal_bayar',
                 'transaksi.status_pengiriman',
@@ -540,7 +540,7 @@ class ApiDikantinOld extends Controller
                 ->select(
                     'menu.id_menu',
                     'menu.nama',
-                    'menu.harga',
+                    'menu.harga_pokok as harga',
                     DB::raw('SUM(detail_transaksi.QTY) as total_qty'),
                     DB::raw('SUM(detail_transaksi.subtotal_bayar) as total_pendapatan')
                 )
