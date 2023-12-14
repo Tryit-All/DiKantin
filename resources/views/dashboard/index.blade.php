@@ -14,7 +14,7 @@
                             {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
                         </h3> --}}
                         <h3 class="fs-2">Rp {{ number_format($pendapatan_seluruh) }}</h3>
-                        <p class="fs-5">Total Pendapatan</p>
+                        <p class="fs-5">Total Pendapatan Hari Ini</p>
                     </div>
                 </div>
             </div>
@@ -27,8 +27,8 @@
                     <div>
                         {{-- <h3 class="fs-2">12</h3> --}}
                         {{-- <h3 class="fs-2">{{ \App\Models\Detail_penjualan::getTotalMenuByTanggal('2023-04-06') }}</h3> --}}
-                        <h3 class="fs-2">{{ number_format($totalMenu, 0, ',', '.') }}</h3>
-                        <p class="fs-5">Menu Terjual</p>
+                        <h3 class="fs-2">{{ number_format($totalMenu) }}</h3>
+                        <p class="fs-5">Menu Terjual Hari Ini</p>
                     </div>
 
                 </div>
@@ -47,7 +47,7 @@
                         <h3 class="fs-2">
                             {{ \App\Models\Transaksi::getTotalTransaksiByTanggal(date('Y-m-d')) }}
                         </h3>
-                        <p class="fs-5">Jumlah Transaksi</p>
+                        <p class="fs-5">Jumlah Transaksi Hari Ini</p>
                     </div>
 
                 </div>
