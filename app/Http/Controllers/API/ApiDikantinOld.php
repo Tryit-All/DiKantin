@@ -448,7 +448,7 @@ class ApiDikantinOld extends Controller
             $dataTotal = 0;
 
             foreach ($dataRiwayat as $riwayat) {
-                $dataTotal += $riwayat->subtotal_bayar;
+                $dataTotal += $riwayat->subtotal_hargapokok;
             }
 
             return $this->sendMassage(["dataRiwayat" => $dataRiwayat, "dataTotal" => $dataTotal], 200, true);
