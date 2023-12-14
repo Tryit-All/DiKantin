@@ -13,7 +13,7 @@
                         {{-- <h3 class="fs-2">Rp
                             {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
                         </h3> --}}
-                        <h3 class="fs-2">Rp {{ number_format($sumTotal[0]->total) }}</h3>
+                        <h3 class="fs-2">Rp {{ number_format($pendapatan_seluruh) }}</h3>
                         <p class="fs-5">Total Pendapatan</p>
                     </div>
                 </div>
@@ -180,8 +180,8 @@
             },
             xAxis: {
                 categories: [
-                    @foreach ($label as $bulan)
-                        '{{ $bulan }}',
+                    @foreach ($pendapatan as $bulan=>$value)
+                        '{{ $value["bulan"] }}',
                     @endforeach
                 ]
             },
@@ -209,8 +209,8 @@
             series: [{
                 name: 'Pendapatan',
                 data: [
-                    @foreach ($jumlah_pendapatan as $data)
-                        {{ $data->total }},
+                    @foreach ($pendapatan as $data)
+                        {{ $data["total"] }},
                     @endforeach
                 ]
             }]

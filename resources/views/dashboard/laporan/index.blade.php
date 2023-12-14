@@ -68,7 +68,8 @@
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Diskon</th>
-                        <th>Harga</th>
+                        <th>Harga Jual</th>
+                        <th>Harga Pokok</th>
 
                     </tr>
                 </thead>
@@ -85,24 +86,53 @@
                             <td>{{ $m->status_pengiriman }}</td>
                             <td>{{ $m->diskon }}</td>
                             <td>Rp {{ number_format($m->harga_satuan) }}</td>
-
+                            <td>Rp {{ number_format($m->harga_pokok) }}</td>
+                           
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
+                    {{-- @if ($sumTotal == 0)
+                        <tr>
+                            <td colspan="8">
+                                <center><b>Data tidak Ditemukan !
+                                    </b></center>
+                            </td>
+                        </tr>
+                    @endif --}}
+                    @if ($jumlah != null)
+                        <tr>
+                        
+                            <th colspan="9"></th>
+                            <th>Total Penndapatan</th>
+                            <th>Rp {{ number_format($pendapatan) }}</th>
+                  
+                        </tr>
+                    @endif
+                </tfoot>
+                <tfoot>
+                    {{-- @if ($sumTotal == 0)
+                        <tr>
+                            <td colspan="8">
+                                <center><b>Data tidak Ditemukan !
+                                    </b></center>
+                            </td>
+                        </tr>
+                    @endif --}}
 
                     @if ($jumlah != null)
                         <tr>
-                            <th colspan="9">Total Pendapatan :</th>
-                            <th>Rp {{ number_format($sumTotal) }}</td>
+                            <th colspan="9">Total</th>
+                            <th>Rp {{ number_format($sumTotal) }}</th>
+                            <th>Rp {{ number_format($sumTotalPokok) }}</th>
                         </tr>
                     @endif
 
                 </tfoot>
+
             </table>
-            <a href="" class="btn btn-primary" id="btn-cetak" targe="_blank"
-                onclick="this.href='/laporan/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value + '/' + document.getElementById('idKantin').value + '/' + document.getElementById('statuss').value">Cetak
-                Laporan</a>
+            {{-- <a href="/laporan/cetakSemua" class="btn btn-primary" id="btn-cetak" targe="_blank">Cetak
+                Laporan</a> --}}
         </div>
     </div>
 
@@ -132,7 +162,31 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('laporan-excel') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="format">Format Excel</label>
+                        <select class="form-select" id="format" aria-label="Default select example" name="type">
+                            <option value="xlsx">XLSX</option>
+                            <option value="csv">CSV</option>
+                            <input type="text" id="id_data" name="data" hidden>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Cetak Sekarang</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('script')

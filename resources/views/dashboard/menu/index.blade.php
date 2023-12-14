@@ -15,7 +15,8 @@
                         @endphp
                         <th>No</th>
                         <th>Menu</th>
-                        <th>Harga</th>
+                        <th>Harga Jual</th>
+                        <th>Harga Pokok</th>
                         <th>Foto</th>
                         <th>Stok</th>
                         <th>Kantin</th>
@@ -28,6 +29,7 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $m->nama }}</td>
                             <td>Rp {{ number_format($m->harga) }}</td>
+                            <td>Rp {{ number_format($m->harga_pokok) }}</td>
                             <td>
                                 <img src="{{ url($m->foto) }}" style="width: 70px; height: 70px; object-fit: cover;"
                                     alt="" class="rounded-circle">

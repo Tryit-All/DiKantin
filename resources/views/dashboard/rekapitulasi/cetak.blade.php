@@ -41,26 +41,40 @@
                         <th>Kode transaksi</th>
                         <th>Kantin</th>
                         <th>Metode</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Harga Jual</th>
+                        <th>Jumlah Harga Pokok</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $m)
                         <tr>
-                            <td>{{ $m->kode }}</td>
-                            <td>{{ $m->nama_kantin }}</td>
-                            <td>{{ $m->metode }}</td>
-                            <td>Rp {{ number_format($m->total) }}</td>
+                            <td>{{ $m['kode'] }}</td>
+                            <td>{{ $m['nama_kantin'] }}</td>
+                            <td>{{ $m['metode'] }}</td>
+                            <td>Rp {{ number_format($m['total']) }}</td>
+                            <td>Rp {{ number_format($m['total_hargapokok']) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     @if ($jumlah != null)
                         <tr>
-                            <th colspan="1">Total Pendapatan :</th>
+                            <th colspan="1"></th>
+                            <th></th>
+                            <th></th>
+                            <th>Pendapatan</td>
+                            <th>Rp {{ number_format($pendapatan) }}</td>
+                        </tr>
+                    @endif
+                </tfoot>
+                <tfoot>
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="1">Total :</th>
                             <th></th>
                             <th></th>
                             <th>Rp {{ number_format($sumTotal) }}</td>
+                            <th>Rp {{ number_format($sumTotalPokok) }}</td>
                         </tr>
                     @endif
                 </tfoot>

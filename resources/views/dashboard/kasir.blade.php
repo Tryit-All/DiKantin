@@ -20,10 +20,38 @@
                             class="form-control bg-lingkaran" readonly style="border-radius: 10px;"></div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-12">
+                    {{-- <div class="col-md-12">
                         <input type="text" autocomplete="off" class="form-control d-inline" onchange="getMenu()"
                             placeholder="Cari Menu" name="q" id="search-input" style="border-radius: 10px;">
+                    </div> --}}
+                    <div class="col-md-6">
+                        <select class="form-select" style="border-radius: 10px;" aria-label="Default select example"
+                            name="kantin" onchange="getMenu()" required id="kantin">
+                            <option value="">Semua Kantin</option>
+                            <option value="1">Kantin 1</option>
+                            <option value="2">Kantin 2</option>
+                            <option value="3">Kantin 3</option>
+                            <option value="4">Kantin 4</option>
+                            <option value="5">Kantin 5</option>
+                            <option value="6">Kantin 6</option>
+                            <option value="7">Kantin 7</option>
+                            <option value="8">Kantin 8</option>
+                            <option value="9">Kantin 9</option>
+                        </select>
                     </div>
+                    <div class="col-md-2">
+                        <input class="btn-check" type="checkbox" style="border-radius: 10px;" id="btn-check-makanan"
+                            autocomplete="off" onchange="getMenu()">
+                        <label class="btn btn-outline-primary ml-7" style="border-radius: 10px;"
+                            for="btn-check-makanan">Makanan</label><br>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="btn-check" type="checkbox" style="border-radius: 10px;" id="btn-check-minuman"
+                            autocomplete="off" onchange="getMenu()">
+                        <label class="btn btn-outline-primary" style="border-radius: 10px;"
+                            for="btn-check-minuman">Minuman</label><br>
+                    </div>
+
 
                 </div>
                 <div class="row mt-2 m-0" id="data-menu"
@@ -150,6 +178,23 @@
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 }
             })
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var checkboxMakanan = document.getElementById('btn-check-makanan');
+                var checkboxMinuman = document.getElementById('btn-check-minuman');
+
+                checkboxMakanan.addEventListener('change', function() {
+                    var valueMakanan = checkboxMakanan.checked ? 'Makanan' : '';
+                    getMenu();
+                    // console.log('Value Makanan:', valueMakanan);
+                });
+
+                checkboxMinuman.addEventListener('change', function() {
+                    var valueMinuman = checkboxMinuman.checked ? 'Minuman' : '';
+                    getMenu();
+                    // console.log('Value Minuman:', valueMinuman);
+                });
+            });
 
             function reloadmenu() {
                 var totalAwal = 0;
@@ -396,9 +441,13 @@
             }
 
             function getMenu() {
-                searching = $('#search-input').val();
+                // searching = $('#search-input').val();
+                searching = $('#kantin').val();
+                makanan = $('#btn-check-makanan').is(':checked') ? 'Makanan' : '';
+                minuman = $('#btn-check-minuman').is(':checked') ? 'Minuman' : '';
                 $.ajax({
-                    url: '/searchProductAll?q=' + searching,
+                    url: '/searchProductAll?kantin=' + searching + '&makanan=' + makanan + '&minuman=' + minuman,
+                    // url: '/searchProductAll?q=' + searching,
                     method: 'GET',
                     success: function(response) {
                         html = ''
@@ -419,6 +468,9 @@
                                 </div>`;
                         });
                         $('#data-menu').html(html);
+                    },
+                    error: function(err) {
+                        console.log(err);
                     }
                 });
             }
@@ -610,7 +662,7 @@
                         }
 
                     });
-                    
+
                 }
             }
 
