@@ -229,10 +229,13 @@ class ApiTransaction extends Controller
 
         foreach ($dataOrderan as $key => $value) {
             $detail = new DetailTransaksi();
+            $hargaPokokMenu = Menu::where('id_menu', $value['kode_menu'])->first();
             $detail->kode_tr = $kodeTr;
             $detail->kode_menu = $value['kode_menu'];
             $detail->QTY = $value['qty_barang'];
+            $detail->subtotal_hargapokok = $hargaPokokMenu->harga_pokok * $value['qty_barang'];
             $detail->subtotal_bayar = $value['total_harga_barang'];
+            $detail->status_konfirm = 'menunggu';
             $detail->save();
         }
         // send message to customer
