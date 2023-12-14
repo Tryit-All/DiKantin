@@ -342,28 +342,65 @@ class ApiDikantinOld extends Controller
         $token = $request->bearerToken();
         $kantin = User::where('token', $token)->first();
 
-        $dataPenjualanBulanIni = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+        $dataRiwayat = Transaksi::select(
+            'transaksi.kode_tr',
+            DB::raw('DATE(detail_transaksi.created_at) as tanggal_transaksi'),
+            'menu.nama',
+            'menu.harga_pokok as harga',
+            'detail_transaksi.QTY',
+            'detail_transaksi.subtotal_hargapokok',
+            'transaksi.status_pengiriman',
+            'customer.nama AS customer_name',
+            'customer.no_telepon',
+            'user.username',
+            'transaksi.model_pembayaran'
+        )->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
+            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->where('menu.id_kantin', '=', $kantin->id_kantin)
+            ->where('kantin.id_kantin', $kantin->id_kantin)
             ->where('transaksi.status_pengiriman', 'terima')
             ->whereMonth('transaksi.created_at', Carbon::now()->format('m'))
-            ->whereYear('transaksi.created_at', Carbon::now()->format('Y'))
-            ->selectRaw('SUM(detail_transaksi.subtotal_hargapokok) as total')
-            ->value('total');
+            ->orderBy('transaksi.created_at', 'desc')->get();
 
-        $dataPenujualanHariIni = DetailTransaksi::leftJoin('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+        $dataRiwayatToday = Transaksi::select(
+            'transaksi.kode_tr',
+            DB::raw('DATE(detail_transaksi.created_at) as tanggal_transaksi'),
+            'menu.nama',
+            'menu.harga_pokok as harga',
+            'detail_transaksi.QTY',
+            'detail_transaksi.subtotal_hargapokok',
+            'transaksi.status_pengiriman',
+            'customer.nama AS customer_name',
+            'customer.no_telepon',
+            'user.username',
+            'transaksi.model_pembayaran'
+        )->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
+            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->where('menu.id_kantin', '=', $kantin->id_kantin)
+            ->where('kantin.id_kantin', $kantin->id_kantin)
             ->where('transaksi.status_pengiriman', 'terima')
-            ->whereDate('transaksi.created_at', Carbon::now()->format('Y-m-d'))
-            ->selectRaw('SUM(detail_transaksi.subtotal_hargapokok) as total')
-            ->value('total');
+            ->whereDate('transaksi.created_at', Carbon::now()->format('d'))
+            ->orderBy('transaksi.created_at', 'desc')->get();
 
+        $totalBulan = 0;
+        $totalToday = 0;
+
+        foreach ($dataRiwayat as $key => $value) {
+            # code...
+
+            $totalBulan += $value->subtotal_hargapokok;
+        }
+        foreach ($dataRiwayatToday as $key => $value) {
+            # code...
+            $totalToday += $value->subtotal_hargapokok;
+        }
         return $this->sendMassage([
-            "penjualanBulanIni" => (int) $dataPenjualanBulanIni,
-            'penjualanHariIni' => (int) $dataPenujualanHariIni
+            "penjualanBulanIni" => (int) $totalBulan,
+            'penjualanHariIni' => (int) $totalToday
         ], 200, true);
     }
 
