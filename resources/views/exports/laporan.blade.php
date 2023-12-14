@@ -53,6 +53,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
+
+                        <th></th>
                         <th style="text-align: left; border-left: 1px solid #ccc;">Total Pokok
                         </th>
                         <th style="border-right: 1px solid #ccc;">Rp {{ number_format($totalPokok) }}
@@ -68,6 +71,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
+                        <th></th>
+
 
 
                         <th style="text-align: left; border-left: 1px solid #ccc;">Total Jual
@@ -83,6 +89,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
+                        <th></th>
+
                         <th></th>
                         <th></th>
 

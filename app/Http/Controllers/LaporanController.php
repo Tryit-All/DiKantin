@@ -36,7 +36,9 @@ class LaporanController extends Controller
                 'menu.harga_pokok as harga_pokok',
                 'detail_transaksi.QTY as jumlah',
                 'menu.diskon as diskon',
-                'status_pengiriman'
+                'status_pengiriman',
+                'detail_transaksi.subtotal_bayar as subtotal',
+                'detail_transaksi.subtotal_hargapokok as subtotalpokok'
             )
             ->orderBy('transaksi.created_at', 'desc')->whereDate('transaksi.created_at', now()->toDateString())
             ->get()->toArray();
@@ -176,7 +178,9 @@ class LaporanController extends Controller
                     'menu.harga_pokok as harga_pokok',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -273,7 +277,9 @@ class LaporanController extends Controller
                     'menu.harga_pokok as harga_pokok',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -368,7 +374,9 @@ class LaporanController extends Controller
                     'menu.harga as harga_satuan',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
@@ -463,7 +471,9 @@ class LaporanController extends Controller
                     'menu.harga as harga_satuan',
                     'detail_transaksi.QTY as jumlah',
                     'menu.diskon as diskon',
-                    'status_pengiriman'
+                    'status_pengiriman',
+                    'detail_transaksi.subtotal_bayar as subtotal',
+                    'detail_transaksi.subtotal_hargapokok as subtotalpokok'
                 )
                 ->orderBy('transaksi.created_at', 'desc');
 
