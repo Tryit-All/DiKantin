@@ -50,7 +50,7 @@ class RekapitulasiController extends Controller
                 menu.harga_pokok * detail_transaksi.QTY,
                 (menu.harga_pokok * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga_pokok * detail_transaksi.QTY))
             )) as total_hargapokok, transaksi.model_pembayaran as metode"
-            
+
         )
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')->whereDate('transaksi.created_at', now()->toDateString())
@@ -91,14 +91,14 @@ class RekapitulasiController extends Controller
                 (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga_pokok*QTY))
             )) as total_pokok')
             ->value('total_pokok');
-         $pendapatan=$sumTotal-$sumTotalPokok;
-        return view('dashboard.rekapitulasi.index', compact(['data', 'jumlah', 'sumTotal','sumTotalPokok','pendapatan']));
+        $pendapatan = $sumTotal - $sumTotalPokok;
+        return view('dashboard.rekapitulasi.index', compact(['data', 'jumlah', 'sumTotal', 'sumTotalPokok', 'pendapatan']));
     }
 
     public function cekRekapitulasi($tglMulai, $tglSelesai)
     {
-        $tglSelesai = $tglSelesai. ' 23:59:00';
-        $tglMulai = $tglMulai. ' 00:00:00';
+        $tglSelesai = $tglSelesai . ' 23:59:00';
+        $tglMulai = $tglMulai . ' 00:00:00';
         $dataQuery = DetailTransaksi::with([
             'Menu.Kantin:id,nama_kantin',
         ])
@@ -133,7 +133,7 @@ class RekapitulasiController extends Controller
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
             ->get()->toArray();
-        
+
 
         $jumlahQuery = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -185,9 +185,9 @@ class RekapitulasiController extends Controller
             ->value('total_pokok');
 
         // return $data;
-$pendapatan=$sumTotal-$sumTotalPokok;
-$tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
-$tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
+        $pendapatan = $sumTotal - $sumTotalPokok;
+        $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
+        $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
         return view(
             'dashboard.rekapitulasi.cekRekapitulasi',
             [
@@ -204,8 +204,8 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
 
     public function cetak($tglMulai, $tglSelesai)
     {
-       $tglSelesai = $tglSelesai. ' 23:59:00';
-        $tglMulai = $tglMulai. ' 00:00:00';
+        $tglSelesai = $tglSelesai . ' 23:59:00';
+        $tglMulai = $tglMulai . ' 00:00:00';
         $dataQuery = DetailTransaksi::with([
             'Menu.Kantin:id,nama_kantin',
         ])
@@ -240,7 +240,7 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')
             ->get()->toArray();
-        
+
 
         $jumlahQuery = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -292,9 +292,9 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
             ->value('total_pokok');
 
         // return $data;
-$pendapatan=$sumTotal-$sumTotalPokok;
-$tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
-$tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
+        $pendapatan = $sumTotal - $sumTotalPokok;
+        $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
+        $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
         return view(
             'dashboard.rekapitulasi.cetak',
             [
@@ -337,7 +337,7 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
                 menu.harga_pokok * detail_transaksi.QTY,
                 (menu.harga_pokok * detail_transaksi.QTY) - (menu.diskon/100 * (menu.harga_pokok * detail_transaksi.QTY))
             )) as total_hargapokok, transaksi.model_pembayaran as metode"
-            
+
         )
             ->groupBy('kantin.id_kantin', 'kantin.nama', 'transaksi.model_pembayaran', 'transaksi.kode_tr')
             ->orderBy('kantin.id_kantin', 'asc')->whereDate('transaksi.created_at', now()->toDateString())
@@ -378,9 +378,9 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
                 (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga_pokok*QTY))
             )) as total_pokok')
             ->value('total_pokok');
-         $pendapatan=$sumTotal-$sumTotalPokok;
+        $pendapatan = $sumTotal - $sumTotalPokok;
 
-         return view(
+        return view(
             'dashboard.rekapitulasi.cetaksemua',
             [
                 'data' => $data,
@@ -398,7 +398,7 @@ $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
     {
         $data = $request->input('data');
         $dataAsArray = json_decode($data);
-        return FacadesExcel::download(new RekapitulasiExport($dataAsArray), "rekapitulasi." . $request->input('type'));
+        return FacadesExcel::download(new RekapitulasiExport($dataAsArray, $request->input('sum_total_pokok'), $request->input('pendapatan')), "rekapitulasi." . $request->input('type'));
     }
 
 }

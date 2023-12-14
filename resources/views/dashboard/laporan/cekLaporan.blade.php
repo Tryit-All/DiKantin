@@ -92,7 +92,7 @@
                         </tr>
                     @endforeach
                 </tbody>
-       
+
                 <tfoot>
                     {{-- @if ($sumTotal == 0)
                         <tr>
@@ -104,11 +104,11 @@
                     @endif --}}
                     @if ($jumlah != null)
                         <tr>
-                        
+
                             <th colspan="9"></th>
                             <th>Total Penndapatan</th>
                             <th>Rp {{ number_format($pendapatan) }}</th>
-                  
+
                         </tr>
                     @endif
 
@@ -124,8 +124,8 @@
                     @endif --}}
 
 
-                    <tfoot>
-                        {{-- @if ($sumTotal == 0)
+                <tfoot>
+                    {{-- @if ($sumTotal == 0)
                             <tr>
                                 <td colspan="8">
                                     <center><b>Data tidak Ditemukan !
@@ -133,15 +133,15 @@
                                 </td>
                             </tr>
                         @endif --}}
-                        @if ($jumlah != null)
-                            <tr>
-                                <th colspan="9">Total</th>
-                                <th>Rp {{ number_format($sumTotal) }}</th>
-                                <th>Rp {{ number_format($sumTotalPokok) }}</th>
-                            </tr>
-                        @endif
-    
-                    </tfoot>
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="9">Total</th>
+                            <th>Rp {{ number_format($sumTotal) }}</th>
+                            <th>Rp {{ number_format($sumTotalPokok) }}</th>
+                        </tr>
+                    @endif
+
+                </tfoot>
 
 
 
@@ -153,7 +153,35 @@
         </div>
     </div>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('laporan-excel') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="format">Format Excel</label>
+                        <select class="form-select" id="format" aria-label="Default select example" name="type">
+                            <option value="xlsx">XLSX</option>
+                            <option value="csv">CSV</option>
+                            <input type="text" id="id_data" name="data" hidden>
+                            <input type="text" id="totalPokok" name="total_pokok" hidden>
+                            <input type="text" id="pendapatan" name="pendapatan" hidden>
+                            <input type="text" id="totalJual" name="totalJual" hidden>
 
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Cetak Sekarang</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('script')
@@ -164,6 +192,9 @@
         $(document).on('click', '.btn-cetak', function() {
             var data = {!! json_encode($jsonContent) !!}
             $('#id_data').val(data);
+            $('#pendapatan').val('{{ $pendapatan }}');
+            $('#totalPokok').val('{{ $sumTotalPokok }}');
+            $('#totalJual').val('{{ $sumTotal }}');
         });
     </script>
 @endpush

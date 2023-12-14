@@ -13,7 +13,8 @@
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="" class="form-label">Dari Tanggal</label>
-                    <input type="date" class="form-control" name="dariTanggal" id="tglMulai" value="{{ date('Y-m-d') }}" required>
+                    <input type="date" class="form-control" name="dariTanggal" id="tglMulai" value="{{ date('Y-m-d') }}"
+                        required>
                 </div>
                 <div class="col-md-4">
                     <label for="" class="form-label">Sampai Tanggal</label>
@@ -47,7 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                
+
                     @foreach ($data as $m)
                         <tr>
                             <td>{{ $m['kode'] }}</td>
@@ -80,7 +81,7 @@
                         </tr>
                     @endif
                 </tfoot>
-       
+
             </table>
             <a href="/rekapitulasi/cetak-semua" class="btn btn-primary" id="btn-cetak" targe="_blank">Cetak
                 Rekapitulasi</a>
@@ -104,6 +105,9 @@
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
                             <input type="text" id="id_data" name="data" hidden>
+                            <input type="text" name="sum_total_pokok" id="total_pokok" hidden>
+                            <input type="text" name="pendapatan" id="pendapatan" hidden>
+
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -114,21 +118,18 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 @push('script')
     <script>
         $(document).ready(function() {
-            $('#table-rekapitulasi').DataTable();
-
-            $(document).on('click', '.btn-cetak', function() {
-                var data = {!!json_encode($jsonContent)!!}
-                $('#id_data').val(data);
-            });
-
+            $('#table-menu').DataTable();
         });
-        
+        $(document).on('click', '.btn-cetak', function() {
+            var data = {!! json_encode($jsonContent) !!}
+            $('#id_data').val(data);
+            $('#total_pokok').val('{{ $sumTotalPokok }}');
+            $('#pendapatan').val('{{ $pendapatan }}');
+        });
     </script>
 @endpush

@@ -4,65 +4,45 @@
             <table class="table table-striped table-hover w-100 nowrap" width="100%" id="table-menu"
                 style="height: 100% !important">
                 <thead class="table-dark">
+
+
                     <tr>
-                        <th
-                            style="text-align: center; border-left: 1px solid #ccc; white-space: normal; vertical-align: middle;">
-                            No</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Tgl Penjualan</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Pembeli</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Kasir</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Kantin</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Menu</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Jumlah</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Status</th>
-                        <th style="text-align: center; white-space: normal; vertical-align: middle;">Diskon</th>
-                        <th style="border-right: 1px solid #ccc; white-space: normal; vertical-align: middle;">Harga
-                        </th>
+                        <th>No</th>
+                        <th>Tgl Penjualan</th>
+                        <th>Pembeli</th>
+                        <th>Kasir</th>
+                        <th>Kantin</th>
+                        <th>Menu</th>
+                        <th>Jumlah</th>
+                        <th>Status</th>
+                        <th>Diskon</th>
+                        <th>Harga Jual</th>
+                        <th>Harga Pokok</th>
+                        <th>Subtotal Harga Pokok</th>
+                        <th>Subtotal Harga Jual</th>
                     </tr>
+
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="border-left: 1px solid #ccc;">1</td>
-                        <td>2023-12-13 13:12:49</td>
-                        <td>fathur</td>
-                        <td></td>
-                        <td>kantin 1</td>
-                        <td>Es Jeruk</td>
-                        <td>1</td>
-                        <td>proses</td>
-                        <td></td>
-                        <td style="border-right: 1px solid #ccc;">
-                            Rp 3,000</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 1px solid #ccc;">2</td>
-                        <td>2023-12-13 13:12:37</td>
-                        <td>fathur</td>
-                        <td></td>
-                        <td>kantin 1</td>
-                        <td>Es Jeruk</td>
-                        <td>1</td>
-                        <td>proses</td>
-                        <td></td>
-                        <td style="border-right: 1px solid #ccc;">
-                            Rp 3,000</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 1px solid #ccc;">3</td>
-                        <td>2023-12-13 13:12:19</td>
-                        <td>fathur</td>
-                        <td></td>
-                        <td>kantin 1</td>
-                        <td>Aqua</td>
-                        <td>1</td>
-                        <td>proses</td>
-                        <td></td>
-                        <td style="border-right: 1px solid #ccc;">
-                            Rp 3,000</td>
-                    </tr>
+                    @foreach ($data as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->tanggal }}</td>
+                            <td>{{ $item->pembeli }}</td>
+                            <td>{{ $item->kasir }}</td>
+                            <td>{{ $item->kantin }}</td>
+                            <td>{{ $item->pesanan }}</td>
+                            <td>{{ $item->jumlah }}</td>
+                            <td>{{ $item->status_pengiriman }}</td>
+                            <td>{{ $item->diskon }}</td>
+                            <td>{{ $item->harga_satuan }}</td>
+                            <td>{{ $item->harga_pokok }}</td>
+                            <td>{{ $item->subtotalpokok }}</td>
+                            <td>{{ $item->subtotal }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
                 <tfoot>
-
                     <tr>
                         <th></th>
                         <th></th>
@@ -72,10 +52,10 @@
                         <th></th>
                         <th></th>
                         <th></th>
-
-                        <th style="text-align: left; border-left: 1px solid #ccc;" >Total Pendapatan
+                        <th></th>
+                        <th style="text-align: left; border-left: 1px solid #ccc;">Total Pokok
                         </th>
-                        <th style="border-right: 1px solid #ccc;">Rp 9,000
+                        <th style="border-right: 1px solid #ccc;">Rp {{ number_format($totalPokok) }}
                         </th>
                     </tr>
                     <tr>
@@ -87,13 +67,16 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
 
-                        <th style="text-align: left; border-left: 1px solid #ccc;" >Total Pokok
+
+                        <th style="text-align: left; border-left: 1px solid #ccc;">Total Jual
                         </th>
-                        <th style="border-right: 1px solid #ccc;">Rp 9,000
+                        <th style="border-right: 1px solid #ccc;">Rp {{ number_format($totalJual) }}
                         </th>
                     </tr>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -106,7 +89,7 @@
 
                         <th style="text-align: left; border-left: 1px solid #ccc;"> Keuntungan
                         </th>
-                        <th style="border-right: 1px solid #ccc;">Rp 9,000
+                        <th style="border-right: 1px solid #ccc;">Rp {{ number_format($pendapatan) }}
                         </th>
                     </tr>
 

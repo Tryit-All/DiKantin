@@ -70,24 +70,22 @@
                         <th>Diskon</th>
                         <th>Harga Jual</th>
                         <th>Harga Pokok</th>
-
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $m)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $m->tanggal }}</td>
-                            <td>{{ $m->pembeli }}</td>
-                            <td>{{ $m->kasir }}</td>
-                            <td>{{ $m->kantin }}</td>
-                            <td>{{ $m->pesanan }}</td>
-                            <td>{{ $m->jumlah }}</td>
-                            <td>{{ $m->status_pengiriman }}</td>
-                            <td>{{ $m->diskon }}</td>
-                            <td>Rp {{ number_format($m->harga_satuan) }}</td>
-                            <td>Rp {{ number_format($m->harga_pokok) }}</td>
-                           
+                            <td>{{ $m['tanggal'] }}</td>
+                            <td>{{ $m['pembeli'] }}</td>
+                            <td>{{ $m['kasir'] }}</td>
+                            <td>{{ $m['kantin'] }}</td>
+                            <td>{{ $m['pesanan'] }}</td>
+                            <td>{{ $m['jumlah'] }}</td>
+                            <td>{{ $m['status_pengiriman'] }}</td>
+                            <td>{{ $m['diskon'] }}</td>
+                            <td>Rp {{ number_format($m['harga_satuan']) }}</td>
+                            <td>Rp {{ number_format($m['harga_pokok']) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -102,11 +100,11 @@
                     @endif --}}
                     @if ($jumlah != null)
                         <tr>
-                        
+
                             <th colspan="9"></th>
                             <th>Total Penndapatan</th>
                             <th>Rp {{ number_format($pendapatan) }}</th>
-                  
+
                         </tr>
                     @endif
                 </tfoot>
@@ -177,6 +175,10 @@
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
                             <input type="text" id="id_data" name="data" hidden>
+                            <input type="text" id="totalPokok" name="total_pokok">
+                            <input type="text" id="pendapatan" name="pendapatan">
+                            <input type="text" id="totalJual" name="totalJual">
+
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -196,6 +198,9 @@
             $(document).on('click', '.btn-cetak', function() {
                 var data = {!! json_encode($jsonContent) !!}
                 $('#id_data').val(data);
+                $('#pendapatan').val('{{$pendapatan}}');
+                $('#totalPokok').val('{{$sumTotalPokok}}');
+                $('#totalJual').val('{{$sumTotal}}');
             });
         });
     </script>
