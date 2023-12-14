@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $totalPendapatan = Transaksi::getTotalPendapatanByTanggal(date('Y-m-d'));
         $totalMenu = DetailTransaksi::getTotalMenuByTanggal(date('Y-m-d'));
 
-        $jumlah_pendapatan = DB::table('transaksi')
+        $jumlah_pendapatan_jual = DB::table('transaksi')
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
@@ -30,10 +30,43 @@ class DashboardController extends Controller
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->where('transaksi.status_pengiriman', '=', 'terima')
+            ->whereYear('transaksi.created_at',date('Y'))
             ->groupBy('bulan', 'bulan_num')
             ->orderBy('bulan_num', 'ASC')
             ->get()
             ->toArray();
+      
+        $jumlah_pendapatan_pokok = DB::table('transaksi')
+            ->selectRaw('
+                SUM(IF(
+                    menu.diskon IS NULL OR menu.diskon = 0,
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
+                )) AS total_pokok,
+                DATE_FORMAT(detail_transaksi.created_at, "%M") AS bulan,
+                MONTH(detail_transaksi.created_at) AS bulan_num
+            ')
+            ->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
+            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kurir')
+            ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+            ->where('transaksi.status_pengiriman', '=', 'terima')
+            ->whereYear('transaksi.created_at',date('Y'))
+            ->groupBy('bulan', 'bulan_num')
+            ->orderBy('bulan_num', 'ASC')
+            ->get()
+            ->toArray();
+
+$pendapatan=[];
+foreach ($jumlah_pendapatan_jual as $key => $value) {
+
+    $tmp = [
+        'total' => $value->total - (int)$jumlah_pendapatan_pokok[$key]->total_pokok,
+        'bulan'=>$value->bulan
+    ];
+    array_push($pendapatan,$tmp );
+}
 
 
         $nama_bulan = array(
@@ -52,20 +85,20 @@ class DashboardController extends Controller
         );
 
         // Ubah format nama bulan pada array $jumlah_pendapatan
-        foreach ($jumlah_pendapatan as $data) {
-            $data->bulan = $nama_bulan[date('n', strtotime($data->bulan)) - 1];
-        }
+        // foreach ($pendapatan as $data) {
+        //     $data['bulan'] = $nama_bulan[date('n', strtotime($data->bulan)) - 1];
+        // }
 
         // Gunakan label yang sudah diubah format namanya pada grafik
-        $label = $nama_bulan;
-        $label = array_column($jumlah_pendapatan, 'bulan');
+        // $label = $nama_bulan;
+        // $label = array_column($pendapatan, 'bulan');
 
         $pendapatan_kantin1 = DB::table('detail_transaksi')
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -79,8 +112,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -94,8 +127,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -109,8 +142,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -124,8 +157,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -139,8 +172,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -154,8 +187,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -169,8 +202,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -184,8 +217,8 @@ class DashboardController extends Controller
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
-                    detail_transaksi.subtotal_bayar,
-                    detail_transaksi.subtotal_bayar - (menu.diskon / 100 * detail_transaksi.subtotal_bayar)
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
                 )) AS total
             ')
             ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -207,16 +240,30 @@ class DashboardController extends Controller
             ->join('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->where('transaksi.status_pengiriman', '=', 'terima')
             ->whereDate('transaksi.tanggal', '=', now()->toDateString())
-            ->get();
-
+            ->value('total');
+        $sumTotalPokok= DB::table('detail_transaksi')
+            ->selectRaw('
+                SUM(IF(
+                    menu.diskon IS NULL OR menu.diskon = 0,
+                    detail_transaksi.subtotal_hargapokok,
+                    detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
+                )) AS total_pokok
+            ')
+            ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+            ->join('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+            ->where('transaksi.status_pengiriman', '=', 'terima')
+            ->whereDate('transaksi.tanggal', '=', now()->toDateString())
+            ->value('total_pokok');
+$pendapatan_seluruh=$sumTotal-$sumTotalPokok;
         // dd($sumTotal);
 
         return view('dashboard.index', [
             'title' => 'Dashboard',
             'totalPendapatan' => $totalPendapatan,
             'totalMenu' => $totalMenu,
-            'jumlah_pendapatan' => $jumlah_pendapatan,
-            'label' => $label,
+            // 'jumlah_pendapatan' => $jumlah_pendapatan,
+            'pendapatan' => $pendapatan,
+         
             'kantin1' => $pendapatan_kantin1,
             'kantin2' => $pendapatan_kantin2,
             'kantin3' => $pendapatan_kantin3,
@@ -227,6 +274,7 @@ class DashboardController extends Controller
             'kantin8' => $pendapatan_kantin8,
             'kantin9' => $pendapatan_kantin9,
             'sumTotal' => $sumTotal,
+            'pendapatan_seluruh' => $pendapatan_seluruh,
 
         ]);
     }

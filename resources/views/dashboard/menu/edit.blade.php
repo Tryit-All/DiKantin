@@ -12,9 +12,14 @@
                     value="{{ $menu->nama }}">
             </div>
             <div class="mb-2">
-                <label for="harga" class="form-label">Harga</label>
+                <label for="harga" class="form-label">Harga Jual</label>
                 <input type="number" class="form-control" id="harga" name="harga" required
                     value="{{ $menu->harga }}">
+            </div>
+            <div class="mb-2">
+                <label for="harga" class="form-label">Harga Pokok</label>
+                <input type="number" class="form-control" id="harga_pokok" name="harga_pokok" required
+                    value="{{ $menu->harga_pokok }}">
             </div>
             <div class="mb-2">
                 <label for="foto" class="form-label">Foto</label>

@@ -13,7 +13,7 @@ class Menu extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $fillable = ['id_menu', 'nama', 'harga', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at'];
+    protected $fillable = ['id_menu', 'nama', 'harga','harga_pokok', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at'];
 
     public function DetailTransaksi()
     {
