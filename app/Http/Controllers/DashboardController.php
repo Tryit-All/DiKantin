@@ -4,16 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Termwind\Components\Dd;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalPendapatan = Transaksi::getTotalPendapatanByTanggal(date('Y-m-d'));
-        $totalMenu = DetailTransaksi::getTotalMenuByTanggal(date('Y-m-d'));
+        $tanggalSekarang = Carbon::now();
 
+        // $totalPendapatan = Transaksi::getTotalPendapatanByTanggal(date('Y-m-d'));
+        $totalMenu = DetailTransaksi::whereDate('created_at',$tanggalSekarang)->sum('QTY');
+      
         $jumlah_pendapatan_jual = DB::table('transaksi')
             ->selectRaw('
                 SUM(IF(
@@ -259,7 +263,7 @@ $pendapatan_seluruh=$sumTotal-$sumTotalPokok;
 
         return view('dashboard.index', [
             'title' => 'Dashboard',
-            'totalPendapatan' => $totalPendapatan,
+            // 'totalPendapatan' => $totalPendapatan,
             'totalMenu' => $totalMenu,
             // 'jumlah_pendapatan' => $jumlah_pendapatan,
             'pendapatan' => $pendapatan,
