@@ -56,7 +56,7 @@
             <div class="col-md-4 mt-3 menu-atas">
                 <div
                 class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna5 c-produk">
-                <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
+                <i class="fa-solid fa-motorcycle fs-2 primary-text border  bg-white secondary-bg p-3"
                     style="color: #fa9a13; border-radius:15px;"></i>
                 <div>
                     {{-- <h3 class="fs-2">Rp 250.000</h3> --}}

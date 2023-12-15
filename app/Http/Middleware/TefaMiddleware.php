@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class KasirMiddleware
+class TefaMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class KasirMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $id_role = auth()->user()->id_role;
-        if (($id_role == 4)||($id_role == 1)) {
+        if ($id_role == 2) {
             return $next($request);
         }
         return back();

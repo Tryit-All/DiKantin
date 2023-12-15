@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\DwpMiddleware;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
@@ -11,6 +13,10 @@ use Termwind\Components\Dd;
 
 class DashboardController extends Controller
 {
+    function __construct()
+    {
+       
+    }
     public function index()
     {
         $tanggalSekarang = Carbon::now();

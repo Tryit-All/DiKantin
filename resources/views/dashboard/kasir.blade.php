@@ -459,6 +459,7 @@
             }
 
             function getMenu() {
+            
                 // searching = $('#search-input').val();
                 searching = $('#kantin').val();
                 makanan = $('#btn-check-makanan').is(':checked') ? 'Makanan' : '';
@@ -485,6 +486,7 @@
                                     </div>
                                 </div>`;
                         });
+
                         $('#data-menu').html(html);
                     },
                     error: function(err) {

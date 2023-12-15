@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RekapitulasiExport;
+use App\Http\Middleware\AdminDLLMiddleware;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\DwpMiddleware;
+use App\Http\Middleware\KasirMiddleware;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
@@ -16,7 +19,7 @@ class RekapitulasiController extends Controller
 
     function __construct()
     {
-        $this->middleware([DwpMiddleware::class]);
+        $this->middleware([AdminDLLMiddleware::class]);
     }
 
     public function index()

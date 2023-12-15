@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LaporanExport;
+use App\Http\Middleware\AdminDLLMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\DwpMiddleware;
+use App\Http\Middleware\TefaMiddleware;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
@@ -15,8 +17,7 @@ class LaporanController extends Controller
 {
     function __construct()
     {
-        $this->middleware([DwpMiddleware::class]);
-        $this->middleware([AdminMiddleware::class]);
+        $this->middleware([AdminDLLMiddleware::class]);
     }
 
     public function index()

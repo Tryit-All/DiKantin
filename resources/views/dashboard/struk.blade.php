@@ -12,7 +12,7 @@
 </head>
 </head>
 
-<body style="width: 350px">
+<body style="width: 400px">
     <div class="container">
         <div class="identitas">
             <img src="{{ url(asset('/img/logo_struk-01.png')) }}" alt="Logo DiKantin" class="mx-auto d-block"
