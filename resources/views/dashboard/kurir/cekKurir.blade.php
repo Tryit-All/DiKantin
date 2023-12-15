@@ -35,7 +35,7 @@
                 style="height: 100% !important">
                 <thead>
                     <tr>
-                      
+
                         <th>Kurir</th>
                         <th>TOtal Ongkir</th>
                     </tr>
@@ -44,10 +44,10 @@
 
                     @foreach ($ongkirByCourier as $m)
                         <tr>
-                    
+
                             <td>{{ $m['nama_kurir'] }}</td>
-                            <td>Rp .{{number_format($m['total_ongkir']) }}</td>
-                   
+                            <td>Rp .{{ number_format($m['total_ongkir']) }}</td>
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -63,15 +63,15 @@
                     @endif
                 </tfoot> --}}
                 <tfoot>
-                   
-                        <tr>
-                            <th colspan="1">Total Ongkir Kurir:</th>
-                            <th></th>
-                          
-                   
-                            <th>Rp {{ number_format($total_keseluruhan_ongkir) }}</td>
-                        </tr>
-                 
+
+                    <tr>
+                        <th colspan="1">Total Ongkir Kurir:</th>
+                        <th></th>
+
+
+                        <th>Rp {{ number_format($total_keseluruhan_ongkir) }}</td>
+                    </tr>
+
                 </tfoot>
             </table>
             {{-- <a href="" class="btn btn-primary" id="btn-cetak" target="_blank"
@@ -90,7 +90,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('rekapitulasi-excel') }}" method="post">
+                <form action="{{ route('kurir-excel') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <label for="format">Format Excel</label>
@@ -98,8 +98,6 @@
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
                             <input type="text" id="id_data" name="data" hidden>
-                            <input type="text" name="sum_total_pokok" id="total_pokok" hidden>
-                            <input type="text" name="pendapatan" id="pendapatan" hidden>
 
                         </select>
                     </div>
@@ -112,5 +110,13 @@
         </div>
     </div>
 
-@endsection
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.btn-cetak', function() {
+                var data = {!! json_encode($jsonContent) !!}
+                $('#id_data').val(data);
+            })
+        });
+    </script>
 
+@endsection

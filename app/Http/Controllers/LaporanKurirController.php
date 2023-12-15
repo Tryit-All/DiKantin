@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exports\RekapitulasiExport;
+use App\Exports\RekapitulasiKurirExport;
 use App\Http\Middleware\AdminDLLMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\DwpMiddleware;
@@ -12,7 +13,7 @@ use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 
-use Maatwebsite\Excel\Excel;
+
 use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 
 class LaporanKurirController extends Controller
@@ -70,5 +71,10 @@ class LaporanKurirController extends Controller
 
             ]
         );
+    }
+
+
+    public function export(Request $request){
+        return FacadesExcel::download(new RekapitulasiKurirExport($request->input('data')) , 'rekapitulasi.'.$request->input('type'));
     }
 }

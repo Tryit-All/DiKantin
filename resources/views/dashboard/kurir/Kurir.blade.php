@@ -90,16 +90,14 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('rekapitulasi-excel') }}" method="post">
+                <form action="{{ route('kurir-excel') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <label for="format">Format Excel</label>
                         <select class="form-select" id="format" aria-label="Default select example" name="type">
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
-                            <input type="text" id="id_data" name="data" hidden>
-                            <input type="text" name="sum_total_pokok" id="total_pokok" hidden>
-                            <input type="text" name="pendapatan" id="pendapatan" hidden>
+                            <input type="text" id="id_data" name="data" hidden >
 
                         </select>
                     </div>
@@ -112,5 +110,14 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function(){
+            $(document).on('click' , '.btn-cetak' , function(){
+                var data = {!! json_encode($jsonContent) !!}
+                $('#id_data').val(data);
+            })
+        });
+    </script>
+    
 @endsection
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthLoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KantinController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanKurirController;
@@ -40,6 +41,19 @@ Route::get('google/callback', [AuthLoginController::class, 'handleGoogleCallback
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
+
+
+    Route::get("/kantin", [KantinController::class, "index"]);
+    Route::get("/kantin/{id}", [KantinController::class, "edit"])->name('kantin-edit');
+    Route::put("/kantin/{id}", [KantinController::class, "update"]);
+    Route::delete("kantin", [KantinController::class, "destroy"]);
+    Route::get("/kantin/add/create", [KantinController::class, "create"]);
+    Route::post("/kantin/add/create", [KantinController::class, "store"]);
+
+
+
+
+
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     // Route::put('roles/{id}/edit', [RoleController::class, 'update'])->name('roles.update');
@@ -98,10 +112,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
     Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
     Route::get('/rekapitulasi/cetak-semua', [RekapitulasiController::class, 'cetakSemua'])->name('cetak.semua');
-  
+
     // Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekRekapitulasi']);
     // Route::get('/kurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cetak']);
     // Route::get('/kurir/cetak-semua', [LaporanKurirController::class, 'cetakSemua'])->name('cetak.semua');
+
 
 
     Route::get('/pelanggan', [CustomerController::class, 'index']);
@@ -116,7 +131,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 Route::get('/kurirr', [LaporanKurirController::class, 'index']);
-    Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekOnkirKurir']);
+Route::post('/kurirr/export', [LaporanKurirController::class, 'export'])->name('kurir-excel');
+
+Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekOnkirKurir']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kantin;
 use App\Models\User;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -11,6 +12,51 @@ use Illuminate\Support\Facades\Validator as FacadesValidator;
 class KantinController extends Controller
 {
     //
+
+    public function index()
+    {
+        $kantins = Kantin::all();
+        return view("dashboard.kantin.index", ['kantin' => $kantins]);
+    }
+
+
+    public function edit($id)
+    {
+
+        return view('dashboard.kantin.edit', ['kantin' => Kantin::find($id)]);
+    }
+    public function destroy(Request $request)
+    {
+        Kantin::find($request->input('id'))->delete();
+        return back();
+    }
+
+    public function create()
+    {
+        return view("dashboard.kantin.create");
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, ['nama' => 'required']);
+        $kantin = Kantin::orderBy('created_at', 'asc')->get();
+        Kantin::create([
+            'nama' => $request->input('nama'),
+            'id_kantin' => $kantin->last()->id_kantin  + 1
+        ]);
+        
+        return redirect('/kantin');
+    }
+
+    public function update(Request $request)
+    {
+        $this->validate($request, ['id' => 'required', 'nama' => 'required']);
+
+        $kantin = Kantin::find($request->input('id'));
+        $kantin->nama = $request->input('nama');
+        $kantin->save();
+        return redirect('/kantin');
+    }
 
 
     public function login(Request $request)
