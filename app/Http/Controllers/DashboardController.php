@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\DwpMiddleware;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
@@ -11,12 +13,17 @@ use Termwind\Components\Dd;
 
 class DashboardController extends Controller
 {
+    function __construct()
+    {
+       
+    }
     public function index()
     {
         $tanggalSekarang = Carbon::now();
 
         // $totalPendapatan = Transaksi::getTotalPendapatanByTanggal(date('Y-m-d'));
         $totalMenu = DetailTransaksi::whereDate('created_at',$tanggalSekarang)->sum('QTY');
+        $Total_ongkir = Transaksi::whereDate('created_at',$tanggalSekarang)->where('status_pengiriman','terima')->sum('total_biaya_kurir');
       
         $jumlah_pendapatan_jual = DB::table('transaksi')
             ->selectRaw('
@@ -267,6 +274,7 @@ $pendapatan_seluruh=$sumTotal-$sumTotalPokok;
             'totalMenu' => $totalMenu,
             // 'jumlah_pendapatan' => $jumlah_pendapatan,
             'pendapatan' => $pendapatan,
+            'Total_ongkir' => $Total_ongkir,
          
             'kantin1' => $pendapatan_kantin1,
             'kantin2' => $pendapatan_kantin2,

@@ -56,7 +56,7 @@
                 style="background-color: #51AADD">
 
                 <!--- Sidemenu -->
-                @if (auth()->user()->id_role == 1)
+                @if ((auth()->user()->id_role == 1))
                     <ul class="side-nav">
                         <li class="side-nav-title side-nav-item text-white">Menu</li>
                         <li class="side-nav-item text-white">
@@ -135,6 +135,12 @@
                                 <span> Rekapitulasi</span>
                             </a>
                         </li>
+                        <li class="side-nav-item text-white">
+                            <a href="/kurirr" class="side-nav-link text-white fw-bold">
+                                <i class="uil-receipt-alt"></i>
+                                <span> Rekap Kurir </span>
+                            </a>
+                        </li>
                         <li class="side-nav-title side-nav-item text-white">User Akses</li>
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
@@ -185,85 +191,8 @@
                             </form>
                         </li>
                     </ul>
-                @elseif(auth()->user()->id_role == 2)
-                    <ul class="side-nav">
-                        <li class="side-nav-title side-nav-item text-white">Menu</li>
-                        <li class="side-nav-item text-white">
-                            <a href="/dashboard" class="side-nav-link text-white fw-bold">
-                                <i class="uil uil-home"></i>
-                                <span> Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item text-white">
-                            <a href="/kasir" class="side-nav-link text-white fw-bold">
-                                <i class="uil-receipt-alt"></i>
-                                <span> Kasir </span>
-                            </a>
-                        </li>
-
-                        <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false"
-                                aria-controls="sidebarEcommerce" class="side-nav-link text-white fw-bold">
-                                <i class="uil-store"></i>
-                                <span> Order</span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            <div class="collapse" id="sidebarEcommerce">
-                                <ul class="side-nav-second-level text-white">
-                                    <li>
-                                        <a href="/success" class="text-white fw-semibold">Sukses</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="side-nav-title side-nav-item text-white">User Akses</li>
-                        <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
-                                aria-controls="sidebarUser" class="side-nav-link text-white fw-bold">
-                                <i class="uil-user"></i>
-                                <span> User </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            <div class="collapse" id="sidebarUser">
-                                <ul class="side-nav-second-level text-white">
-                                    <li>
-                                        <a href="{{ route('users.index') }}" class="text-white fw-semibold">Tambah
-                                            User
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="side-nav-item text-red">
-
-                            <a class="side-nav-link fw-bold text-red" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                        Swal.fire({
-                            title: '<span>Apakah Ingin Logout?</span>',
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
-                            confirmButtonText: 'YA',
-                            cancelButtonText: 'BATAL',
-                            width:'400px'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                document.getElementById('logout-form').submit();
-                            }
-                        });">
-                                <i class="mdi mdi-logout me-1"></i>
-                                <span>Logout</span>
-                            </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
-                @elseif(auth()->user()->id_role == 3)
+                
+                @elseif(auth()->user()->id_role == 4)
                     <ul class="side-nav">
                         <li class="side-nav-title side-nav-item text-white">Menu</li>
                         <li class="side-nav-item text-white">
@@ -322,9 +251,15 @@
                             </form>
                         </li>
                     </ul>
-                @elseif(auth()->user()->id_role == 5)
+                @elseif((auth()->user()->id_role == 5)||(auth()->user()->id_role == 2))
+                
                     <ul class="side-nav">
-                        
+                        <li class="side-nav-item text-white">
+                            <a href="/dashboard" class="side-nav-link text-white fw-bold">
+                                <i class="uil uil-home"></i>
+                                <span> Dashboard</span>
+                            </a>
+                        </li>
                         <li class="side-nav-item text-white">
                             <a href="/laporan" class="side-nav-link text-white fw-bold">
                                 <i class="uil-chart"></i>
@@ -335,6 +270,12 @@
                             <a href="/rekapitulasi" class="side-nav-link text-white fw-bold">
                                 <i class="uil-file"></i>
                                 <span> Rekapitulasi</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item text-white">
+                            <a href="/kurirr" class="side-nav-link text-white fw-bold">
+                                <i class="uil-receipt-alt"></i>
+                                <span> Rekap Kurir </span>
                             </a>
                         </li>
 
@@ -366,7 +307,8 @@
                         </li>
                     </ul>
                 @endif
-
+              
+               
 
                 <!-- End Sidebar -->
             </div>
@@ -394,7 +336,7 @@
                                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <span class="account-user-avatar">
 
-                                    <img src="{{ url(auth()->user()->foto) }}" alt="" class="rounded-circle"
+                                    <img src="{{ url('/').'/profile/'.auth()->user()->foto }}" alt="" class="rounded-circle"
                                         style="width: 30px; height: 30px; object-fit:cover;">
                                 </span>
                                 <span>

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KantinController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LaporanKurirController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NotificationCotroller;
 use App\Http\Controllers\orderController;
@@ -105,11 +106,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/laporan/cetak/{tglMulai}/{tglSelesai}/{idKantin}/{status}', [LaporanController::class, 'cetak']);
     Route::get('/laporan/cetakSemua', [LaporanController::class, 'cetakSemua']);
 
+
     Route::post("/rekapitulasi/excel", [RekapitulasiController::class, "excel"])->name('rekapitulasi-excel');
     Route::get('/rekapitulasi', [RekapitulasiController::class, 'index']);
     Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
     Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
     Route::get('/rekapitulasi/cetak-semua', [RekapitulasiController::class, 'cetakSemua'])->name('cetak.semua');
+  
+    // Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekRekapitulasi']);
+    // Route::get('/kurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cetak']);
+    // Route::get('/kurir/cetak-semua', [LaporanKurirController::class, 'cetakSemua'])->name('cetak.semua');
 
 
 
@@ -124,7 +130,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post("/laporan/cetak/excel", [LaporanController::class, "cetakExcel"])->name('laporan-excel');
 
 });
-
+Route::get('/kurirr', [LaporanKurirController::class, 'index']);
+    Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekOnkirKurir']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();

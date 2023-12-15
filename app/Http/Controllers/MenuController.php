@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\KasirMiddleware;
 use RealRashid\SweetAlert\Facades\Alert; 
 use App\Models\Menu;
 
@@ -13,7 +14,7 @@ class MenuController extends Controller
 {
     function __construct()
     {
-        $this->middleware([AdminMiddleware::class]);
+        $this->middleware([KasirMiddleware::class]);
     }
 
     public function rupiah()
@@ -105,7 +106,6 @@ class MenuController extends Controller
 
     public function searchProduct(Request $req)
     {
-
         if ($req->kantin && $req->makanan && $req->minuman) {
             $builder = Menu::orderBy('id_kantin', 'asc')
                 ->where('status_stok', 'ada')

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class KasirMiddleware
+class DashboardMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,10 +15,6 @@ class KasirMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $id_role = auth()->user()->id_role;
-        if (($id_role == 4)||($id_role == 1)) {
-            return $next($request);
-        }
-        return back();
+        return $next($request);
     }
 }
