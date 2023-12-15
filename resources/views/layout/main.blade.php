@@ -56,7 +56,7 @@
                 style="background-color: #51AADD">
 
                 <!--- Sidemenu -->
-                @if (auth()->user()->id_role == 1)
+                @if ((auth()->user()->id_role == 1))
                     <ul class="side-nav">
                         <li class="side-nav-title side-nav-item text-white">Menu</li>
                         <li class="side-nav-item text-white">

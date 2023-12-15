@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('detail_transaksi', function (Blueprint $table) {
             $table->string('kode_tr', 9);
             $table->integer('QTY');
+        
             $table->integer('subtotal_bayar');
             $table->integer('subtotal_hargapokok');
             $table->integer('kode_menu');

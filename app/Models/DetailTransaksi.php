@@ -12,7 +12,7 @@ class DetailTransaksi extends Model
     public $incrementing = false;
     public $timestamps = true;
 
-    protected $fillable = ['kode_tr', 'QTY', 'subtotal_bayar', 'kode_menu', 'status_konfirm', 'created_at', 'updated_at'];
+    protected $fillable = ['kode_tr', 'QTY', 'subtotal_bayar', 'kode_menu', 'status_konfirm','keterangan', 'created_at', 'updated_at'];
 
     public function Transaksi()
     {

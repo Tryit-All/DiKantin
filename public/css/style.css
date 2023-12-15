@@ -114,6 +114,12 @@ body {
     color: #FFFFFF;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
+.dashboard-warna5 {
+    background-image: linear-gradient(to right, #dbcc1f, #d09618);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
 
 .dashboard-warna2 {
     background-image: linear-gradient(to right, #D1D44F, #E7EB5D);
