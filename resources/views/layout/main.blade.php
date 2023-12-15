@@ -269,7 +269,7 @@
                                 <span> Rekapitulasi</span>
                             </a>
                         </li>
-                        <li class="side-nav-item text-white">
+                          <li class="side-nav-item text-white">
                             <a href="/kurirr" class="side-nav-link text-white fw-bold">
                                 <i class="uil-receipt-alt"></i>
                                 <span> Rekap Kurir </span>
