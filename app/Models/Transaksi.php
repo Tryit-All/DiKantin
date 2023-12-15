@@ -12,7 +12,7 @@ class Transaksi extends Model
     protected $primaryKey = 'kode_tr';
     public $incrementing = false;
     public $timestamps = true;
-    protected $fillable = array('status_konfirm', 'status_pesanan', 'tanggal', 'id_customer', 'id_kurir', 'id_kasir', 'total_bayar', 'total_harga', 'kembalian', 'status_pengiriman', 'bukti_pengiriman', 'model_pembayaran', 'expired_at', 'created_at', 'updated_at');
+    protected $fillable = array('status_konfirm', 'status_pesanan', 'tanggal', 'id_customer', 'id_kurir', 'id_kasir', 'total_bayar', 'total_harga', 'kembalian', 'status_pengiriman', 'bukti_pengiriman','total_ongkir', 'model_pembayaran', 'expired_at', 'created_at', 'updated_at');
 
     public function detail_transaksi()
     {

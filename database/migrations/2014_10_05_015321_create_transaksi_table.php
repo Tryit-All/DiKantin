@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('id_kurir', 9)->nullable(true);
             $table->unsignedBigInteger('id_kasir')->nullable();
             $table->integer('total_bayar');
+            $table->integer('total_ongkir')->nullable();
             $table->integer('total_harga');
             $table->integer('kembalian');
             $table->enum('status_pengiriman', ['proses', 'kirim', 'terima']);

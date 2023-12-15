@@ -137,6 +137,7 @@ class PenjualanController extends Controller
             $jumlah = $value['jumlah'];
             $hargaBarang = $value['harga'];
             $harga_pokok=$kantinMenu->harga_pokok;
+          
       
        
             $subTotal = $jumlah * $hargaBarang;
@@ -147,6 +148,7 @@ class PenjualanController extends Controller
             $detail->kode_tr = $kodeTr;
             $detail->kode_menu = $value['id_menu'];
             $detail->QTY = $value['jumlah'];
+            $detail->keterangan = $value['keterangan'];
             $detail->status_konfirm = 'menunggu';
             $detail->subtotal_bayar = $subTotal;
             $detail->subtotal_hargapokok = $subTotalPokok;

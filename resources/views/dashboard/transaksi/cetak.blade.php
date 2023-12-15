@@ -57,7 +57,7 @@
                 @foreach ($penjualan->detail_transaksi as $item)
                     <p class="mb-0" style="text-align: right;">{{ number_format($item->menu->harga) }}</p>
                 @endforeach
-            </div>
+            </div> 
         </div>
 
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mb-2 mt-2">

@@ -91,6 +91,12 @@
                     <span> Rekapitulasi</span>
                 </a>
             </li>
+            <li class="side-nav-item text-white">
+                <a href="/Dataongkir" class="side-nav-link text-white fw-bold">
+                    <i class="uil-file"></i>
+                    <span>Data Ongkir Kurir</span>
+                </a>
+            </li>
             <li class="side-nav-title side-nav-item text-white">User Akses</li>
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false" aria-controls="sidebarUser"
