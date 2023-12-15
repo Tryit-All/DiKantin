@@ -109,6 +109,9 @@
                                         <a href="/menuAll" class="text-white fw-semibold">Menu</a>
                                     </li>
                                     <li>
+                                        <a href="/kantin" class="text-white fw-semibold">Kantin</a>
+                                    </li>
+                                    <li>
                                         <a href="/pelanggan" class="text-white fw-semibold">Customer</a>
                                     </li>
                                     <li>

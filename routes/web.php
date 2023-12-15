@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthLoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KantinController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MenuController;
@@ -39,6 +40,19 @@ Route::get('google/callback', [AuthLoginController::class, 'handleGoogleCallback
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
+
+
+    Route::get("/kantin" , [KantinController::class , "index"]);
+    Route::get("/kantin/{id}" , [KantinController::class , "edit"])->name('kantin-edit');
+    Route::put("/kantin/{id}" , [KantinController::class , "update"]);
+    Route::delete("kantin" , [KantinController::class , "destroy"]);
+    Route::get("/kantin/add/create" , [KantinController::class , "create"]) ;
+    Route::post("/kantin/add/create" , [KantinController::class , "store"]) ;
+
+
+
+
+
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     // Route::put('roles/{id}/edit', [RoleController::class, 'update'])->name('roles.update');
@@ -96,6 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cekRekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cekRekapitulasi']);
     Route::get('/rekapitulasi/cetak/{tglMulai}/{tglSelesai}', [RekapitulasiController::class, 'cetak']);
     Route::get('/rekapitulasi/cetak-semua', [RekapitulasiController::class, 'cetakSemua'])->name('cetak.semua');
+
 
 
     Route::get('/pelanggan', [CustomerController::class, 'index']);
