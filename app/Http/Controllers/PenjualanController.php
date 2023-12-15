@@ -100,7 +100,7 @@ class PenjualanController extends Controller
     {
         // return $request->all();
         // dd($request->all());
-
+        $totalBiayaKurir = $request->input('total_biaya_kurir');
         $dataDetailOrderan = $request->details;
         $idCust = $request->id_customer;
         $total_bayar = $request->bayar;
@@ -127,8 +127,8 @@ class PenjualanController extends Controller
         $Transaksi->model_pembayaran = $model_pembayaran;
         $Transaksi->no_meja = $noMeja;
         $Transaksi->expired_at = now()->addMinutes(1);
+        $Transaksi->total_biaya_kurir = $totalBiayaKurir;
         $Transaksi->save();
-
         foreach ($dataDetailOrderan as $key => $value) {
             $kantinMenu = Menu::find($value['id_menu']);
             $userKantin = User::where('id_kantin', $kantinMenu->id_kantin)->first();
@@ -136,15 +136,16 @@ class PenjualanController extends Controller
 
             $jumlah = $value['jumlah'];
             $hargaBarang = $value['harga'];
-            $harga_pokok=$kantinMenu->harga_pokok;
-      
-       
+            $harga_pokok = $kantinMenu->harga_pokok;
+
+
             $subTotal = $jumlah * $hargaBarang;
-            $subTotalPokok = $jumlah * $harga_pokok ;
-       
+            $subTotalPokok = $jumlah * $harga_pokok;
+
 
             $detail = new DetailTransaksi();
             $detail->kode_tr = $kodeTr;
+            $detail->catatan = $value['catatan'];
             $detail->kode_menu = $value['id_menu'];
             $detail->QTY = $value['jumlah'];
             $detail->status_konfirm = 'menunggu';
