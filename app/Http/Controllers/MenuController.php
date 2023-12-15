@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Middleware\AdminMiddleware;
 use RealRashid\SweetAlert\Facades\Alert; 
 use App\Models\Menu;
 
@@ -11,10 +13,7 @@ class MenuController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:menu-list|menu-create|menu-edit|menu-delete', ['only' => ['index', 'show']]);
-        $this->middleware('permission:menu-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:menu-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:menu-delete', ['only' => ['destroy']]);
+        $this->middleware([AdminMiddleware::class]);
     }
 
     public function rupiah()
