@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RekapitulasiExport;
+use App\Http\Middleware\AdminDLLMiddleware;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\DwpMiddleware;
+use App\Http\Middleware\KasirMiddleware;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
@@ -15,10 +19,7 @@ class RekapitulasiController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:rekapitulasi-list|cek-Rekapitulasi|cetak-Rekapitulasi', ['only' => ['index', 'cekRekapitulasi', 'cetak']]);
-        $this->middleware('permission:rekapitulasi-list', ['only' => ['index']]);
-        $this->middleware('permission:cek-Rekapitulasi', ['only' => ['cekRekapitulasi']]);
-        $this->middleware('permission:cetak-Rekapitulasi', ['only' => ['cetak']]);
+        $this->middleware([AdminDLLMiddleware::class]);
     }
 
     public function index()
