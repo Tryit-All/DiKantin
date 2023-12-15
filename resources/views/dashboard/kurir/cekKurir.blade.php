@@ -35,7 +35,7 @@
                 style="height: 100% !important">
                 <thead>
                     <tr>
-                        <th>Kode transaksi</th>
+                      
                         <th>Kurir</th>
                         <th>TOtal Ongkir</th>
                     </tr>
@@ -44,7 +44,7 @@
 
                     @foreach ($ongkirByCourier as $m)
                         <tr>
-                            <td>{{ $m['kode_tr'] }}</td>
+                    
                             <td>{{ $m['nama_kurir'] }}</td>
                             <td>Rp .{{number_format($m['total_ongkir']) }}</td>
                    

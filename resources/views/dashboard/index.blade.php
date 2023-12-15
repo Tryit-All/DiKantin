@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 menu-atas">
+            <div class="col-md-4 mt-3 menu-atas">
                 <div
                     class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna2 c-menu">
                     <i class="fas fa-solid fa-cart-shopping fs-2 primary-text border  secondary-bg p-3 bg-white"
@@ -35,9 +35,9 @@
 
             </div>
 
-            <div class="col-md-4 menu-atas">
+            <div class="col-md-4 mt-3 menu-atas">
                 <div
-                    class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna3 c-customer">
+                    class="p-3 bg-white  shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna3 c-customer">
                     <i class="fas fa-solid fa-users fs-2 primary-text border  secondary-bg p-3 bg-white"
                         style="color: #6BB1D7; border-radius:15px"></i>
                     <div>

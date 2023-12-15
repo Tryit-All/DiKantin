@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Tambah User')
 @section('content')
     <div class="container mt-3">

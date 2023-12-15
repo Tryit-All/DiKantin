@@ -14713,6 +14713,7 @@ body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .si
 }
 
 .navbar-custom .topbar-menu {
+  display: flex;
   position: relative;
   z-index: 1
 }
@@ -22308,6 +22309,14 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:first-child
 
 .gantt-container .popup-wrapper .pointer {
   display: none
+}
+
+@media only screen and (max-width: 768px) {
+  .burger{
+    width: 200px;
+    height: 100px;
+    background-color: #002a80;
+  }
 }
 
 /*# sourceMappingURL=app-dark.min.css.map */
