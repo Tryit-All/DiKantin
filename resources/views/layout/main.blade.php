@@ -133,7 +133,7 @@
                             </a>
                         </li>
                         <li class="side-nav-item text-white">
-                            <a href="/kurir" class="side-nav-link text-white fw-bold">
+                            <a href="/kurirr" class="side-nav-link text-white fw-bold">
                                 <i class="uil-receipt-alt"></i>
                                 <span> Rekap Kurir </span>
                             </a>
@@ -248,7 +248,7 @@
                             </form>
                         </li>
                     </ul>
-                @elseif((auth()->user()->id_role == 5))
+                @elseif((auth()->user()->id_role == 5)||(auth()->user()->id_role == 2))
                 
                     <ul class="side-nav">
                         <li class="side-nav-item text-white">
@@ -267,6 +267,12 @@
                             <a href="/rekapitulasi" class="side-nav-link text-white fw-bold">
                                 <i class="uil-file"></i>
                                 <span> Rekapitulasi</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item text-white">
+                            <a href="/kurirr" class="side-nav-link text-white fw-bold">
+                                <i class="uil-receipt-alt"></i>
+                                <span> Rekap Kurir </span>
                             </a>
                         </li>
 
@@ -298,9 +304,7 @@
                         </li>
                     </ul>
                 @endif
-                @if ((auth()->user()->id_role == 5)||(auth()->user()->id_role == 1)||(auth()->user()->id_role == 2))
-                    
-                @endif
+              
                
 
                 <!-- End Sidebar -->

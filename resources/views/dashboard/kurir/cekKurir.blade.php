@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title', 'Ongkir Kurir')
+@section('title', 'Cek Onkir')
 @section('content')
     @php
         $jsonContent = json_encode($ongkirByCourier);

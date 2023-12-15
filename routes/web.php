@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 Route::get('/kurirr', [LaporanKurirController::class, 'index']);
+    Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekOnkirKurir']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();

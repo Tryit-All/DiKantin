@@ -25,6 +25,7 @@
                     <div class="col-md-3"><input type="text" placeholder="Alamat" class="form-control" id="inputtelepon"
                             class="form-control bg-lingkaran" readonly style="border-radius: 10px;"></div>
                 </div>
+                
                 <div class="row mt-2">
                     {{-- <div class="col-md-12">
                         <input type="text" autocomplete="off" class="form-control d-inline" onchange="getMenu()"
@@ -34,15 +35,9 @@
                         <select class="form-select" style="border-radius: 10px;" aria-label="Default select example"
                             name="kantin" onchange="getMenu()" required id="kantin">
                             <option value="">Semua Kantin</option>
-                            <option value="1">Kantin 1</option>
-                            <option value="2">Kantin 2</option>
-                            <option value="3">Kantin 3</option>
-                            <option value="4">Kantin 4</option>
-                            <option value="5">Kantin 5</option>
-                            <option value="6">Kantin 6</option>
-                            <option value="7">Kantin 7</option>
-                            <option value="8">Kantin 8</option>
-                            <option value="9">Kantin 9</option>
+                          @foreach ($kantin as $item)
+                          <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+                          @endforeach
                         </select>
                     </div>
                     <div class="col-md-2">

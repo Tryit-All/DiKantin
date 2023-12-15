@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\KasirMiddleware;
 use App\Models\Customer;
 use App\Models\DetailTransaksi;
+use App\Models\Kantin;
 use App\Models\Menu;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class KasirController extends Controller
     {
         $pencarian = $request->q;
         $customer = Customer::all();
+        $kantin = Kantin::all();
         $penjualan = Transaksi::all();
         $menu = Menu::where('nama', 'like', "%$pencarian%")->get();
         // $menu = Menu::orderBy('id_kantin', 'asc')->get();
@@ -28,7 +30,8 @@ class KasirController extends Controller
         return view('dashboard.kasir', [
             'title' => 'kasir',
             'customer' => $customer,
-            'penjualan ' => $penjualan,
+            'penjualan' => $penjualan,
+            'kantin' => $kantin,
             'menu' => $menu
         ]);
     }
