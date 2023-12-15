@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\ApiKeyMiddleware;
 use App\Service\NotificationService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Kreait\Firebase\Messaging\Notification;
 
@@ -860,7 +861,8 @@ class ApiController extends Controller
                 'detail_transaksi.QTY as jumlah',
                 'menu.diskon as diskon',
                 'transaksi.status_pengiriman as status',
-                'detail_transaksi.status_konfirm as status_detail'
+                'detail_transaksi.status_konfirm as status_detail',
+                'detail_transaksi.catatan'
             )
                 ->leftJoin('customer', 'transaksi.id_customer', '=', 'customer.id_customer')
                 ->leftJoin('detail_transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -927,5 +929,28 @@ class ApiController extends Controller
             'code' => $kode,
             'status' => $status
         ], $kode);
+    }
+
+    public function getPendapatanKurir(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (isset($token)) {
+            $kurir = Kurir::where('token', $token)->first();
+            if (isset($kurir)) {
+                $pendapatanHariIni = Transaksi::where('id_kurir', $kurir->id)->where('status_pengiriman' , 'terima')->whereDate('created_at', Carbon::now())->sum('total_biaya_kurir');
+                $pendapatanBulanIni = Transaksi::where('id_kurir', $kurir->id)->where('status_pengiriman' , 'terima')
+                    ->whereMonth('created_at', Carbon::now())
+                    ->sum('total_biaya_kurir');
+                return response()->json([
+                    'data' => [
+                        'month' => (int) $pendapatanBulanIni, 'today' => (int) $pendapatanHariIni
+                    ],
+                    'status' => true,
+                    'message' => 'success fetch data'
+                ], 200);
+            }
+            return $this->sendMassage("unauthenticated", 401, false);
+        }
+        return $this->sendMassage("unauthenticated", 401, false);
     }
 }

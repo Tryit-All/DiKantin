@@ -10,6 +10,7 @@
                             style="border-radius: 10px;" id="id_customer"> --}}
 
                         <select class="js-example-basic-single" name="id_customer" id="id_customer">
+                            <option value="">Pilih Pelanggan</option>
                             @foreach ($customer as $item => $value)
                                 <option value="{{ $value->id_customer }}">{{ $value->nama }}</option>
                             @endforeach
@@ -123,6 +124,7 @@
                                 </select>
                             </div>
                         </div>
+                    
                         <div class="mb-3">
                             <div class="d-flex justify-content-between mt-0">
                                 <p class="fw-bold">Nama Customer</p>
@@ -300,10 +302,15 @@
                     let nama = $(element).data('nama')
                     let harga = $(element).data('harga')
                     let html = `<div class="cart-menu row align-items-center mt-3" data-id="${id}">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <p class="m-0 text-dark">${nama}</p>
                                     <p class="m-0 text-secondary subtotal-item">${harga}</p>
                                     <p class="d-none item-price">${harga}</p>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <p class="m-0 text-dark">Catatan Menu</p>
+                                    <textarea name="keterangan" id="keterangan" cols="12" rows="1"></textarea>
+                            
                                 </div>
                                 <div class="col-5 mb-2">
                                 
@@ -490,7 +497,7 @@
             $(document).ready(function() {
                 $('#id_customer').on('change', function() {
                     const value = $(this).val();
-                    console.log("tess");
+               
                     idCus = value
                     console.log(idCus);
 
@@ -546,7 +553,8 @@
                         jumlah: parseInt($(cart[i]).find(`span.qty`).html()),
                         harga: parseInt($(cart[i]).find(`.item-price`).html()),
                         diskon: $(cart[i]).find(`input`).val(),
-                    })
+                    catatan: $(cart[i]).find('textarea#keterangan').val()
+                    });
                 }
 
                 // console.log(anu);

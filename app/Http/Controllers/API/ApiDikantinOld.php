@@ -383,9 +383,8 @@ class ApiDikantinOld extends Controller
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->where('kantin.id_kantin', $kantin->id_kantin)
             ->where('transaksi.status_pengiriman', 'terima')
-            ->whereDate('transaksi.created_at', Carbon::now()->format('d'))
+            ->whereDate('transaksi.created_at', Carbon::now())
             ->orderBy('transaksi.created_at', 'desc')->get();
-
         $totalBulan = 0;
         $totalToday = 0;
 

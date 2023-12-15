@@ -12,7 +12,7 @@
 </head>
 </head>
 
-<body style="width: 300px">
+<body style="width: 350px">
     <div class="container">
         <div class="identitas">
             <img src="{{ url(asset('/img/logo_struk-01.png')) }}" alt="Logo DiKantin" class="mx-auto d-block"
@@ -44,6 +44,12 @@
                 <p class="fw-bold mb-0">Qty</p>
                 @foreach ($penjualan->detail_transaksi as $item)
                     <p class="mb-0" style="text-align: center;">{{ $item->QTY }}</p>
+                @endforeach
+            </div>
+            <div class="keterangan">
+                <p class="fw-bold mb-0">keterangan</p>
+                @foreach ($penjualan->detail_transaksi as $item)
+                    <p class="mb-0" style="text-align: center;">{{ $item->catatan }}</p>
                 @endforeach
             </div>
             <div class="diskon">
