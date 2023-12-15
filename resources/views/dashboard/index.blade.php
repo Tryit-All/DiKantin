@@ -180,8 +180,8 @@
             },
             xAxis: {
                 categories: [
-                    @foreach ($pendapatan as $bulan=>$value)
-                        '{{ $value["bulan"] }}',
+                    @foreach ($pendapatan as $bulan => $value)
+                        '{{ $value['bulan'] }}',
                     @endforeach
                 ]
             },
@@ -210,7 +210,7 @@
                 name: 'Pendapatan',
                 data: [
                     @foreach ($pendapatan as $data)
-                        {{ $data["total"] }},
+                        {{ $data['total'] }},
                     @endforeach
                 ]
             }]

@@ -321,7 +321,7 @@
                     </ul>
                 @elseif(auth()->user()->id_role == 5)
                     <ul class="side-nav">
-                        
+
                         <li class="side-nav-item text-white">
                             <a href="/laporan" class="side-nav-link text-white fw-bold">
                                 <i class="uil-chart"></i>

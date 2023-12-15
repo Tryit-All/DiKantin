@@ -16,8 +16,8 @@ class DashboardController extends Controller
         $tanggalSekarang = Carbon::now();
 
         // $totalPendapatan = Transaksi::getTotalPendapatanByTanggal(date('Y-m-d'));
-        $totalMenu = DetailTransaksi::whereDate('created_at',$tanggalSekarang)->sum('QTY');
-      
+        $totalMenu = DetailTransaksi::whereDate('created_at', $tanggalSekarang)->sum('QTY');
+
         $jumlah_pendapatan_jual = DB::table('transaksi')
             ->selectRaw('
                 SUM(IF(
@@ -34,12 +34,12 @@ class DashboardController extends Controller
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->where('transaksi.status_pengiriman', '=', 'terima')
-            ->whereYear('transaksi.created_at',date('Y'))
+            ->whereYear('transaksi.created_at', date('Y'))
             ->groupBy('bulan', 'bulan_num')
             ->orderBy('bulan_num', 'ASC')
             ->get()
             ->toArray();
-      
+
         $jumlah_pendapatan_pokok = DB::table('transaksi')
             ->selectRaw('
                 SUM(IF(
@@ -56,21 +56,21 @@ class DashboardController extends Controller
             ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
             ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
             ->where('transaksi.status_pengiriman', '=', 'terima')
-            ->whereYear('transaksi.created_at',date('Y'))
+            ->whereYear('transaksi.created_at', date('Y'))
             ->groupBy('bulan', 'bulan_num')
             ->orderBy('bulan_num', 'ASC')
             ->get()
             ->toArray();
 
-$pendapatan=[];
-foreach ($jumlah_pendapatan_jual as $key => $value) {
+        $pendapatan = [];
+        foreach ($jumlah_pendapatan_jual as $key => $value) {
 
-    $tmp = [
-        'total' => $value->total - (int)$jumlah_pendapatan_pokok[$key]->total_pokok,
-        'bulan'=>$value->bulan
-    ];
-    array_push($pendapatan,$tmp );
-}
+            $tmp = [
+                'total' => $value->total - (int) $jumlah_pendapatan_pokok[$key]->total_pokok,
+                'bulan' => $value->bulan
+            ];
+            array_push($pendapatan, $tmp);
+        }
 
 
         $nama_bulan = array(
@@ -245,7 +245,7 @@ foreach ($jumlah_pendapatan_jual as $key => $value) {
             ->where('transaksi.status_pengiriman', '=', 'terima')
             ->whereDate('transaksi.tanggal', '=', now()->toDateString())
             ->value('total');
-        $sumTotalPokok= DB::table('detail_transaksi')
+        $sumTotalPokok = DB::table('detail_transaksi')
             ->selectRaw('
                 SUM(IF(
                     menu.diskon IS NULL OR menu.diskon = 0,
@@ -258,7 +258,7 @@ foreach ($jumlah_pendapatan_jual as $key => $value) {
             ->where('transaksi.status_pengiriman', '=', 'terima')
             ->whereDate('transaksi.tanggal', '=', now()->toDateString())
             ->value('total_pokok');
-$pendapatan_seluruh=$sumTotal-$sumTotalPokok;
+        $pendapatan_seluruh = $sumTotal - $sumTotalPokok;
         // dd($sumTotal);
 
         return view('dashboard.index', [
@@ -267,7 +267,7 @@ $pendapatan_seluruh=$sumTotal-$sumTotalPokok;
             'totalMenu' => $totalMenu,
             // 'jumlah_pendapatan' => $jumlah_pendapatan,
             'pendapatan' => $pendapatan,
-         
+
             'kantin1' => $pendapatan_kantin1,
             'kantin2' => $pendapatan_kantin2,
             'kantin3' => $pendapatan_kantin3,
