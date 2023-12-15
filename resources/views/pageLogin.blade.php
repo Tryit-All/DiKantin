@@ -5,8 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="<https://fonts.googleapis.com/icon?family=Material+Icons>" rel="stylesheet" />
-    @vite('resources/css/app.css')
+    <link rel="stylesheet" href="{{ asset('build/assets/app-0d576ebc.css') }}">
+    {{-- @vite('resources/css/app.css') --}}
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script src="<https://cdn.tailwindcss.com>"></script>
+    <link rel="shortcut icon" href="{{ URL::asset('img/logo-kotak.png') }}">
+    <title>Dikantin | Login</title>
 </head>
 
 <body>
@@ -18,7 +22,7 @@
                 <img src="{{ asset('/img/logoPutih.png') }}" class="logoo" alt="" width="230px">
             </div>
             <div class="bg-gradient-to-t from-blue-900 pl-8 pb-8 pr-[25%] relative z-10">
-                <p class="text-6xl mb-6 font-medium leading-[75px]  tracking-wide">TIME FOR BUSINESS MANAGEMENT</p>
+                <p class="text-6xl mb-6 font-semibold leading-[75px] tracking-wide">TIME FOR BUSINESS MANAGEMENT</p>
                 <p class="text-md text-white">Welcome to "DIKANTIN POLIJE", the JTINOVA affiliated application designed
                     to assist you in streamlining report management, sales recapitulation, and simplifying the sales
                     process.</p>
@@ -31,7 +35,9 @@
             <h1 class="text-center mb-8 text-3xl font-bold"><span class="text-xl">Welcome Back! </span><br />Efficient,
                 Intuitive and Organized.</h1>
             <div id="Forms" class="flex flex-col gap-y-6 text-center w-7/12">
-                <form class="text-left font-medium flex flex-col gap-[16px]">
+                <form class="text-left font-medium flex flex-col gap-[16px]" method="POST"
+                    action="{{ route('loginUserWeb') }}">
+                    @csrf
                     <div class="flex flex-col">
                         <label class="mb-2" for="email">Email</label>
                         <input type="email" id="email" value="{{ old('email') }}" required
@@ -76,14 +82,14 @@
                         class="text-center text-white p-[8px_10px] w-full bg-blue-700 rounded-md">Login</button>
                 </form>
                 <div>or</div>
-                <a href="#"
+                <a href="{{ url('google') }}"
                     class="border rounded border-gray-400 hover:border-black focus:border-black p-[8px_10px]"><img
                         src="{{ asset('/assets/images/brands/g-suite.png') }}" alt="google" class="inline mr-[6px]"
                         width="18px" /> Sign-in with
                     Google</a>
             </div>
             <div class="flex justify-center pt-6 items-center flex-col w-96">
-                <span class="text-sm pt-3 text-center">Powered By :</span>
+                <span class="text-sm pt-3 text-center">Copyright by :</span>
                 <img src="{{ asset('/img/JTI-Nova - Full.png') }}" class="logo" alt="" width="130px">
             </div>
 
@@ -91,23 +97,21 @@
     </div>
 </body>
 
-@section('scripts')
-    <script>
-        function togglePasswordVisibility() {
-            var passwordInput = document.getElementById("password");
-            var icon = document.querySelector(".password-toggle-icon i");
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("password");
+        var icon = document.querySelector(".password-toggle-icon i");
 
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-            } else {
-                passwordInput.type = "password";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
-            }
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
-    </script>
-@endsection
+    }
+</script>
 
 </html>

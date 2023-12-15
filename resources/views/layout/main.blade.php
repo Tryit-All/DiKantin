@@ -254,12 +254,7 @@
                 @elseif((auth()->user()->id_role == 5)||(auth()->user()->id_role == 2))
                 
                     <ul class="side-nav">
-                        <li class="side-nav-item text-white">
-                            <a href="/dashboard" class="side-nav-link text-white fw-bold">
-                                <i class="uil uil-home"></i>
-                                <span> Dashboard</span>
-                            </a>
-                        </li>
+
                         <li class="side-nav-item text-white">
                             <a href="/laporan" class="side-nav-link text-white fw-bold">
                                 <i class="uil-chart"></i>
