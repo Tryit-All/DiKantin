@@ -851,6 +851,7 @@ class ApiController extends Controller
                 'detail_transaksi.kode_tr as id_detail',
                 'transaksi.created_at as tanggal',
                 'transaksi.kode_tr',
+                'detail_transaksi.catatan',
                 'customer.nama as pembeli',
                 'customer.no_telepon as no_telepon_pembeli',
                 'transaksi.model_pembayaran',
