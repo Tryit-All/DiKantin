@@ -18,7 +18,7 @@
             </div>
             <div class="mb-2">
                 <label for="no_telepon" class="form-label">No Telepon</label>
-                <input type="text" class="form-control" id="no_telepon" name="no_telepon" required>
+                <input type="number" class="form-control" id="no_telepon" name="no_telepon" required>
             </div>
             <button type="submit" class="btn text-white" style="background: #51AADD; " onClick="store()">Simpan</button>
             <a href="/pelanggan" class="btn btn-light px-3">Kembali</a>
