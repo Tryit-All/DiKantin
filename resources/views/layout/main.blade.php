@@ -41,7 +41,7 @@
     <div class="wrapper">
         @include('sweetalert::alert')
         <!-- ========== Left Sidebar Start ========== -->
-        <div class="leftside-menu">
+        <div class="leftside-menu" id="sidebar">
             <!-- LOGO -->
             <a href="/dashboard" class="logo text-center logo-light">
                 <span class="logo-lg" style="background-color: white">
@@ -254,7 +254,12 @@
                 @elseif((auth()->user()->id_role == 5)||(auth()->user()->id_role == 2))
                 
                     <ul class="side-nav">
-
+                        <li class="side-nav-item text-white">
+                            <a href="/dashboard" class="side-nav-link text-white fw-bold">
+                                <i class="uil uil-home"></i>
+                                <span> Dashboard</span>
+                            </a>
+                        </li>
                         <li class="side-nav-item text-white">
                             <a href="/laporan" class="side-nav-link text-white fw-bold">
                                 <i class="uil-chart"></i>
@@ -267,7 +272,7 @@
                                 <span> Rekapitulasi</span>
                             </a>
                         </li>
-                        <li class="side-nav-item text-white">
+                          <li class="side-nav-item text-white">
                             <a href="/kurirr" class="side-nav-link text-white fw-bold">
                                 <i class="uil-receipt-alt"></i>
                                 <span> Rekap Kurir </span>
@@ -323,7 +328,9 @@
                 <div class="navbar-custom">
                     <ul class="list-unstyled topbar-menu float-end mb-0">
                         <li class="dropdown notification-list d-lg-none">
-
+                            <svg id="buttonSidebar" class="mt-3" onclick="show()" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                                <path d="M 0 9 L 0 11 L 50 11 L 50 9 Z M 0 24 L 0 26 L 50 26 L 50 24 Z M 0 39 L 0 41 L 50 41 L 50 39 Z"></path>
+                                </svg>
                         </li>
 
                         <li class="dropdown notification-list">
@@ -460,6 +467,17 @@
             console.log("test" + data);
         });
         // channel.bind('OrderNotification', function(data) {})
+    </script>
+
+<script>
+    function show() {
+        const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.display == "block") {
+                sidebar.style.display = "none";
+            }else{
+                sidebar.style.display = "block";
+            }
+        }
     </script>
     @stack('script');
 

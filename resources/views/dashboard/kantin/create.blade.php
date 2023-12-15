@@ -1,5 +1,5 @@
-@extends('main')
-@section('title', 'Tambah User')
+@extends('layout.main')
+@section('title', 'Tambah Kantin')
 @section('content')
     <div class="container mt-3">
 

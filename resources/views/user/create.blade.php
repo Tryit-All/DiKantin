@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layout.main')
 @section('title', 'Tambah User')
 @section('content')
     <div class="container mt-3">
@@ -48,7 +48,7 @@
         <div class="mb-2">
             <div class="form-group">
                 <strong>Role</strong>
-              
+
                 {!! Form::select('roles[]', $roles, [], ['class' => 'form-control', 'multiple', 'required' => true]) !!}
             </div>
         </div>
@@ -61,8 +61,18 @@
         </div>
         <div class="mb-2">
             <div class="form-group">
-                <strong>ID Kantin</strong>
-                {!! Form::number('id_kantin', null, ['placeholder' => 'ID Kantin', 'class' => 'form-control', 'min' => 0]) !!}
+
+
+                <label for="exampleFormControlSelect1">Pilih Kantin</label>
+                <select class="form-control" id="exampleFormControlSelect1"name="id_kantin">
+                    <option value=""></option>
+                    @foreach ($kantin as $item)
+                    <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+                    @endforeach
+              
+
+                </select>
+
             </div>
         </div>
         <div class="mb-2">

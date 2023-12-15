@@ -1,12 +1,12 @@
 @extends('layout.main')
-@section('title', 'Edit Customer')
+@section('title', 'Edit Kantin')
 @section('content')
     <div class="container mt-3">
         <form class="bg-white p-4" style="border-radius: 20px;" method="POST" action="">
             @method('PUT')
             @csrf
             <div class="mb-2">
-                <label for="id_customer" class="form-label">ID Customer</label>
+                <label for="id_customer" class="form-label">ID Kantin</label>
                 <input type="text" class="form-control" id="id_customer" name="id" required
                     value="{{ $kantin->id_kantin }}"readonly>
             </div>
