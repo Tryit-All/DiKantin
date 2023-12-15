@@ -12,7 +12,7 @@
 </head>
 </head>
 
-<body style="width: 350px">
+<body style="width: 250px">
     <div class="container">
         <div class="identitas">
             <img src="{{ url(asset('/img/logo_struk-01.png')) }}" alt="Logo DiKantin" class="mx-auto d-block"
@@ -20,7 +20,7 @@
             <!-- <p class="text-center">Politeknik Negeri Jember</p> -->
         </div>
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mb-0">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between" style="font-size: 11px;">
             <div class="order">
                 <p style="margin-bottom: 1px;">{{ $penjualan->kode_tr }}</p>
                 <p style="margin-bottom: 1px;">No Meja : {{ $penjualan->no_meja }}</p>
@@ -33,7 +33,7 @@
         </div>
         <hr class="mb-1 mt-0" style="border-top: 2px dotted rgb(0, 0, 0)">
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between" style="font-size: 11px;">
             <div class="nama-product">
                 <p class="fw-bold mb-0">Menu</p>
                 @foreach ($penjualan->detail_transaksi as $item)
@@ -47,7 +47,7 @@
                 @endforeach
             </div>
             <div class="keterangan">
-                <p class="fw-bold mb-0">keterangan</p>
+                <p class="fw-bold mb-0">Keterangan</p>
                 @foreach ($penjualan->detail_transaksi as $item)
                     <p class="mb-0" style="text-align: center;">{{ $item->catatan }}</p>
                 @endforeach
@@ -66,10 +66,11 @@
             </div>
         </div>
 
+
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mb-2 mt-2">
         <div class="d-flex justify-content-between">
-            <div class="bayar">
-                <p class="mb-2" style="line-height: 1;">Model Pembayaran</p>
+            <div class="bayar" style="font-size: 11px;">
+                <p class="fw-bold mb-2" style="line-height: 1;">Model Pembayaran</p>
                 {{-- <p class="mb-2" style="line-height: 1;">Subtotal</p>
                 <p class="mb-2" style="line-height: 1;">Diskon</p> --}}
                 <p class="fw-bold mb-2" style="line-height: 1;">Total</p>
@@ -77,7 +78,7 @@
                 <p class="fw-bold mb-2" style="line-height: 1;">Kembali</p>
 
             </div>
-            <div class="value-bayar mb-1">
+            <div class="value-bayar mb-1" style="font-size: 11px;">
                 <p class="mb-2" style="line-height: 1; text-align: right;">{{ $penjualan->model_pembayaran }}</p>
                 </p>
                 {{-- @if ($penjualan->diskon == null)
@@ -95,8 +96,8 @@
         </div>
 
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mt-1 mb-2">
-        <p class="text-center fw-bold mb-0 mt-1">Terima Kasih</p>
-        <p class="text-center fw-bold">Atas Kunjungan Anda</p>
+        <p class="text-center fw-bold mb-0 mt-1" style="font-size: 11px;">Terima Kasih</p>
+        <p class="text-center fw-bold" style="font-size: 11px;">Atas Kunjungan Anda</p>
 
     </div>
 
