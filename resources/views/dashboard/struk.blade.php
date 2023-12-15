@@ -49,7 +49,7 @@
             <div class="keterangan">
                 <p class="fw-bold mb-0">keterangan</p>
                 @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->keterangan }}</p>
+                    <p class="mb-0" style="text-align: center;">{{ $item->catatan }}</p>
                 @endforeach
             </div>
             <div class="diskon">

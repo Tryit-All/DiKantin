@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('id_kurir', 9)->nullable(true);
             $table->unsignedBigInteger('id_kasir')->nullable();
             $table->integer('total_bayar');
-            $table->integer('total_ongkir')->nullable();
+
             $table->integer('total_harga');
             $table->integer('kembalian');
             $table->enum('status_pengiriman', ['proses', 'kirim', 'terima']);
@@ -30,6 +30,7 @@ return new class extends Migration {
             $table->foreign('id_kurir')->references('id_kurir')->on('kurir')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('id_kasir')->references('id_user')->on('user')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamp('expired_at')->nullable(true);
+            $table->integer('total_biaya_kurir')->nullable();
             $table->timestamps();
         });
     }

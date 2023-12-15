@@ -10,6 +10,7 @@
                             style="border-radius: 10px;" id="id_customer"> --}}
 
                         <select class="js-example-basic-single" name="id_customer" id="id_customer">
+                            <option value="">Pilih Pelanggan</option>
                             @foreach ($customer as $item => $value)
                                 <option value="{{ $value->id_customer }}">{{ $value->nama }}</option>
                             @endforeach

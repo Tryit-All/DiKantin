@@ -42,7 +42,8 @@ Route::prefix('validate')->group(function () {
     Route::post('/editProfile', [ApiController::class, 'editProfile']);
     Route::get('/kurirShow', [ApiController::class, 'tampilKurir']);
     Route::post('/logoutKurir', [ApiTransaction::class, 'offStatusProfile']);
-
+    Route::put('/kurir/status' , [ApiTransaction::class , "updateStatusKurir"]);
+    
     // Kantin
     Route::post('/loginKantin', [ApiController::class, 'loginKantin']);
     Route::post('/logoutKantin', [ApiController::class, 'logout']);
@@ -133,6 +134,8 @@ Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->
 
 Route::post("/auth/kantin/sign", [KantinController::class, "login"]);
 Route::put("/kantin/fcmtoken", [KantinController::class, "updateFcmToken"]);
+
+Route::get("/kurir/pendapatan" , [ApiController::class , "getPendapatanKurir"]);
 
 
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);

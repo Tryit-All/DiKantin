@@ -199,7 +199,6 @@ class ApiTransaction extends Controller
     public function transaksiCustomer(Request $request)
     {
         $dataDetailOrderan = $request->detail_orderan;
-
         $token = $request->bearerToken();
         $user = Customer::where('token', $token)->first();
         $customer = $user->id_customer;
@@ -216,6 +215,7 @@ class ApiTransaction extends Controller
         $Transaksi->status_pesanan = "1";
         $Transaksi->tanggal = $today;
         $Transaksi->id_customer = $customer;
+
         // $Transaksi->id_kurir = $dataDetailOrderan['id_kurir'];
         $Transaksi->total_bayar = $dataDetailOrderan['total_bayar'];
         $Transaksi->total_harga = $dataDetailOrderan['total_harga'];
@@ -224,6 +224,7 @@ class ApiTransaction extends Controller
         // $Transaksi->bukti_pengiriman = $dataDetailOrderan['bukti_pengiriman'];
         $Transaksi->no_meja = 0;
         $Transaksi->model_pembayaran = $dataDetailOrderan['model_pembayaran'];
+        $Transaksi->total_biaya_kurir = 3000; // set 300 pada setiap 1 transaksi online
         $Transaksi->expired_at = now()->addMinutes(1);
         $Transaksi->save();
 
@@ -235,15 +236,13 @@ class ApiTransaction extends Controller
             $detail->QTY = $value['qty_barang'];
             $detail->subtotal_hargapokok = $hargaPokokMenu->harga_pokok * $value['qty_barang'];
             $detail->subtotal_bayar = $value['total_harga_barang'];
+            $detail->catatan = $value['catatan'];
             $detail->status_konfirm = 'menunggu';
             $detail->save();
         }
         // send message to customer
-
-
         return $this->sendMassage("Data berhasil di tambahkan", 200, true);
     }
-
 
     public function pesananDiproses(Request $request)
     {
