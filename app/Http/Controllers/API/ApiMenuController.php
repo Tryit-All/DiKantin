@@ -94,7 +94,7 @@ class ApiMenuController extends Controller
         }
     }
 
-    public function product(Request $request)
+    public function  product(Request $request)
     {
         if ($request->segment(4)) {
             return $this->sendMassage(Menu::select('id_menu', 'nama', 'harga', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at')
