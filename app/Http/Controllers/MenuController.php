@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\KasirMiddleware;
-use RealRashid\SweetAlert\Facades\Alert; 
+use App\Models\Kantin;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Menu;
 
 use Illuminate\Http\Request;
@@ -26,10 +25,12 @@ class MenuController extends Controller
     public function index()
     {
         $menu = Menu::orderBy('id_kantin', 'asc')->get();
+        $kantin = Kantin::all();
         // return $menu;
         return view('dashboard.menu.index', [
             'menu' => $menu,
-            'title' => 'Menu'
+            'title' => 'Menu',
+            'kantin' => $kantin
         ]);
     }
 
@@ -44,7 +45,7 @@ class MenuController extends Controller
     {
         $data = $request->all();
         // dd($data);
-        $data['foto'] = $request->file('foto')->move('menu', $request->file('foto')->getClientOriginalName().".".$request->file("foto")->getClientOriginalExtension());
+        $data['foto'] = $request->file('foto')->move('menu', $request->file('foto')->getClientOriginalName() . "." . $request->file("foto")->getClientOriginalExtension());
         $data['harga'] = str_replace('.', '', $data['harga']);
         $data['harga_pokok'] = str_replace('.', '', $data['harga_pokok']);
         Menu::create($data);
@@ -67,7 +68,7 @@ class MenuController extends Controller
         $data = $request->all();
 
         if (!empty($data['foto'])) {
-            $data['foto'] = $request->file('foto')->move('menu', $request->file('foto')->getClientOriginalName().".".$request->file("foto")->getClientOriginalExtension());
+            $data['foto'] = $request->file('foto')->move('menu', $request->file('foto')->getClientOriginalName() . "." . $request->file("foto")->getClientOriginalExtension());
         } else {
             unset($data['foto']);
         }
