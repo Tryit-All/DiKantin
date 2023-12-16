@@ -11,11 +11,13 @@
             </div>
             <div class="mb-2">
                 <label for="harga" class="form-label">Harga jual</label>
-                <input type="text" class="form-control" id="harga" name="harga" oninput="formatCurrency(this)" required>
+                <input type="text" class="form-control" id="harga" name="harga" oninput="formatCurrency(this)"
+                    required>
             </div>
             <div class="mb-2">
                 <label for="harga" class="form-label">Harga pokok</label>
-                <input type="text" class="form-control" id="hargapokok" name="harga_pokok"  oninput="formatCurrency(this)" required>
+                <input type="text" class="form-control" id="hargapokok" name="harga_pokok" oninput="formatCurrency(this)"
+                    required>
             </div>
             <div class="mb-2">
                 <label for="foto" class="form-label">Foto</label>
@@ -44,6 +46,10 @@
                     <option value="9">Kantin 9</option>
                 </select>
             </div>
+            <select name="kategori" id="">
+                <option value="makanan">Makanan</option>
+                <option value="minuman">Minuman</option>
+            </select>
             <div class="mb-2">
                 <button type="submit" class="btn btn-dark text-white">Simpan</button>
                 <a href="/menuAll" class="btn btn-light px-3">Kembali</a>
@@ -51,15 +57,15 @@
         </form>
     </div>
     <script>
-function formatCurrency(input) {
-    // Hapus tanda titik atau koma jika ada
-    let valueWithoutCommas = input.value.replace(/[,.]/g, '');
+        function formatCurrency(input) {
+            // Hapus tanda titik atau koma jika ada
+            let valueWithoutCommas = input.value.replace(/[,.]/g, '');
 
-    // Format angka dengan tanda titik sebagai pemisah ribuan
-    let formattedValue = new Intl.NumberFormat('id-ID').format(valueWithoutCommas);
+            // Format angka dengan tanda titik sebagai pemisah ribuan
+            let formattedValue = new Intl.NumberFormat('id-ID').format(valueWithoutCommas);
 
-    // Tampilkan nilai yang diformat pada input
-    input.value = formattedValue;
-}
+            // Tampilkan nilai yang diformat pada input
+            input.value = formattedValue;
+        }
     </script>
 @endsection
