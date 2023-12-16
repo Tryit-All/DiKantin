@@ -10,9 +10,9 @@ class OrderDetailTransaksiController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:orderdetailpenjualan-list|orderdetailpenjualan-edit|orderdetailpenjualan-delete', ['only' => ['index']]);
-        $this->middleware('permission:orderdetailpenjualan-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:orderdetailpenjualan-delete', ['only' => ['destroy']]);
+        // $this->middleware('permission:orderdetailpenjualan-list|orderdetailpenjualan-edit|orderdetailpenjualan-delete', ['only' => ['index']]);
+        // $this->middleware('permission:orderdetailpenjualan-edit', ['only' => ['edit', 'update']]);
+        // $this->middleware('permission:orderdetailpenjualan-delete', ['only' => ['destroy']]);
     }
 
     public function index()

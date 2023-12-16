@@ -10,10 +10,10 @@ class TransaksiController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:Transaksi-list|Transaksi-detail|Transaksi-hapus', ['only' => ['index', 'detail', 'destroy']]);
-        $this->middleware('permission:Transaksi-list', ['only' => ['index']]);
-        $this->middleware('permission:Transaksi-detail', ['only' => ['detail']]);
-        $this->middleware('permission:Transaksi-hapus', ['only' => ['destroy']]);
+        // $this->middleware('permission:Transaksi-list|Transaksi-detail|Transaksi-hapus', ['only' => ['index', 'detail', 'destroy']]);
+        // $this->middleware('permission:Transaksi-list', ['only' => ['index']]);
+        // $this->middleware('permission:Transaksi-detail', ['only' => ['detail']]);
+        // $this->middleware('permission:Transaksi-hapus', ['only' => ['destroy']]);
     }
     public function index()
     {

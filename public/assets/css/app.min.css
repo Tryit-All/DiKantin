@@ -14414,7 +14414,7 @@ body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .logo span.log
   .leftside-menu {
     -webkit-box-shadow: 0 0 35px 0 rgba(154, 161, 171, .15);
     box-shadow: 0 0 35px 0 rgba(154, 161, 171, .15);
-    display: none;
+     display: none;  /* sng iki tol */
     z-index: 10 !important
   }
 

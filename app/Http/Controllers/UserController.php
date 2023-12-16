@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Models\Kantin;
 use App\Models\Role;
 use App\Models\Roles;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
+
+
 
 class UserController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+        $this->middleware([AdminMiddleware::class]);
     }
 
 
@@ -33,8 +35,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $kantin=Kantin::all();
         $roles = Roles::pluck('name', 'id')->all();
-        return view('user.create', compact('roles'));
+        return view('user.create', compact('roles','kantin'));
     }
 
     /**
@@ -68,6 +71,7 @@ class UserController extends Controller
             ]);
             // $user = User::create($input);
             // $user->assignRole($request->input('roles'));
+            Alert::success('Success', 'Berhasil Tambah Data');
             return redirect()->route('users.index');
         } else {
             $input = $request->all();
@@ -81,6 +85,7 @@ class UserController extends Controller
                 'id_role' => $input['roles'][0]
             ]);
             // $user->assignRole($request->input('roles'));
+            Alert::success('Success', 'Berhasil Tambah Data');
             return redirect()->route('users.index');
         }
     }

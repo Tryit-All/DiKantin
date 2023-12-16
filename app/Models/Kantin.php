@@ -10,9 +10,12 @@ class Kantin extends Model
     use HasFactory;
     protected $table = 'kantin';
     protected $primaryKey = 'id_kantin';
-    public $incrementing = false;
+    public $incrementing = true;
     public $timestamps = true;
     protected $quarded = [];
+    // protected $fillable = 'nama';
+
+    protected $fillable = ['nama', 'id_kantin'];
 
     public function infoKantin()
     {
