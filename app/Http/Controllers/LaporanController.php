@@ -80,8 +80,8 @@ class LaporanController extends Controller
                 (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga_pokok*QTY))
             )) as total_pokok')->value('total_pokok');
         $pendapatan = $sumTotal - $sumTotalPokok;
-        $komisi_jti = $pendapatan * (45 / 100);
-        $komisi_dwp = $pendapatan * (55 / 100);
+            $komisi_jti = $pendapatan * (45 / 100);
+            $komisi_dwp = $pendapatan * (55 / 100);
 
         return view(
             'dashboard.laporan.index',
@@ -148,12 +148,16 @@ class LaporanController extends Controller
             )) as total_pokok')->value('total_pokok');
         $pendapatan = $sumTotal - $sumTotalPokok;
 
+        $komisi_jti = $pendapatan * (45 / 100);
+        $komisi_dwp = $pendapatan * (55 / 100);
 
         return view('dashboard.laporan.cetaksemua', [
             'data' => $data,
             'sumTotal' => $sumTotal,
             'sumTotalPokok' => $sumTotalPokok,
             'pendapatan' => $pendapatan,
+            'komisi_jti' => $komisi_jti,
+            'komisi_dwp' => $komisi_dwp,
 
             'jumlah' => $jumlah,
 
