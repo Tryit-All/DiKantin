@@ -1021,7 +1021,7 @@ class LaporanController extends Controller
 
     public function cetakExcel(Request $request)
     {
-
+        
         return Excel::download(new LaporanExport($request->input('data'), $request->input('total_pokok'), $request->input('pendapatan'), $request->input('totalJual')), "laporan." . $request->input('type'));
     }
 }

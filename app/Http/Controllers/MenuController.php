@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\KasirMiddleware;
 use App\Models\Kantin;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Menu;
@@ -36,8 +37,10 @@ class MenuController extends Controller
 
     public function create()
     {
+        $kantin =Kantin::all();
         return view('dashboard.menu.create', [
-            'title' => 'Add Menu'
+            'title' => 'Add Menu',
+            'kantin' => $kantin
         ]);
     }
 
@@ -55,11 +58,13 @@ class MenuController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $menu = Menu::findOrFail($id);
+        $menu = Menu::with('Kantin')->findOrFail($id);
+        $kantin = Kantin::all();
 
         return view('dashboard.menu.edit', [
             'title' => 'Edit Menu',
-            'menu' => $menu
+            'menu' => $menu,
+            'kantin' => $kantin
         ]);
     }
 

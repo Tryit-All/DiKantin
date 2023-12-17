@@ -52,11 +52,12 @@
                 </span>
 
             </a>
+
             <div class="sidebar text-white h-100" id="leftside-menu-container" data-simplebar=""
                 style="background-color: #51AADD">
 
                 <!--- Sidemenu -->
-                @if ((auth()->user()->id_role == 1))
+                @if (auth()->user()->id_role == 1)
                     <ul class="side-nav">
                         <li class="side-nav-title side-nav-item text-white">Menu</li>
                         <li class="side-nav-item text-white">
@@ -141,6 +142,12 @@
                                 <span> Rekap Kurir </span>
                             </a>
                         </li>
+                        <li class="side-nav-item text-white">
+                            <a href="/keuangan" class="side-nav-link text-white fw-bold">
+                                <i class="uil-receipt-alt"></i>
+                                <span> Keuangan </span>
+                            </a>
+                        </li>
                         <li class="side-nav-title side-nav-item text-white">User Akses</li>
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
@@ -191,7 +198,6 @@
                             </form>
                         </li>
                     </ul>
-                
                 @elseif(auth()->user()->id_role == 4)
                     <ul class="side-nav">
                         <li class="side-nav-title side-nav-item text-white">Menu</li>
@@ -223,7 +229,12 @@
                                 </ul>
                             </div>
                         </li>
-
+                        <li class="side-nav-item text-white">
+                            <a href="/keuangan" class="side-nav-link text-white fw-bold">
+                                <i class="uil-receipt-alt"></i>
+                                <span> Keuangan </span>
+                            </a>
+                        </li>
                         <li class="side-nav-item text-red">
 
                             <a class="side-nav-link fw-bold text-red" href="{{ route('logout') }}"
@@ -251,8 +262,7 @@
                             </form>
                         </li>
                     </ul>
-                @elseif((auth()->user()->id_role == 5)||(auth()->user()->id_role == 2))
-                
+                @elseif(auth()->user()->id_role == 5 || auth()->user()->id_role == 2)
                     <ul class="side-nav">
                         <li class="side-nav-item text-white">
                             <a href="/dashboard" class="side-nav-link text-white fw-bold">
@@ -272,10 +282,16 @@
                                 <span> Rekapitulasi</span>
                             </a>
                         </li>
-                          <li class="side-nav-item text-white">
+                        <li class="side-nav-item text-white">
                             <a href="/kurirr" class="side-nav-link text-white fw-bold">
                                 <i class="uil-receipt-alt"></i>
                                 <span> Rekap Kurir </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item text-white">
+                            <a href="/keuangan" class="side-nav-link text-white fw-bold">
+                                <i class="uil-receipt-alt"></i>
+                                <span> Keuangan </span>
                             </a>
                         </li>
 
@@ -307,9 +323,6 @@
                         </li>
                     </ul>
                 @endif
-              
-               
-
                 <!-- End Sidebar -->
             </div>
 
@@ -328,9 +341,13 @@
                 <div class="navbar-custom">
                     <ul class="list-unstyled topbar-menu float-end mb-0">
                         <li class="dropdown notification-list d-lg-none">
-                            <svg id="buttonSidebar" class="mt-3" onclick="show()" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
-                                <path d="M 0 9 L 0 11 L 50 11 L 50 9 Z M 0 24 L 0 26 L 50 26 L 50 24 Z M 0 39 L 0 41 L 50 41 L 50 39 Z"></path>
-                                </svg>
+                            <svg id="buttonSidebar" class="mt-3" onclick="show()"
+                                xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                                viewBox="0 0 50 50">
+                                <path
+                                    d="M 0 9 L 0 11 L 50 11 L 50 9 Z M 0 24 L 0 26 L 50 26 L 50 24 Z M 0 39 L 0 41 L 50 41 L 50 39 Z">
+                                </path>
+                            </svg>
                         </li>
 
                         <li class="dropdown notification-list">
@@ -338,8 +355,8 @@
                                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <span class="account-user-avatar">
 
-                                    <img src="{{ url('/').'/profile/'.auth()->user()->foto }}" alt="" class="rounded-circle"
-                                        style="width: 30px; height: 30px; object-fit:cover;">
+                                    <img src="{{ url('/') . '/profile/' . auth()->user()->foto }}" alt=""
+                                        class="rounded-circle" style="width: 30px; height: 30px; object-fit:cover;">
                                 </span>
                                 <span>
                                     <span class="account-user-name">
@@ -469,12 +486,12 @@
         // channel.bind('OrderNotification', function(data) {})
     </script>
 
-<script>
-    function show() {
-        const sidebar = document.getElementById('sidebar');
+    <script>
+        function show() {
+            const sidebar = document.getElementById('sidebar');
             if (sidebar.style.display == "block") {
                 sidebar.style.display = "none";
-            }else{
+            } else {
                 sidebar.style.display = "block";
             }
         }

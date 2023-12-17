@@ -158,6 +158,9 @@
                             <option value="xlsx">XLSX</option>
                             <option value="csv">CSV</option>
                             <input type="text" id="id_data" name="data" hidden>
+                            <input type="text" id="totalPokok">
+                            <input type="text" id="totalJual">
+                            <input type="text" id="untung">
                         </select>
                     </div>
                     <div class="modal-footer">

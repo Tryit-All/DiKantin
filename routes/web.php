@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KantinController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanKurirController;
 use App\Http\Controllers\MenuController;
@@ -128,6 +129,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/deleteCustomer/{id}', [CustomerController::class, 'destroy'])->name('deleteCustomer');
 
     Route::post("/laporan/cetak/excel", [LaporanController::class, "cetakExcel"])->name('laporan-excel');
+
+
+    Route::get('/keuangan', [KeuanganController::class, "index"]);
+    Route::get('/keuangan/kantin/history/{id}', [KeuanganController::class, "historyKantin"])->name('history-kantin');
+    Route::get('/keuangan/kurir/history/{id}', [KeuanganController::class, "historyKurir"])->name('history-kurir');
+    Route::post('/keuangan/kurir', [KeuanganController::class, 'berikanDanaKantin'])->name('berikan-dana-kantin');
 
 });
 Route::get('/kurirr', [LaporanKurirController::class, 'index']);

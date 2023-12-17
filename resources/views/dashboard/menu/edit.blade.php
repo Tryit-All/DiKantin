@@ -38,15 +38,10 @@
                 <label for="
                 kantin" class="form-label">Kantin</label>
                 <select class="form-select" aria-label="Default select example" name="id_kantin">
-                    <option selected>{{ $menu->id_kantin }}</option>
-                    <option value="1">Kantin 1</option>
-                    <option value="2">Kantin 2</option>
-                    <option value="3">Kantin 3</option>
-                    <option value="4">Kantin 4</option>
-                    <option value="5">Kantin 5</option>
-                    <option value="6">Kantin 6</option>
-                    <option value="7">Kantin 7</option>
-                    <option value="8">Kantin 8</option>
+                    @foreach ($kantin as $item)
+                        <option {{ $menu->id_kantin == $item->id_kantin ? 'selected' : '' }} value="{{ $item->id_kantin }}">
+                            {{ $item->nama }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="mb-2">
