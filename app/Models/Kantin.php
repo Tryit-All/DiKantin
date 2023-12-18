@@ -15,7 +15,7 @@ class Kantin extends Model
     protected $quarded = [];
     // protected $fillable = 'nama';
 
-    protected $fillable = ['nama', 'id_kantin'];
+    protected $fillable = ['nama', 'id_kantin', 'total_saldo'];
 
     public function infoKantin()
     {
@@ -24,5 +24,10 @@ class Kantin extends Model
     public function User()
     {
         return $this->belongsTo(Kantin::class, 'id_kantin', 'id_kantin');
+    }
+
+    public function history()
+    {
+        return $this->hasMany(History::class , 'id_kantin');
     }
 }
