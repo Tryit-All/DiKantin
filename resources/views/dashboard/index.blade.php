@@ -1,6 +1,7 @@
 @extends('layout.main')
 @section('title', 'Dashboard')
 @section('content')
+
     <div class="container-fluid mt-2">
         <div class="row">
             <div class="col-md-4 mt-3">
@@ -54,8 +55,7 @@
             </div>
             
             <div class="col-md-4 mt-3 menu-atas">
-                <div
-                class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna5 c-produk">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna5 c-produk">
                 <i class="fa-solid fa-motorcycle fs-2 primary-text border  bg-white secondary-bg p-3"
                     style="color: #fa9a13; border-radius:15px;"></i>
                 <div>
@@ -65,6 +65,31 @@
                     </h3> --}}
                     <h3 class="fs-2">Rp {{ number_format($Total_ongkir) }}</h3>
                     <p class="fs-5">Total Pendapatan Kurir Hari Ini</p>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-4 mt-3 menu-atas">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna6 c-produk">
+                    <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
+                    style="color: #3b315c; border-radius:15px;"></i>
+                    {{-- <h3 class="fs-2">Rp 250.000</h3> --}}
+                    {{-- <h3 class="fs-2">Rp
+                        {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
+                    </h3> --}}
+                    <h3 class="fs-2">Rp {{ number_format($komisi_dwp) }}</h3>
+                    <p class="fs-5"> Komisi DWP Hari Ini</p>
+                </div>
+            </div>
+            <div class="col-md-4 mt-3 menu-atas">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna7 c-produk">
+                    <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
+                    style="color: #3b315c; border-radius:15px;"></i>
+                    {{-- <h3 class="fs-2">Rp 250.000</h3> --}}
+                    {{-- <h3 class="fs-2">Rp
+                        {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
+                    </h3> --}}
+                    <h3 class="fs-2">Rp {{ number_format($komisi_jti) }}</h3>
+                    <p class="fs-5"> Komisi jti Hari Ini</p>
                 </div>
             </div>
             </div>

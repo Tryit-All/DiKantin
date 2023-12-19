@@ -290,6 +290,9 @@ foreach ($kantin as $key) {
             ->whereDate('transaksi.tanggal', '=', now()->toDateString())
             ->value('total_pokok');
         $pendapatan_seluruh = $sumTotal - $sumTotalPokok;
+        $komisi_jti = $pendapatan_seluruh * (45 / 100);
+        $komisi_dwp = $pendapatan_seluruh * (55 / 100);      
+     
         // dd($sumTotal);
 
         return view('dashboard.index', [
@@ -298,18 +301,20 @@ foreach ($kantin as $key) {
             'totalMenu' => $totalMenu,
             // 'jumlah_pendapatan' => $jumlah_pendapatan,
             'pendapatan' => $pendapatan,
+            'komisi_jti' => $komisi_jti,
+            'komisi_dwp' => $komisi_dwp,
             'Total_ongkir' => $Total_ongkir,
             'pendapatan_kantin' => $pendapatan_kantin,
 
-            'kantin1' => $pendapatan_kantin1,
-            'kantin2' => $pendapatan_kantin2,
-            'kantin3' => $pendapatan_kantin3,
-            'kantin4' => $pendapatan_kantin4,
-            'kantin5' => $pendapatan_kantin5,
-            'kantin6' => $pendapatan_kantin6,
-            'kantin7' => $pendapatan_kantin7,
-            'kantin8' => $pendapatan_kantin8,
-            'kantin9' => $pendapatan_kantin9,
+            // 'kantin1' => $pendapatan_kantin1,
+            // 'kantin2' => $pendapatan_kantin2,
+            // 'kantin3' => $pendapatan_kantin3,
+            // 'kantin4' => $pendapatan_kantin4,
+            // 'kantin5' => $pendapatan_kantin5,
+            // 'kantin6' => $pendapatan_kantin6,
+            // 'kantin7' => $pendapatan_kantin7,
+            // 'kantin8' => $pendapatan_kantin8,
+            // 'kantin9' => $pendapatan_kantin9,
             'sumTotal' => $sumTotal,
             'pendapatan_seluruh' => $pendapatan_seluruh,
 
