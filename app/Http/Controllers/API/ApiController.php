@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Kantin;
 use Http;
 use App\Models\Menu;
 use App\Models\User;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\ApiKeyMiddleware;
-use App\Models\Kantin;
+
 use App\Service\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -218,7 +219,9 @@ class ApiController extends Controller
                             'token' => $token,
                             'token_fcm' => $dataTokenFcm,
                         ]);
-                        $dataKurir = User::where('email', $dataEmail)->first();
+                        $dataKurir = User::with(['Kantin' => function ($query) {
+                            $query->select('id_kantin', 'status');
+                        }])->where('email', $dataEmail)->first();
                         return $this->sendMassage($dataKurir, 200, true);
                     }
                     return $this->sendMassage('Password salah', 400, false);
@@ -248,12 +251,14 @@ class ApiController extends Controller
                 Kurir::where('email', $dataEmail)->update([
                     'status' => false
                 ]);
-                return $this->sendMassage($kurir->status, 200, true);
+                $selectStatus = Kurir::select('status')->where('email', $dataEmail)->first();
+                return $this->sendMassage($selectStatus->status, 200, true);
             } else {
                 Kurir::where('email', $dataEmail)->update([
                     'status' => true
                 ]);
-                return $this->sendMassage($kurir->status, 200, true);
+                $selectStatus = Kurir::select('status')->where('email', $dataEmail)->first();
+                return $this->sendMassage($selectStatus->status, 200, true);
             }
         }
     }
@@ -413,6 +418,7 @@ class ApiController extends Controller
                     'id_kurir' => '3219',
                     'status_pesanan' => '3',
                 ]);
+                $kurir = Kurir::find('3219');
                 if (isset($transaksiCustomer->Customer->token_fcm)) {
                     $this->service->sendNotifToSpesidicToken($transaksi->Customer->token_fcm, Notification::create("Pesanan Sudah Dimasak", "Pesananmu Sedang Menunggu Kurir mohon bersabar"), [
                         'kode_tr' => $kodeTransaksi,
@@ -420,6 +426,13 @@ class ApiController extends Controller
                 } else {
                     // user belum memiliki token
                 }
+
+                if (isset($kurir->token_fcm)) {
+                    $this->service->sendNotifToSpesidicToken($kurir->token_fcm, Notification::create("Ada Pesanan", "Segera ambil pesanan kamu dan antar ke customer yaa"), [
+                        'kode_tr' => $kodeTransaksi,
+                    ]);
+                }
+
             }
 
             return $validatePesanan;
@@ -666,8 +679,8 @@ class ApiController extends Controller
                     ->where('detail_transaksi.kode_menu', $kodeMenu)
                     ->first();
 
-                $subTotalHargaPokok = DetailTransaksi::where('kode_tr' , $kodeTransaksi)->sum('subtotal_hargapokok');
-                
+                $subTotalHargaPokok = DetailTransaksi::where('kode_tr', $kodeTransaksi)->sum('subtotal_hargapokok');
+
                 if (isset($statusKonfirm)) {
                     $kodeIdKantin = $statusKonfirm->id_kantin;
                     $kodeMenu = $statusKonfirm->kode_menu;
@@ -918,6 +931,33 @@ class ApiController extends Controller
         $user->save();
 
         return response()->json(['message' => 'User updated successfully.', 'data' => $user]);
+    }
+
+    public function editStatus(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        $kantin = User::with(['Kantin' => function ($query) {
+            $query->select('id_kantin', 'status');
+        }])->where('token', $token)->first();
+
+        $dataIdKantin = $kantin->kantin->id_kantin;
+
+        if (isset($kantin)) {
+            if ($kantin->kantin->status == true) {
+                Kantin::where('id_kantin', $dataIdKantin)->update([
+                    'status' => false
+                ]);
+                $selectStatus = Kantin::select('status')->where('id_kantin', $dataIdKantin)->first();
+                return $this->sendMassage($selectStatus->status, 200, true);
+            } elseif ($kantin->kantin->status == false) {
+                Kantin::where('id_kantin', $dataIdKantin)->update([
+                    'status' => true
+                ]);
+                $selectStatus = Kantin::select('status')->where('id_kantin', $dataIdKantin)->first();
+                return $this->sendMassage($selectStatus->status, 200, true);
+            }
+        }
     }
 
     public function ubahprofile(Request $request, )
