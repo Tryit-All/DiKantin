@@ -33,10 +33,13 @@
             </div>
             <div class="mb-2">
                 <label for="kantin" class="form-label">Kantin</label>
+
                 <select class="form-select" aria-label="Default select example" name="id_kantin" required>
-                    @foreach ($kantin as $item)
-                        <option value="{{$item->id_kantin}}">{{$item->nama}}</option>
-                    @endforeach
+                    <option value="">Pilih Kantin</option>
+             @foreach ($kantin as $item)
+             <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+             @endforeach
+             
                 </select>
             </div>
             <div class="mb-2">

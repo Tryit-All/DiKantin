@@ -26,7 +26,7 @@ class MenuController extends Controller
     public function index()
     {
         $menu = Menu::orderBy('id_kantin', 'asc')->get();
-        $kantin = Kantin::all();
+        $kantin= Kantin::all();
         // return $menu;
         return view('dashboard.menu.index', [
             'menu' => $menu,
@@ -37,7 +37,7 @@ class MenuController extends Controller
 
     public function create()
     {
-        $kantin =Kantin::all();
+        $kantin= Kantin::all();
         return view('dashboard.menu.create', [
             'title' => 'Add Menu',
             'kantin' => $kantin
@@ -58,9 +58,8 @@ class MenuController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $menu = Menu::with('Kantin')->findOrFail($id);
-        $kantin = Kantin::all();
-
+        $menu = Menu::with(['Kantin'])->findOrFail($id);
+        $kantin= Kantin::all();
         return view('dashboard.menu.edit', [
             'title' => 'Edit Menu',
             'menu' => $menu,

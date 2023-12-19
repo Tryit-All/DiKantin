@@ -8,8 +8,11 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\DwpMiddleware;
 use App\Http\Middleware\TefaMiddleware;
 use App\Models\DetailTransaksi;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Kantin;
 use App\Models\Transaksi;
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,6 +25,7 @@ class LaporanController extends Controller
 
     public function index()
     {
+        $kantin = Kantin::all();
         $data = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
             ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
             ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -76,10 +80,12 @@ class LaporanController extends Controller
                 (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga_pokok*QTY))
             )) as total_pokok')->value('total_pokok');
         $pendapatan = $sumTotal - $sumTotalPokok;
+            $komisi_jti = $pendapatan * (45 / 100);
+            $komisi_dwp = $pendapatan * (55 / 100);
 
         return view(
             'dashboard.laporan.index',
-            compact(['data', 'jumlah', 'sumTotal', 'sumTotalPokok', 'pendapatan'])
+            compact(['data', 'jumlah', 'sumTotal', 'sumTotalPokok', 'pendapatan', 'kantin', 'komisi_dwp', 'komisi_jti'])
         );
     }
     public function cetakSemua()
@@ -142,14 +148,19 @@ class LaporanController extends Controller
             )) as total_pokok')->value('total_pokok');
         $pendapatan = $sumTotal - $sumTotalPokok;
 
+        $komisi_jti = $pendapatan * (45 / 100);
+        $komisi_dwp = $pendapatan * (55 / 100);
 
         return view('dashboard.laporan.cetaksemua', [
             'data' => $data,
             'sumTotal' => $sumTotal,
             'sumTotalPokok' => $sumTotalPokok,
             'pendapatan' => $pendapatan,
+            'komisi_jti' => $komisi_jti,
+            'komisi_dwp' => $komisi_dwp,
 
             'jumlah' => $jumlah,
+
 
 
         ]);
@@ -157,6 +168,7 @@ class LaporanController extends Controller
 
     public function cekLaporan($tglMulai, $tglSelesai, $idKantin, $status)
     {
+        $kantin = Kantin::all();
         $tglSelesai = $tglSelesai . ' 23:59:00';
         $tglMulai = $tglMulai . ' 00:00:00';
         if (($idKantin != 'p') && ($status != 'p')) {
@@ -193,7 +205,16 @@ class LaporanController extends Controller
             }
 
             $data = $data->get();
-
+            $first = $data->first();
+            $first = $data->first();
+        
+            if ($first == null) {
+                Alert::error('Tidak ada', 'Tidak Ada Laporan Untuk Kantin ini dengan status '.$status);
+                return back();
+            }else {
+                # code...
+                $nama_kantin = $first->kantin;
+            }
             $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
                 ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -248,6 +269,8 @@ class LaporanController extends Controller
             (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga_pokok*QTY))
         )) as total_pokok')->value('total_pokok');
             $pendapatan = $sumTotal - $sumTotalPokok;
+            $komisi_jti = $pendapatan * (45 / 100);
+            $komisi_dwp = $pendapatan * (55 / 100);
             $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
             $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
             return view('dashboard.laporan.cekLaporan', [
@@ -255,7 +278,10 @@ class LaporanController extends Controller
                 'sumTotal' => $sumTotal,
                 'sumTotalPokok' => $sumTotalPokok,
                 'pendapatan' => $pendapatan,
-
+                'nama_kantin' => $nama_kantin,
+                'komisi_jti' => $komisi_jti,
+                'komisi_dwp' => $komisi_dwp,
+                'kantin' => $kantin,
                 'jumlah' => $jumlah,
                 'tglMulai' => $tglMulai,
                 'tglSelesai' => $tglSelesai,
@@ -293,7 +319,16 @@ class LaporanController extends Controller
             }
 
             $data = $data->get();
-
+            $first = $data->first();
+        
+            if ($first == null) {
+                Alert::error('Tidak ada', 'Tidak Ada Laporan Untuk Tanggal Yang dicari');
+                return back();
+            }else {
+                # code...
+          
+                $nama_kantin = "Semua Kantin";
+            }
             $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
                 ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
@@ -344,12 +379,17 @@ class LaporanController extends Controller
             $pendapatan = $sumTotal - $sumTotalPokok;
             $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
             $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
+            $komisi_jti = $pendapatan * (45 / 100);
+            $komisi_dwp = $pendapatan * (55 / 100);
             return view('dashboard.laporan.cekLaporan', [
                 'data' => $data,
                 'sumTotal' => $sumTotal,
                 'sumTotalPokok' => $sumTotalPokok,
                 'pendapatan' => $pendapatan,
-
+                'nama_kantin' => $nama_kantin,
+                'komisi_jti' => $komisi_jti,
+                'komisi_dwp' => $komisi_dwp,
+                'kantin' => $kantin,
                 'jumlah' => $jumlah,
                 'tglMulai' => $tglMulai,
                 'tglSelesai' => $tglSelesai,
@@ -389,6 +429,16 @@ class LaporanController extends Controller
             }
 
             $data = $data->get();
+            $first = $data->first();
+        
+            if ($first == null) {
+                Alert::error('Tidak ada', 'Tidak Ada Laporan Untuk Status Yang diberikan');
+                return back();
+            }else {
+                # code...
+          
+                $nama_kantin = "Semua Kantin";
+            }
 
             $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
@@ -441,6 +491,8 @@ class LaporanController extends Controller
             (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga_pokok*QTY))
         )) as total_pokok')->value('total_pokok');
             $pendapatan = $sumTotal - $sumTotalPokok;
+            $komisi_jti = $pendapatan * (45 / 100);
+            $komisi_dwp = $pendapatan * (55 / 100);
             $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
             $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
             return view('dashboard.laporan.cekLaporan', [
@@ -448,7 +500,10 @@ class LaporanController extends Controller
                 'sumTotal' => $sumTotal,
                 'sumTotalPokok' => $sumTotalPokok,
                 'pendapatan' => $pendapatan,
-
+                'nama_kantin' => $nama_kantin,
+                'komisi_jti' => $komisi_jti,
+                'komisi_dwp' => $komisi_dwp,
+                'kantin' => $kantin,
                 'jumlah' => $jumlah,
                 'tglMulai' => $tglMulai,
                 'tglSelesai' => $tglSelesai,
@@ -486,6 +541,17 @@ class LaporanController extends Controller
             }
 
             $data = $data->get();
+
+        
+            $first = $data->first();
+        
+            if ($first == null) {
+                Alert::error('Tidak ada', 'Tidak Ada Laporan Untuk Kantin Yang dicari');
+                return back();
+            }else {
+                # code...
+                $nama_kantin = $first->kantin;
+            }
 
             $jumlah = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
                 ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
@@ -538,14 +604,20 @@ class LaporanController extends Controller
         (menu.harga_pokok*QTY) - (menu.diskon/100*(menu.harga*QTY))
     )) as total')->value('total');
             $pendapatan = $sumTotal - $sumTotalPokok;
+            $komisi_jti = $pendapatan * (45 / 100);
+            $komisi_dwp = $pendapatan * (55 / 100);
             $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
             $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
+
             return view('dashboard.laporan.cekLaporan', [
                 'data' => $data,
                 'sumTotal' => $sumTotal,
                 'sumTotalPokok' => $sumTotalPokok,
                 'pendapatan' => $pendapatan,
-
+                'nama_kantin' => $nama_kantin,
+                'komisi_jti' => $komisi_jti,
+                'komisi_dwp' => $komisi_dwp,
+                'kantin' => $kantin,
                 'jumlah' => $jumlah,
                 'tglMulai' => $tglMulai,
                 'tglSelesai' => $tglSelesai,
@@ -752,7 +824,6 @@ class LaporanController extends Controller
                 'idKantin' => $idKantin,
                 'status' => $status
             ]);
-
         } elseif (($idKantin == 'p') && ($status !== 'p')) {
 
             $data = Transaksi::leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
@@ -933,6 +1004,7 @@ class LaporanController extends Controller
             $pendapatan = $sumTotal - $sumTotalPokok;
             $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
             $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
+            dd($data);
             return view('dashboard.laporan.cetak', [
                 'data' => $data,
                 'sumTotal' => $sumTotal,
