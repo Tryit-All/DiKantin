@@ -37,7 +37,7 @@ class MenuController extends Controller
 
     public function create()
     {
-        $kantin= Kantin::all();
+        $kantin = Kantin::all();
         return view('dashboard.menu.create', [
             'title' => 'Add Menu',
             'kantin' => $kantin
@@ -59,7 +59,7 @@ class MenuController extends Controller
     public function edit(Request $request, $id)
     {
         $menu = Menu::with(['Kantin'])->findOrFail($id);
-        $kantin= Kantin::all();
+        $kantin = Kantin::all();
         return view('dashboard.menu.edit', [
             'title' => 'Edit Menu',
             'menu' => $menu,
@@ -93,7 +93,12 @@ class MenuController extends Controller
 
     public function product(Request $request)
     {
-        $menuada = Menu::where('status_stok', 'ada')->get();
+        $menuada = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')
+            ->where('menu.status_stok', 'ada')
+            ->where('kantin.status', 1)
+            ->get();
+        dd($menuada);
+
         $databarang = $menuada->count();
         return response()->json($databarang);
         if ($databarang > $databarang)
@@ -112,8 +117,7 @@ class MenuController extends Controller
     public function searchProduct(Request $req)
     {
         if ($req->kantin && $req->makanan && $req->minuman) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
-                ->where('status_stok', 'ada')
+            $builder = Menu::where('status_stok', 'ada')
                 ->where('id_kantin', 'like', "%$req->kantin%")
                 ->where(function ($query) use ($req) {
                     $query->where('kategori', $req->makanan)
@@ -130,9 +134,11 @@ class MenuController extends Controller
         }
 
         if ($req->kantin == '' && $req->makanan == '' && $req->minuman == '') {
-            $builder = Menu::orderBy('id_kantin', 'asc')
+            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)
                 ->where('status_stok', 'ada');
-            $menu = $builder->get();
+            $menu = $builder->get()->toArray();
+
+            shuffle($menu);
             // return $menu;
 
             return response()->json([
@@ -143,12 +149,12 @@ class MenuController extends Controller
         }
 
         if ($req->kantin && $req->makanan) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
-                ->where('status_stok', 'ada')
+            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)->where('status_stok', 'ada')
                 ->where('id_kantin', 'like', "%$req->kantin%")
                 ->where('kategori', $req->makanan);
-            $menu = $builder->get();
-            // return $menu;
+                $menu = $builder->get()->toArray();
+                shuffle($menu);
+
 
             return response()->json([
                 'data' => $menu,
@@ -158,12 +164,11 @@ class MenuController extends Controller
         }
 
         if ($req->kantin && $req->minuman) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
-                ->where('status_stok', 'ada')
+            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)->where('status_stok', 'ada')
                 ->where('id_kantin', 'like', "%$req->kantin%")
                 ->where('kategori', $req->minuman);
-            $menu = $builder->get();
-            // return $menu;
+                $menu = $builder->get()->toArray();
+                shuffle($menu);
 
             return response()->json([
                 'data' => $menu,
@@ -173,12 +178,11 @@ class MenuController extends Controller
         }
 
         if ($req->makanan && $req->minuman) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
-                ->where('status_stok', 'ada')
-                ->where('kategori', $req->makanan)
-                ->where('kategori', $req->minuman);
-            $menu = $builder->get();
-            // return $menu;
+            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)
+                ->where('status_stok', 'ada');
+            $menu = $builder->get()->toArray();
+
+            shuffle($menu);
 
             return response()->json([
                 'data' => $menu,
@@ -188,25 +192,27 @@ class MenuController extends Controller
         }
 
         if ($req->kantin) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
-                ->where('status_stok', 'ada')
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })->where('status_stok', 'ada')
                 ->where('id_kantin', 'like', "%$req->kantin%");
             $menu = $builder->get();
             // return $menu;
-
-            return response()->json([
-                'data' => $menu,
-                'code' => 200,
-                'status' => true
-            ], 200);
+      
+                return response()->json([
+                    'data' => $menu,
+                    'code' => 200,
+                    'status' => true
+                ], 200);
+        
         }
 
         if ($req->makanan) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
+            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)
                 ->where('status_stok', 'ada')
                 ->where('kategori', $req->makanan);
-            $menu = $builder->get();
-            // return $menu;
+            $menu = $builder->get()->toArray();
+            shuffle($menu);
 
             return response()->json([
                 'data' => $menu,
@@ -216,11 +222,10 @@ class MenuController extends Controller
         }
 
         if ($req->minuman) {
-            $builder = Menu::orderBy('id_kantin', 'asc')
-                ->where('status_stok', 'ada')
+            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)->where('status_stok', 'ada')
                 ->where('kategori', $req->minuman);
-            $menu = $builder->get();
-            // return $menu;
+                $menu = $builder->get()->toArray();
+                shuffle($menu);
 
             return response()->json([
                 'data' => $menu,
@@ -235,5 +240,4 @@ class MenuController extends Controller
             'status' => false
         ], 400);
     }
-
 }

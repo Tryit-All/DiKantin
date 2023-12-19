@@ -120,6 +120,18 @@ body {
     color: #FFFFFF;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
+.dashboard-warna6 {
+    background-image: linear-gradient(to right, #4822c4, #d6a53a);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.dashboard-warna7 {
+    background-image: linear-gradient(to right, #05541c, #9f2b59);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
 
 .dashboard-warna2 {
     background-image: linear-gradient(to right, #D1D44F, #E7EB5D);
