@@ -42,12 +42,13 @@ Route::prefix('validate')->group(function () {
     Route::post('/editProfile', [ApiController::class, 'editProfile']);
     Route::get('/kurirShow', [ApiController::class, 'tampilKurir']);
     Route::post('/logoutKurir', [ApiTransaction::class, 'offStatusProfile']);
-    Route::put('/kurir/status' , [ApiTransaction::class , "updateStatusKurir"]);
-    
+    Route::put('/kurir/status', [ApiTransaction::class, "updateStatusKurir"]);
+
     // Kantin
     Route::post('/loginKantin', [ApiController::class, 'loginKantin']);
     Route::post('/logoutKantin', [ApiController::class, 'logout']);
     Route::post('/updateprofile', [ApiController::class, 'updateprofile']);
+    Route::post('/editStatus', [ApiController::class, 'editStatus']);
     Route::post('/userprofile', [ApiController::class, 'ubahprofile']);
 });
 
@@ -103,10 +104,12 @@ Route::post('/menuTerlaris', [ApiDikantinOld::class, 'menuTerlaris']);
 
 // Request Kantin
 Route::post('/updatestatus', [ApiDikantinOld::class, 'updateStatusPenjualan']);
+Route::post('/updateBuka', [ApiDikantinOld::class, 'updateBuka']);
+Route::post('/updateTutup', [ApiDikantinOld::class, 'updateTutup']);
+Route::post('/updateada', [ApiDikantinOld::class, 'updateAda']);
 Route::post('/updatehabis', [ApiDikantinOld::class, 'updateHabis']);
 Route::get('/update', [ApiDikantinOld::class, 'barangada']);
 Route::get('/baranghabis', [ApiDikantinOld::class, 'baranghabis']);
-Route::post('/updateada', [ApiDikantinOld::class, 'updateAda']);
 Route::get('/ubahHarga', [ApiDikantinOld::class, 'ubahHarga']);
 Route::get('/updateselesai', [ApiDikantinOld::class, 'orderselesai']);
 Route::get('/updatemenu', [ApiDikantinOld::class, 'menuada']);
@@ -135,7 +138,7 @@ Route::post('/penjualan/hapusItem', [PenjualanController::class, 'hapusItem'])->
 Route::post("/auth/kantin/sign", [KantinController::class, "login"]);
 Route::put("/kantin/fcmtoken", [KantinController::class, "updateFcmToken"]);
 
-Route::get("/kurir/pendapatan" , [ApiController::class , "getPendapatanKurir"]);
+Route::get("/kurir/pendapatan", [ApiController::class, "getPendapatanKurir"]);
 
 
 // Route::post('/customerAccount/{id_customer}', [ApiTransaction::class, 'editCustomer']);

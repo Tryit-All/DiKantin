@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('kantin', function (Blueprint $table) {
             $table->integer('id_kantin')->primary();
             $table->string('nama', 100);
-            $table->enum('status', ['aktif', 'tidak aktif']);
+            $table->boolean('status');
             $table->timestamps();
         });
     }
