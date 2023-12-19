@@ -134,10 +134,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/keuangan', [KeuanganController::class, "index"]);
     Route::get('/keuangan/kantin/history/{id}', [KeuanganController::class, "historyKantin"])->name('history-kantin');
     Route::get('/keuangan/kurir/history/{id}', [KeuanganController::class, "historyKurir"])->name('history-kurir');
-    Route::post('/keuangan/kurir', [KeuanganController::class, 'berikanDanaKantin'])->name('berikan-dana-kantin');
-    Route::get("/keuangan/kantin/{id}/history/{start}/{end}" , [KeuanganController::class , "procesHistoryKantin"]);
-    Route::get("/keuangan/kurir/{id}/history/{start}/{end}" , [KeuanganController::class , "procesHistoryKurir"]);
-    Route::post("/keuangan/history/kantin/export" , [KeuanganController::class , "exportHistoryKantin"])->name("export-kantin");
+    Route::post('/keuangan/kantin', [KeuanganController::class, 'berikanDanaKantin'])->name('berikan-dana-kantin');
+    Route::post('/keuangan/kurir', [KeuanganController::class, 'berikanDanaKurir'])->name('berikan-dana-kurir');
+
+    Route::get("/keuangan/kantin/{id}/history/{start}/{end}", [KeuanganController::class, "procesHistoryKantin"]);
+    Route::get("/keuangan/kurir/{id}/history/{start}/{end}", [KeuanganController::class, "procesHistoryKurir"]);
+    Route::post("/keuangan/history/kantin/export", [KeuanganController::class, "exportHistoryKantin"])->name("export-kantin");
 
 });
 Route::get('/kurirr', [LaporanKurirController::class, 'index']);
