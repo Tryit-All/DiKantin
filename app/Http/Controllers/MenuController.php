@@ -134,7 +134,9 @@ class MenuController extends Controller
         }
 
         if ($req->kantin == '' && $req->makanan == '' && $req->minuman == '') {
-            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })
                 ->where('status_stok', 'ada');
             $menu = $builder->get()->toArray();
 
@@ -149,7 +151,9 @@ class MenuController extends Controller
         }
 
         if ($req->kantin && $req->makanan) {
-            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)->where('status_stok', 'ada')
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })->where('status_stok', 'ada')
                 ->where('id_kantin', 'like', "%$req->kantin%")
                 ->where('kategori', $req->makanan);
             $menu = $builder->get()->toArray();
@@ -164,7 +168,9 @@ class MenuController extends Controller
         }
 
         if ($req->kantin && $req->minuman) {
-            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)->where('status_stok', 'ada')
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })->where('status_stok', 'ada')
                 ->where('id_kantin', 'like', "%$req->kantin%")
                 ->where('kategori', $req->minuman);
             $menu = $builder->get()->toArray();
@@ -178,7 +184,9 @@ class MenuController extends Controller
         }
 
         if ($req->makanan && $req->minuman) {
-            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })
                 ->where('status_stok', 'ada');
             $menu = $builder->get()->toArray();
 
@@ -204,11 +212,12 @@ class MenuController extends Controller
                 'code' => 200,
                 'status' => true
             ], 200);
-
         }
 
         if ($req->makanan) {
-            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })
                 ->where('status_stok', 'ada')
                 ->where('kategori', $req->makanan);
             $menu = $builder->get()->toArray();
@@ -222,7 +231,9 @@ class MenuController extends Controller
         }
 
         if ($req->minuman) {
-            $builder = Menu::join('kantin', 'menu.id_kantin', '=', 'kantin.id_kantin')->where('kantin.status', 1)->where('status_stok', 'ada')
+            $builder = Menu::with(['Kantin'])->whereHas('Kantin', function ($query) {
+                $query->where('status', 1);
+            })->where('status_stok', 'ada')
                 ->where('kategori', $req->minuman);
             $menu = $builder->get()->toArray();
             shuffle($menu);
