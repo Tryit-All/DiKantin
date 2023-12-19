@@ -96,7 +96,7 @@
                             <th>Rp {{ number_format($pendapatan) }}</td>
                         </tr>
                     @endif
-                </tfoot>
+                </tfoot> 
             </table>
 
         </div>

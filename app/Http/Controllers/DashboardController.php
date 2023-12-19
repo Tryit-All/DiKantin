@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\DwpMiddleware;
 use App\Models\DetailTransaksi;
+use App\Models\Kantin;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -103,6 +104,30 @@ class DashboardController extends Controller
         // Gunakan label yang sudah diubah format namanya pada grafik
         // $label = $nama_bulan;
         // $label = array_column($pendapatan, 'bulan');
+$pendapatan_perkantin=[];
+$kantin=Kantin::all();
+
+foreach ($kantin as $key) {
+    $pendapatan_kantin = DB::table('detail_transaksi')
+    ->selectRaw('
+        SUM(IF(
+            menu.diskon IS NULL OR menu.diskon = 0,
+            detail_transaksi.subtotal_hargapokok,
+            detail_transaksi.subtotal_hargapokok - (menu.diskon / 100 * detail_transaksi.subtotal_hargapokok)
+        )) AS total,
+        menu.id_kantin,kantin.nama as nama_kantin
+    ')
+    ->join('transaksi', 'transaksi.kode_tr', '=', 'detail_transaksi.kode_tr')
+    ->join('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
+    ->join('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+    ->where('transaksi.status_pengiriman', '=', 'terima')
+    ->whereDate('transaksi.tanggal', '=', now()->toDateString())
+    ->groupBy('menu.id_kantin')
+    ->get();
+
+}
+// dd($pendapatan_kantin);
+
 
         $pendapatan_kantin1 = DB::table('detail_transaksi')
             ->selectRaw('
@@ -118,7 +143,6 @@ class DashboardController extends Controller
             ->where('transaksi.status_pengiriman', '=', 'terima')
             ->whereDate('transaksi.tanggal', '=', now()->toDateString())
             ->get();
-
         $pendapatan_kantin2 = DB::table('detail_transaksi')
             ->selectRaw('
                 SUM(IF(
@@ -275,6 +299,7 @@ class DashboardController extends Controller
             // 'jumlah_pendapatan' => $jumlah_pendapatan,
             'pendapatan' => $pendapatan,
             'Total_ongkir' => $Total_ongkir,
+            'pendapatan_kantin' => $pendapatan_kantin,
 
             'kantin1' => $pendapatan_kantin1,
             'kantin2' => $pendapatan_kantin2,

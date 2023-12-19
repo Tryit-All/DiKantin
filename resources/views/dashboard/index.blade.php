@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid mt-2">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 mt-3">
                 <div
                     class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna1 c-produk">
                     <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
@@ -69,7 +69,11 @@
             </div>
             </div>
         </div>
-
+        @php
+        $backgroundColors = ['bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-info', 'bg-warning'];
+        $colorCount = count($backgroundColors);
+    @endphp
+    
         <div class="row mt-3">
             <div class="col-md-8">
                 <div class="p-3 bg-white shadow-sm d-flex justify-content-start align-items-center dashboard-warna4"
@@ -81,18 +85,20 @@
                         Pendapatan Kantin Hari Ini</p>
                 </div>
                 <div class="p-2 bg-white top-kantin" id="pendapatan">
-
-                    <div class="d-flex align-items-center gap-3 kantin1">
-                        <p style="color: #FF4A4F">1</p>
-                        <h1>
-                            <i class='bx bx-store'></i>
-                        </h1>
-                        <div>
-                            <h5 class="fw-bold">Kantin 1</h5>
-                            <p> Rp {{ number_format($kantin1[0]->total) }}</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-3 kantin2 mt-3">
+@foreach ($pendapatan_kantin as $item)
+<div class="d-flex align-items-center gap-3 kantin1 mt-3">
+               
+    <h1>
+        <i class='bx bx-store'></i>
+    </h1>
+    <div>
+        <h5 class="fw-bold">{{ $item->nama_kantin }}</h5>
+        <p> Rp {{ number_format($item->total) }}</p>
+    </div>
+</div>
+@endforeach
+                    
+                    {{-- <div class="d-flex align-items-center gap-3 kantin2 mt-3">
                         <p style="color: #A3A711">2</p>
                         <h1>
                             <i class='bx bx-store'></i>
@@ -171,7 +177,7 @@
                             <h5 class="fw-bold">Kantin 9</h5>
                             <p>Rp {{ number_format($kantin9[0]->total) }}</p>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -265,5 +271,24 @@
         }
 
         reload();
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    const kantinItems = document.querySelectorAll('.kantin1');
+    kantinItems.forEach(item => {
+        const randomColor = getRandomColor();
+        item.style.background = randomColor;
+    });
+});
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color + '20'; // Menambahkan opacity ke warna untuk membuatnya semi-transparan
+}
+
     </script>
 @endsection

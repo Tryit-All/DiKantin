@@ -141,8 +141,8 @@ Route::get('/kurirr', [LaporanKurirController::class, 'index']);
 Route::post('/kurirr/export', [LaporanKurirController::class, 'export'])->name('kurir-excel');
 
 Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirController::class, 'cekOnkirKurir']);
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
