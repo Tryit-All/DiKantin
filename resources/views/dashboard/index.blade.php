@@ -1,9 +1,10 @@
 @extends('layout.main')
 @section('title', 'Dashboard')
 @section('content')
+
     <div class="container-fluid mt-2">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 mt-3">
                 <div
                     class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna1 c-produk">
                     <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
@@ -52,47 +53,84 @@
 
                 </div>
             </div>
-            
+
             <div class="col-md-4 mt-3 menu-atas">
                 <div
-                class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna5 c-produk">
-                <i class="fa-solid fa-motorcycle fs-2 primary-text border  bg-white secondary-bg p-3"
-                    style="color: #fa9a13; border-radius:15px;"></i>
-                <div>
+                    class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna5 c-produk">
+                    <i class="fa-solid fa-motorcycle fs-2 primary-text border  bg-white secondary-bg p-3"
+                        style="color: #fa9a13; border-radius:15px;"></i>
+                    <div>
+                        {{-- <h3 class="fs-2">Rp 250.000</h3> --}}
+                        {{-- <h3 class="fs-2">Rp
+                        {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
+                    </h3> --}}
+                        <h3 class="fs-2">Rp {{ number_format($Total_ongkir) }}</h3>
+                        <p class="fs-5">Total Pendapatan Kurir Hari Ini</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-3 menu-atas">
+                <div
+                    class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna6 c-produk">
+                    <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
+                        style="color: #b700ff; border-radius:15px;"></i>
                     {{-- <h3 class="fs-2">Rp 250.000</h3> --}}
                     {{-- <h3 class="fs-2">Rp
                         {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
                     </h3> --}}
-                    <h3 class="fs-2">Rp {{ number_format($Total_ongkir) }}</h3>
-                    <p class="fs-5">Total Pendapatan Kurir Hari Ini</p>
+                    <div>
+                        <h3 class="fs-2">Rp {{ number_format($komisi_dwp) }}</h3>
+                        <p class="fs-5"> Komisi DWP Hari Ini</p>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-4 mt-3 menu-atas">
+                <div
+                    class="p-3 bg-white shadow-sm d-flex justify-content-start gap-3 align-items-center dashboard-warna7 c-produk">
+                    <i class="fas fa-solid fa-money-check-dollar fs-2 primary-text border  bg-white secondary-bg p-3"
+                        style="color: #ff0000; border-radius:15px;"></i>
+                    {{-- <h3 class="fs-2">Rp 250.000</h3> --}}
+                    {{-- <h3 class="fs-2">Rp
+                        {{ number_format(\App\Models\Penjualan::getTotalPendapatanByTanggal('2023-04-06'), 0, ',', '.') }}
+                    </h3> --}}
+                    <div>
+                        <h3 class="fs-2">Rp {{ number_format($komisi_jti) }}</h3>
+                        <p class="fs-5"> Komisi jti Hari Ini</p>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+    @php
+        $backgroundColors = ['bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-info', 'bg-warning'];
+        $colorCount = count($backgroundColors);
+    @endphp
 
-        <div class="row mt-3">
-            <div class="col-md-8">
-                <div class="p-3 bg-white shadow-sm d-flex justify-content-start align-items-center dashboard-warna4"
-                    id="grafik"></div>
+    <div class="row mt-3">
+        <div class="col-md-8">
+            <div class="p-3 bg-white shadow-sm d-flex justify-content-start align-items-center dashboard-warna4"
+                id="grafik"></div>
+        </div>
+        <div class="col-md-4 dashboard-warna4" id="pendapatan">
+            <div>
+                <p class="fs-5 mt-2" style="font-weight: bold; text-align: left; margin-left: 10px; margin-top:20px;">
+                    Pendapatan Kantin Hari Ini</p>
             </div>
-            <div class="col-md-4 dashboard-warna4" id="pendapatan">
-                <div>
-                    <p class="fs-5 mt-2" style="font-weight: bold; text-align: left; margin-left: 10px; margin-top:20px;">
-                        Pendapatan Kantin Hari Ini</p>
-                </div>
-                <div class="p-2 bg-white top-kantin" id="pendapatan">
+            <div class="p-2 bg-white top-kantin" id="pendapatan">
+                @foreach ($pendapatan_kantin as $item)
+                    <div class="d-flex align-items-center gap-3 kantin1 mt-3">
 
-                    <div class="d-flex align-items-center gap-3 kantin1">
-                        <p style="color: #FF4A4F">1</p>
                         <h1>
                             <i class='bx bx-store'></i>
                         </h1>
                         <div>
-                            <h5 class="fw-bold">Kantin 1</h5>
-                            <p> Rp {{ number_format($kantin1[0]->total) }}</p>
+                            <h5 class="fw-bold">{{ $item->nama_kantin }}</h5>
+                            <p> Rp {{ number_format($item->total) }}</p>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-3 kantin2 mt-3">
+                @endforeach
+
+                {{-- <div class="d-flex align-items-center gap-3 kantin2 mt-3">
                         <p style="color: #A3A711">2</p>
                         <h1>
                             <i class='bx bx-store'></i>
@@ -171,10 +209,10 @@
                             <h5 class="fw-bold">Kantin 9</h5>
                             <p>Rp {{ number_format($kantin9[0]->total) }}</p>
                         </div>
-                    </div>
-                </div>
+                    </div> --}}
             </div>
         </div>
+    </div>
 
     </div>
 @endsection
@@ -265,5 +303,23 @@
         }
 
         reload();
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const kantinItems = document.querySelectorAll('.kantin1');
+            kantinItems.forEach(item => {
+                const randomColor = getRandomColor();
+                item.style.background = randomColor;
+            });
+        });
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color + '20'; // Menambahkan opacity ke warna untuk membuatnya semi-transparan
+        }
     </script>
 @endsection

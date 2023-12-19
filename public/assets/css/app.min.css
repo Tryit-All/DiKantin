@@ -57,12 +57,11 @@
 }
 
 .kantin1 {
-    background: rgba(236, 31, 36, 0.2);
-    border-radius: 20px;
-    padding: 8px;
+  border-radius: 20px;
+  padding: 8px;
 }
 .kantin1 i {
-    color: #ff4a4f;
+  color: #ff4a4f;
 }
 .kantin2 {
     background: rgba(228, 234, 23, 0.2);

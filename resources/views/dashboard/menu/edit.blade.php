@@ -35,13 +35,26 @@
                 </select>
             </div>
             <div class="mb-2">
-                <label for="
-                kantin" class="form-label">Kantin</label>
-                <select class="form-select" aria-label="Default select example" name="id_kantin">
-                    @foreach ($kantin as $item)
-                        <option {{ $menu->id_kantin == $item->id_kantin ? 'selected' : '' }} value="{{ $item->id_kantin }}">
-                            {{ $item->nama }}</option>
-                    @endforeach
+                <label for="kantin" class="form-label">Kantin</label>
+
+                <select class="form-select" aria-label="Default select example" name="id_kantin" required>
+                    <option value="{{ $menu->id_kantin }}">{{ $menu->Kantin->nama }}</option>
+             @foreach ($kantin as $item)
+             <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+             @endforeach
+             
+                </select>
+            </div>
+            <div class="mb-2">
+                <label for="kantin" class="form-label">Kategori</label>
+
+                <select class="form-select" aria-label="Default select example" name="kategori" required>
+              
+  
+             <option value="makanan">makanan</option>
+             <option value="minuman">minuman</option>
+    
+             
                 </select>
             </div>
             <div class="mb-2">

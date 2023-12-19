@@ -43,12 +43,18 @@
                 </select>
             </div>
             <div class="mb-2">
-                <label for="kantin" class="form-label">Kategori Makanan</label>
+                <label for="kantin" class="form-label">Kategori</label>
+
                 <select class="form-select" aria-label="Default select example" name="kategori" required>
-                    <option value="makanan">Makanan</option>
-                    <option value="makanan">Minuman</option>
+              
+  
+             <option value="makanan">makanan</option>
+             <option value="minuman">minuman</option>
+    
+             
                 </select>
             </div>
+
             <div class="mb-2">
                 <button type="submit" class="btn btn-dark text-white">Simpan</button>
                 <a href="/menuAll" class="btn btn-light px-3">Kembali</a>

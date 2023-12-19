@@ -4,7 +4,7 @@ body {
     background-position: center !important;
     background-attachment: fixed !important;
     background-repeat: no-repeat !important;
-   
+
 }
 
 
@@ -114,8 +114,23 @@ body {
     color: #FFFFFF;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
+
 .dashboard-warna5 {
     background-image: linear-gradient(to right, #dbcc1f, #d09618);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.dashboard-warna6 {
+    background-image: linear-gradient(to right, #b700ff, #4822c4);
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.dashboard-warna7 {
+    background-image: linear-gradient(to right, #ff0000, #9f2b59);
     border-radius: 20px;
     color: #FFFFFF;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
