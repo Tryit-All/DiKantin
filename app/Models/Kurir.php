@@ -19,6 +19,7 @@ class Kurir extends Model
         'status',
         'created_at',
         'updated_at',
+        'total_saldo'
     ];
 
     protected $hidden = [

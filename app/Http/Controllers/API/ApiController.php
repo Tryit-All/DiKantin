@@ -942,7 +942,7 @@ class ApiController extends Controller
         if (isset($token)) {
             $kurir = Kurir::where('token', $token)->first();
             if (isset($kurir)) {
-                $pendapatanHariIni = Transaksi::where('id_kurir', $kurir->id_kurir)->whereDate('created_at', Carbon::now())->sum('total_biaya_kurir');
+                $pendapatanHariIni = $kurir->total_saldo;
                 $pendapatanBulanIni = Transaksi::where('id_kurir', $kurir->id_kurir)
                     ->whereMonth('created_at', Carbon::now())
                     ->sum('total_biaya_kurir');
