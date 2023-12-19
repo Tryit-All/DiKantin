@@ -631,6 +631,7 @@ class ApiController extends Controller
 
             $idKurir = $transaksi->id_kurir;
             $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
+            $kurirToken = Kurir::where('token', $kurir)->first();
             $kurir2 = $idKurir2->id_kurir; // sementara bolo
             $kantinData = User::where('id_kantin', $kantin)->first();
             if ($kode_tr == $kodeTransaksi) {
@@ -640,7 +641,8 @@ class ApiController extends Controller
                         'status_pengiriman' => 'terima',
                         'bukti_pengiriman' => 'Done'
                     ]);
-
+                    $kurirToken->total_saldo += 3000;
+                    $kurirToken->save();
                     if (isset($kantinData->fcm_token)) {
                         $this->service->sendNotifToSpesidicToken($kantinData->fcm_token, Notification::create("Pesanan Diterima", "Pesananmu Sudah diterima oleh customer"), [
                             'kode_tr' => $kodeTransaksi,
