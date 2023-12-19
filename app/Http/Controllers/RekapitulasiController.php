@@ -93,7 +93,9 @@ class RekapitulasiController extends Controller
             )) as total_pokok')
             ->value('total_pokok');
         $pendapatan = $sumTotal - $sumTotalPokok;
-        return view('dashboard.rekapitulasi.index', compact(['data', 'jumlah', 'sumTotal', 'sumTotalPokok', 'pendapatan']));
+        $komisi_jti = $pendapatan * (45 / 100);
+        $komisi_dwp = $pendapatan * (55 / 100);
+        return view('dashboard.rekapitulasi.index', compact(['data', 'jumlah', 'sumTotal', 'sumTotalPokok', 'pendapatan','komisi_jti','komisi_dwp']));
     }
 
     public function cekRekapitulasi($tglMulai, $tglSelesai)
@@ -187,6 +189,8 @@ class RekapitulasiController extends Controller
 
         // return $data;
         $pendapatan = $sumTotal - $sumTotalPokok;
+        $komisi_jti = $pendapatan * (45 / 100);
+        $komisi_dwp = $pendapatan * (55 / 100);
         $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
         $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
         return view(
@@ -197,6 +201,8 @@ class RekapitulasiController extends Controller
                 'sumTotalPokok' => $sumTotalPokok,
                 'jumlah' => $jumlah,
                 'pendapatan' => $pendapatan,
+                'komisi_jti' => $komisi_jti,
+                'komisi_dwp' => $komisi_dwp,
                 'tglMulai' => $tglMulai,
                 'tglSelesai' => $tglSelesai,
             ]
@@ -294,6 +300,8 @@ class RekapitulasiController extends Controller
 
         // return $data;
         $pendapatan = $sumTotal - $sumTotalPokok;
+        $komisi_jti = $pendapatan * (45 / 100);
+        $komisi_dwp = $pendapatan * (55 / 100);
         $tglSelesai = Carbon::parse($tglSelesai)->format('Y-m-d');
         $tglMulai = Carbon::parse($tglMulai)->format('Y-m-d');
         return view(
@@ -304,6 +312,8 @@ class RekapitulasiController extends Controller
                 'sumTotalPokok' => $sumTotalPokok,
                 'jumlah' => $jumlah,
                 'pendapatan' => $pendapatan,
+                'komisi_jti' => $komisi_jti,
+                'komisi_dwp' => $komisi_dwp,
                 'tglMulai' => $tglMulai,
                 'tglSelesai' => $tglSelesai,
             ]
@@ -380,6 +390,8 @@ class RekapitulasiController extends Controller
             )) as total_pokok')
             ->value('total_pokok');
         $pendapatan = $sumTotal - $sumTotalPokok;
+        $komisi_jti = $pendapatan * (45 / 100);
+        $komisi_dwp = $pendapatan * (55 / 100);
 
         return view(
             'dashboard.rekapitulasi.cetaksemua',
@@ -388,6 +400,8 @@ class RekapitulasiController extends Controller
                 'sumTotal' => $sumTotal,
                 'jumlah' => $jumlah,
                 'pendapatan' => $pendapatan,
+                'komisi_dwp' => $komisi_dwp,
+                'komisi_jti' => $komisi_jti,
                 'sumTotalPokok' => $sumTotalPokok,
 
             ]

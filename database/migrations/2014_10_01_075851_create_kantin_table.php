@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->integer('id_kantin')->primary();
             $table->string('nama', 100);
             $table->boolean('status');
+            $table->bigInteger('total_saldo')->default(0);
+
             $table->timestamps();
         });
     }

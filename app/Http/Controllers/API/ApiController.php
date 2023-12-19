@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\ApiKeyMiddleware;
+
 use App\Service\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -678,22 +679,25 @@ class ApiController extends Controller
                     ->where('detail_transaksi.kode_menu', $kodeMenu)
                     ->first();
 
+                $subTotalHargaPokok = DetailTransaksi::where('kode_tr', $kodeTransaksi)->sum('subtotal_hargapokok');
+
                 if (isset($statusKonfirm)) {
                     $kodeIdKantin = $statusKonfirm->id_kantin;
                     $kodeMenu = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
-
+                    $kantindata = Kantin::find($kantin);
                     if ($status == "memasak" && $kodeIdKantin == $kantin) {
                         $konfirm_status = "selesai";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
                         ]);
+                        $kantindata->total_saldo += $subTotalHargaPokok;
+                        $kantindata->save();
                     } else {
                         return $this->sendMassage('Anda sudah memproses pesanan', 400, false);
                     }
                 }
                 // return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
-
             }
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
@@ -978,7 +982,7 @@ class ApiController extends Controller
         if (isset($token)) {
             $kurir = Kurir::where('token', $token)->first();
             if (isset($kurir)) {
-                $pendapatanHariIni = Transaksi::where('id_kurir', $kurir->id_kurir)->whereDate('created_at', Carbon::now())->sum('total_biaya_kurir');
+                $pendapatanHariIni = $kurir->total_saldo;
                 $pendapatanBulanIni = Transaksi::where('id_kurir', $kurir->id_kurir)
                     ->whereMonth('created_at', Carbon::now())
                     ->sum('total_biaya_kurir');

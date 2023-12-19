@@ -25,15 +25,9 @@
                     <select class="form-select" aria-label="Default select example" name="id_kantin" required
                         id="idKantin">
                         <option value="p">Pilih Kantin</option>
-                        <option value="1">Kantin 1</option>
-                        <option value="2">Kantin 2</option>
-                        <option value="3">Kantin 3</option>
-                        <option value="4">Kantin 4</option>
-                        <option value="5">Kantin 5</option>
-                        <option value="6">Kantin 6</option>
-                        <option value="7">Kantin 7</option>
-                        <option value="8">Kantin 8</option>
-                        <option value="9">Kantin 9</option>
+                     @foreach ($kantin as $item)
+                     <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+                     @endforeach
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -143,31 +137,6 @@
     </div>
 
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('laporan-excel') }}" method="post">
-                    @csrf
-                    <div class="modal-body">
-                        <label for="format">Format Excel</label>
-                        <select class="form-select" id="format" aria-label="Default select example" name="type">
-                            <option value="xlsx">XLSX</option>
-                            <option value="csv">CSV</option>
-                            <input type="text" id="id_data" name="data" hidden>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Cetak Sekarang</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

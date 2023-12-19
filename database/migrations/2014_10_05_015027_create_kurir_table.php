@@ -20,6 +20,9 @@ return new class extends Migration {
             $table->string('token_fcm')->nullable(true);
             $table->string('telepon', 13);
             $table->string('foto', 255)->nullable(true);
+            $table->bigInteger('total_saldo')->default(0);
+            $table->bigInteger('total_saldo_temp')->default(0);
+
             $table->timestamps();
         });
     }

@@ -98,8 +98,6 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();
-        // dd($request->all());
         $totalBiayaKurir = $request->input('total_biaya_kurir');
         $dataDetailOrderan = $request->details;
         $idCust = $request->id_customer;
@@ -108,12 +106,9 @@ class PenjualanController extends Controller
         $kembalian = $request->kembalian;
         $model_pembayaran = $request->model_pembayaran;
         $noMeja = $request->no_meja;
-
         $today = Carbon::now();
-
         $RandomNumber = rand(1000, 9999);
         $kodeTr = "TRDKN" . $RandomNumber;
-
         $Transaksi = new Transaksi();
         $Transaksi->kode_tr = $kodeTr;
         $Transaksi->status_konfirm = "1";
@@ -131,29 +126,22 @@ class PenjualanController extends Controller
         $Transaksi->save();
         foreach ($dataDetailOrderan as $key => $value) {
             $kantinMenu = Menu::find($value['id_menu']);
-            $userKantin = User::where('id_kantin', $kantinMenu->id_kantin)->first();
-            // dd($kantinMenu);
+            $userKantin = User::with('Kantin')->where('id_kantin', $kantinMenu->id_kantin)->first();
 
             $jumlah = $value['jumlah'];
             $hargaBarang = $value['harga'];
-            $harga_pokok=$kantinMenu->harga_pokok;
-      
-       
+            $harga_pokok = $kantinMenu->harga_pokok;
             $subTotal = $jumlah * $hargaBarang;
             $subTotalPokok = $jumlah * $harga_pokok;
-
-
             $detail = new DetailTransaksi();
             $detail->kode_tr = $kodeTr;
             $detail->catatan = $value['catatan'];
             $detail->kode_menu = $value['id_menu'];
             $detail->QTY = $value['jumlah'];
-            // $detail->keterangan = $value['keterangan'];
             $detail->status_konfirm = 'menunggu';
             $detail->subtotal_bayar = $subTotal;
             $detail->subtotal_hargapokok = $subTotalPokok;
             $detail->save();
-
             $this->service->sendNotifToSpesidicToken($userKantin->token_fcm,
                 Notification::create('Pesanan Baru', 'Ada Pesanan Baru nih')
                 , [

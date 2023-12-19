@@ -35,10 +35,10 @@ class DatabaseSeeder extends Seeder
         $this->call(DataKurirSeeder::class);
 
         // Add Transaksi
-        $this->call(DataTransaksiSeeder::class);
+        // $this->call(DataTransaksiSeeder::class);
 
-        // Add Detail Transaksi
-        $this->call(DataDetailTransaksiSeeder::class);
+        // // Add Detail Transaksi
+        // $this->call(DataDetailTransaksiSeeder::class);
 
         // Add Roles
         $this->call(DataRoles::class);

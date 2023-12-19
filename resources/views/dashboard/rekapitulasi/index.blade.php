@@ -65,11 +65,19 @@
                             <th colspan="1"></th>
                             <th></th>
                             <th></th>
-                            <th>Pendapatan</td>
-                            <th>Rp {{ number_format($pendapatan) }}</td>
+                            <th>Komisi JTI</td>
+                            <th>Rp {{ number_format($komisi_jti) }}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="1"></th>
+                            <th></th>
+                            <th></th>
+                            <th>Komisi DWP</td>
+                            <th>Rp {{ number_format($komisi_dwp) }}</td>
                         </tr>
                     @endif
                 </tfoot>
+          
                 <tfoot>
                     @if ($jumlah != null)
                         <tr>
@@ -78,6 +86,17 @@
                             <th></th>
                             <th>Rp {{ number_format($sumTotal) }}</td>
                             <th>Rp {{ number_format($sumTotalPokok) }}</td>
+                        </tr>
+                    @endif
+                </tfoot>
+                <tfoot>
+                    @if ($jumlah != null)
+                        <tr>
+                            <th colspan="1"></th>
+                            <th></th>
+                            <th></th>
+                            <th>Pendapatan</td>
+                            <th>Rp {{ number_format($pendapatan) }}</td>
                         </tr>
                     @endif
                 </tfoot>

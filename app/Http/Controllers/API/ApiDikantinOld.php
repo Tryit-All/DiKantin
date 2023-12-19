@@ -393,42 +393,18 @@ class ApiDikantinOld extends Controller
             ->whereMonth('transaksi.created_at', Carbon::now()->format('m'))
             ->orderBy('transaksi.created_at', 'desc')->get();
 
-        $dataRiwayatToday = Transaksi::select(
-            'transaksi.kode_tr',
-            DB::raw('DATE(detail_transaksi.created_at) as tanggal_transaksi'),
-            'menu.nama',
-            'menu.harga_pokok as harga',
-            'detail_transaksi.QTY',
-            'detail_transaksi.subtotal_hargapokok',
-            'transaksi.status_pengiriman',
-            'customer.nama AS customer_name',
-            'customer.no_telepon',
-            'user.username',
-            'transaksi.model_pembayaran'
-        )->leftJoin('customer', 'customer.id_customer', '=', 'transaksi.id_customer')
-            ->leftJoin('user', 'user.id_user', '=', 'transaksi.id_kasir')
-            ->leftJoin('detail_transaksi', 'transaksi.Kode_tr', '=', 'detail_transaksi.kode_tr')
-            ->leftJoin('menu', 'menu.id_menu', '=', 'detail_transaksi.kode_menu')
-            ->leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
-            ->where('kantin.id_kantin', $kantin->id_kantin)
-            ->where('transaksi.status_pengiriman', 'terima')
-            ->whereDate('transaksi.created_at', Carbon::now())
-            ->orderBy('transaksi.created_at', 'desc')->get();
+        $kantinData = Kantin::find($kantin->id_kantin);
         $totalBulan = 0;
-        $totalToday = 0;
 
         foreach ($dataRiwayat as $key => $value) {
             # code...
 
             $totalBulan += $value->subtotal_hargapokok;
         }
-        foreach ($dataRiwayatToday as $key => $value) {
-            # code...
-            $totalToday += $value->subtotal_hargapokok;
-        }
+
         return $this->sendMassage([
             "penjualanBulanIni" => (int) $totalBulan,
-            'penjualanHariIni' => (int) $totalToday
+            'penjualanHariIni' => (int) $kantinData->total_saldo
         ], 200, true);
     }
 
