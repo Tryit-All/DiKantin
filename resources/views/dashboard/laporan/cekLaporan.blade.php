@@ -24,17 +24,16 @@
                     <label for="kantin" class="form-label">Kantin</label>
                     <select class="form-select" aria-label="Default select example" name="id_kantin" required
                         id="idKantin">
-
+                        @if ($nama_kantin == 'Semua Kantin')
+                            <option value="p"{{ $idKantin == 'p' ? 'selected' : '' }}>Semua Kantin</option>
+                        @else
+                            <option value={{ $idKantin }}>{{ $nama_kantin }}</option>
+                        @endif
                         <option value="p"{{ $idKantin == 'p' ? 'selected' : '' }}>Semua Kantin</option>
-                        <option value="1"{{ $idKantin == 1 ? 'selected' : '' }}>Kantin 1</option>
-                        <option value="2"{{ $idKantin == 2 ? 'selected' : '' }}>Kantin 2</option>
-                        <option value="3"{{ $idKantin == 3 ? 'selected' : '' }}>Kantin 3</option>
-                        <option value="4"{{ $idKantin == 4 ? 'selected' : '' }}>Kantin 4</option>
-                        <option value="5"{{ $idKantin == 5 ? 'selected' : '' }}>Kantin 5</option>
-                        <option value="6"{{ $idKantin == 6 ? 'selected' : '' }}>Kantin 6</option>
-                        <option value="7"{{ $idKantin == 7 ? 'selected' : '' }}>Kantin 7</option>
-                        <option value="8"{{ $idKantin == 8 ? 'selected' : '' }}>Kantin 8</option>
-                        <option value="9"{{ $idKantin == 9 ? 'selected' : '' }}>Kantin 9</option>
+                        @foreach ($kantin as $item)
+                            <option value={{ $item->id_kantin }}>{{ $item->nama }}</option>
+                        @endforeach
+
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -71,10 +70,10 @@
                         <th>Diskon</th>
                         <th>Harga Pokok</th>
                         <th>Harga Jual </th>
-                        <th>Subtotal Harga  Pokok</th>
+                        <th>Subtotal Harga Pokok</th>
                         <th>Subtotal Harga Jual </th>
-                 
-                 
+
+
 
                     </tr>
                 </thead>
@@ -94,10 +93,11 @@
                             <td>Rp {{ number_format($m->harga_satuan) }}</td>
                             <td>Rp {{ number_format($m->subtotalpokok) }}</td>
                             <td>Rp {{ number_format($m->subtotal) }}</td>
-                           
+
                         </tr>
                     @endforeach
                 </tbody>
+                      
                 <tfoot>
                     {{-- @if ($sumTotal == 0)
                         <tr>
@@ -109,14 +109,24 @@
                     @endif --}}
                     @if ($jumlah != null)
                         <tr>
-                        
+
                             <th colspan="11"></th>
-                            <th>Total Penndapatan</th>
-                            <th>Rp {{ number_format($pendapatan) }}</th>
+                            <th>Komisi Tefa</th>
+                            <th>Rp {{ number_format($komisi_jti) }}</th>
+
+                        </tr>
+                        <tr>
+
+                            <th colspan="11"></th>
+                            <th>Komisi DWP</th>
+                            <th>Rp {{ number_format($komisi_dwp) }}</th>
 
                         </tr>
                     @endif
                 </tfoot>
+               
+         
+    
                 <tfoot>
                     {{-- @if ($sumTotal == 0)
                         <tr>
@@ -136,14 +146,32 @@
                     @endif
 
                 </tfoot>
+                <tfoot>
+                    {{-- @if ($sumTotal == 0)
+                        <tr>
+                            <td colspan="8">
+                                <center><b>Data tidak Ditemukan !
+                                    </b></center>
+                            </td>
+                        </tr>
+                    @endif --}}
+                    @if ($jumlah != null)
+                        <tr>
 
+                            <th colspan="11"></th>
+                            <th>Total Penndapatan</th>
+                            <th>Rp {{ number_format($pendapatan) }}</th>
+
+                        </tr>
+                    @endif
+                </tfoot>
 
 
 
             </table>
             {{-- <a href="" class="btn btn-primary" id="btn-cetak" target="_blank"
                 onclick="this.href='/laporan/cetak/'+ document.getElementById('tglMulai').value + '/' + document.getElementById('tglSelesai').value + '/' + document.getElementById('idKantin').value + '/' + document.getElementById('statuss').value">Cetak
-                Laporan</a> --}} 
+                Laporan</a> --}}
         </div>
     </div>
 
