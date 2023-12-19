@@ -28,6 +28,6 @@ class Kantin extends Model
 
     public function history()
     {
-        return $this->hasMany(History::class , 'id_kantin');
+        return $this->hasMany(History::class, 'id_kantin');
     }
 }

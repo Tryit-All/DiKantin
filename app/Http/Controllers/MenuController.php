@@ -26,7 +26,7 @@ class MenuController extends Controller
     public function index()
     {
         $menu = Menu::orderBy('id_kantin', 'asc')->get();
-        $kantin = Kantin::all();
+        $kantin= Kantin::all();
         // return $menu;
         return view('dashboard.menu.index', [
             'menu' => $menu,

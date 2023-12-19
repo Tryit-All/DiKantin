@@ -254,19 +254,6 @@ class ApiDikantinOld extends Controller
         }
     }
 
-    public function updateHabis(Request $request)
-    {
-        if ($request->has('id_menu')) {
-            $id = $request->input('id_menu');
-
-            Menu::where('id_menu', '=', $id)
-                ->update(['status_stok' => 'tidak ada']);
-
-            return response()->json(['success' => 'Status menu berhasil diubah']);
-        } else {
-            return response()->json(['error' => 'Parameter ID menu tidak diberikan']);
-        }
-    }
 
     public function barangAda()
     {
@@ -281,6 +268,48 @@ class ApiDikantinOld extends Controller
         $barangHabis = Menu::where('status_stok', 'tidak ada')->get();
 
         return response()->json($barangHabis);
+    }
+
+    public function updateTutup(Request $request)
+    {
+        if ($request->has('id_kantin')) {
+            $id = $request->input('id_kantin');
+
+            Menu::where('id_kantin', '=', $id)
+                ->update(['status_stok' => 'tidak ada']);
+
+            return response()->json(['success' => 'Status menu berhasil diubah']);
+        } else {
+            return response()->json(['error' => 'Parameter ID menu tidak diberikan']);
+        }
+    }
+
+    public function updateBuka(Request $request)
+    {
+        if ($request->has('id_kantin')) {
+            $id = $request->input('id_kantin');
+
+            Menu::where('id_kantin', '=', $id)
+                ->update(['status_stok' => 'ada']);
+
+            return response()->json(['success' => 'Status menu berhasil diubah']);
+        } else {
+            return response()->json(['error' => 'Parameter ID menu tidak diberikan']);
+        }
+    }
+
+    public function updateHabis(Request $request)
+    {
+        if ($request->has('id_menu')) {
+            $id = $request->input('id_menu');
+
+            Menu::where('id_menu', '=', $id)
+                ->update(['status_stok' => 'tidak ada']);
+
+            return response()->json(['success' => 'Status menu berhasil diubah']);
+        } else {
+            return response()->json(['error' => 'Parameter ID menu tidak diberikan']);
+        }
     }
 
     public function updateAda(Request $request)
