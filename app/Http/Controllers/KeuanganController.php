@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exports\HistoryKantinExport;
+use App\Exports\HistoryKurirExport;
 use App\Models\History;
 use App\Models\Kantin;
 use App\Models\Kurir;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +42,7 @@ class KeuanganController extends Controller
         $start = $start . ' 23:59:00';
         $end = $end . ' 00:00:00';
 
-        $data = History::where('id_kantin', $idKantin)->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get();
+        $data = History::with('kantin')->where('id_kantin', $idKantin)->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get();
         return view('keuangan.history-kantin-process', compact('data', 'id'));
     }
 
@@ -50,7 +52,7 @@ class KeuanganController extends Controller
         $start = $start . ' 23:59:00';
         $end = $end . ' 00:00:00';
 
-        $data = History::where('id_kurir', $idKantin)->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get();
+        $data = History::where('id_kurir', $idKantin)->with('kurir')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get();
 
         return view('keuangan.history-kurir-process', compact('data', 'id'));
     }
@@ -65,8 +67,8 @@ class KeuanganController extends Controller
 
     public function exportHistoryKurir(Request $request)
     {
-        $data = json_decode($request->input('data'));
-        return Excel::download(new HistoryKantinExport($data), 'kantin.xlsx');
+
+        return Excel::download(new HistoryKurirExport($request->input('data')), 'kurir.' . $request->input('type'));
     }
 
     public function berikanDanaKantin(Request $request)
@@ -81,7 +83,7 @@ class KeuanganController extends Controller
             DB::beginTransaction();
             $kantin = Kantin::find($request->input('id_kantin'));
             if (isset($kantin)) {
-                History::create([
+                $dateCreated = History::create([
                     'id_kantin' => $request->input('id_kantin'),
                     'total_penarikan' => $request->input('total_saldo'),
                     'kode_penarikan' => 'TRK' . rand(10000, 99999)
@@ -89,8 +91,7 @@ class KeuanganController extends Controller
                 $kantin->total_saldo = 0;
                 $kantin->save();
                 DB::commit();
-                Alert::success("Sukses", "Berhasil Memberikan Saldo");
-                return back();
+                return view('exports.penarikan-saldo', ['kode_penarikan' => $dateCreated->kode_penarikan , 'total' => $dateCreated->total_penarikan , 'nama' => $kantin->nama]);
             }
             return back()->withErrors('Kantin tidak ditemukan');
 
@@ -114,7 +115,7 @@ class KeuanganController extends Controller
             $kantin = Kurir::find($request->input('id_kurir'));
 
             if (isset($kantin)) {
-                History::create([
+                $dateCreated = History::create([
                     'id_kurir' => $request->input('id_kurir'),
                     'total_penarikan' => $request->input('total_saldo'),
                     'kode_penarikan' => 'TRK' . rand(10000, 99999)
@@ -122,8 +123,7 @@ class KeuanganController extends Controller
                 $kantin->total_saldo = 0; // set saldo to 0 again
                 $kantin->save();
                 DB::commit();
-                Alert::success("Sukses", "Berhasil Memberikan Saldo");
-                return back();
+                return view('exports.penarikan-saldo', ['kode_penarikan' => $dateCreated->kode_penarikan , 'total' => $dateCreated->total_penarikan , 'nama' => $kantin->nama]);
             }
             return back()->withErrors('Kurir tidak ditemukan');
 
