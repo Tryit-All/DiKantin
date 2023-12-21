@@ -8,6 +8,7 @@ use App\Models\Kurir;
 use App\Models\Kantin;
 use App\Models\Customer;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\DetailTransaksi;
@@ -15,13 +16,17 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
+use App\Service\NotificationService;
 use App\Http\Middleware\ApiKeyMiddleware;
+use Kreait\Firebase\Messaging\Notification;
 
 class ApiTransaction extends Controller
 {
+    private NotificationService $service;
     public function __construct()
     {
         $this->middleware(ApiKeyMiddleware::class);
+        $this->service = new NotificationService();
     }
 
     // List Riwayat Pesanan Pada Setiap Customer
@@ -48,7 +53,7 @@ class ApiTransaction extends Controller
                     ->where('transaksi.status_konfirm', '3')
                     ->where('transaksi.status_pesanan', '3')
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -64,7 +69,7 @@ class ApiTransaction extends Controller
                     ->where('transaksi.status_pesanan', '3')
                     ->whereDate('transaksi.created_at', $request->get('searchDate'))
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -80,7 +85,7 @@ class ApiTransaction extends Controller
                     ->where('transaksi.status_pesanan', '3')
                     ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -97,7 +102,7 @@ class ApiTransaction extends Controller
                     ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
                     ->whereDate('transaksi.created_at', $request->get('searchDate'))
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -229,6 +234,9 @@ class ApiTransaction extends Controller
         $Transaksi->save();
 
         foreach ($dataOrderan as $key => $value) {
+            $kantinMenu = Menu::find($value['kode_menu']);
+            $userKantin = User::with('Kantin')->where('id_kantin', $kantinMenu->id_kantin)->first();
+
             $detail = new DetailTransaksi();
             $hargaPokokMenu = Menu::where('id_menu', $value['kode_menu'])->first();
             $detail->kode_tr = $kodeTr;
@@ -239,6 +247,11 @@ class ApiTransaction extends Controller
             $detail->catatan = $value['catatan'];
             $detail->status_konfirm = 'menunggu';
             $detail->save();
+            $this->service->sendNotifToSpesidicToken($userKantin->token_fcm,
+                Notification::create('Pesanan Baru', 'Ada Pesanan Baru nih')
+                , [
+                    'detail' => $detail
+                ]);
         }
         // send message to customer
         return $this->sendMassage("Data berhasil di tambahkan", 200, true);
@@ -254,7 +267,7 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'proses')
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'proses')->orderBy('transaksi.created_at', 'desc')
             ->get();
 
         if (sizeof($transaksi) != 0) {
@@ -321,7 +334,7 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'kirim')
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'kirim')->orderBy('transaksi.created_at', 'desc')
             ->get();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -369,6 +382,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '2')
             ->where('transaksi.status_pesanan', '3')
             ->where('status_pengiriman', 'terima')
+            ->orderBy('transaksi.created_at', 'desc')
             ->get();
 
         if (sizeof($transaksi) != 0) {
@@ -417,6 +431,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '1')
             ->where('transaksi.status_pesanan', '3')
             ->where('transaksi.status_pengiriman', 'proses')
+            ->orderBy('transaksi.created_at', 'desc')
             ->get();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -469,6 +484,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '2')
             ->where('transaksi.status_pesanan', '3')
             ->groupBy('transaksi.kode_tr')
+            ->orderBy('transaksi.created_at', 'desc')
             ->get();
 
         // return $transaksi;
@@ -524,6 +540,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '3')
             ->where('transaksi.status_pesanan', '3')
             ->groupBy('transaksi.kode_tr')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // return $transaksi;

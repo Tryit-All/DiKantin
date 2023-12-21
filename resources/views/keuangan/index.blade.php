@@ -34,7 +34,7 @@
                                         class="btn btn-warning">History Penarikan</a>
                                 </div>
                                 <div>
-                                    <form action="{{ route('berikan-dana-kantin') }}" method="post">
+                                    <form action="{{ route('berikan-dana-kantin') }}" method="post" target="_blank">
                                         @csrf
                                         @method('post')
                                         <input type="text" value="{{ $item->total_saldo }}" hidden name="total_saldo">
@@ -73,7 +73,14 @@
                                             class="btn btn-warning">History Penarikan</a>
                                     </div>
                                     <div>
-                                        <button type="button" class="btn btn-primary">Berikan Ke kurir</button>
+                                        <form action="{{ route('berikan-dana-kurir', ['id' => 1]) }}" method="post" target="_blank">
+                                            @method('post')
+                                            @csrf
+                                            <input type="text" value="{{ $item->total_saldo }}" hidden
+                                                name="total_saldo">
+                                            <input type="text" value="{{ $item->id_kurir }}" hidden name="id_kurir">
+                                            <button type="submit" class="btn btn-primary">Berikan Ke kantin</button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>

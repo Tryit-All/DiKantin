@@ -8,12 +8,21 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class HistoryKurirExport implements FromView
 {
+
+    private $data;
+
+    public function __construct($data) {
+        $this->data =  $data;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function view() : View 
     {
         //
-        return view();
+        $data = json_decode($this->data);
+        
+        return view('exports.history-kurir' , ['data' => $data]);
     }
 }

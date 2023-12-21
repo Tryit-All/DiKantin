@@ -435,9 +435,12 @@ class ApiDikantinOld extends Controller
             ->orderBy('transaksi.created_at', 'desc')
             ->count();
 
+        $statusKantin = Kantin::select('id_kantin', 'status')->where('kantin.id_kantin', $kantin->id_kantin)->first();
+
         return $this->sendMassage([
             "selesai" => $terima,
-            'dilayani' => $proces
+            'dilayani' => $proces,
+            "statusKantin" => $statusKantin->status
         ], 200, true);
     }
 
