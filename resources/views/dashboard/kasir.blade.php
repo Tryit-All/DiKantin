@@ -25,7 +25,7 @@
                     <div class="col-md-3"><input type="text" placeholder="Alamat" class="form-control" id="inputtelepon"
                             class="form-control bg-lingkaran" readonly style="border-radius: 10px;"></div>
                 </div>
-                
+
                 <div class="row mt-2">
                     {{-- <div class="col-md-12">
                         <input type="text" autocomplete="off" class="form-control d-inline" onchange="getMenu()"
@@ -35,9 +35,9 @@
                         <select class="form-select" style="border-radius: 10px;" aria-label="Default select example"
                             name="kantin" onchange="getMenu()" required id="kantin">
                             <option value="">Semua Kantin</option>
-                          @foreach ($kantin as $item)
-                          <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
-                          @endforeach
+                            @foreach ($kantin as $item)
+                                <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -119,7 +119,7 @@
                                 </select>
                             </div>
                         </div>
-                    
+
                         <div class="mb-3">
                             <div class="d-flex justify-content-between mt-0">
                                 <p class="fw-bold">Nama Customer</p>
@@ -454,7 +454,7 @@
             }
 
             function getMenu() {
-            
+
                 // searching = $('#search-input').val();
                 searching = $('#kantin').val();
                 makanan = $('#btn-check-makanan').is(':checked') ? 'Makanan' : '';
@@ -467,19 +467,14 @@
                         html = ''
                         response.data.forEach((item) => {
                             html += `<div class="col-md-3 mt-2 pb-2">
-                                    <div id="menu_luar" class="bungkus-menu bg-second bg-white" style="cursor: pointer; border-radius : 10px;" data-nama="${item.nama}" data-harga="${item.harga}" data-id="${item.id_menu}" onclick="showCart(this)">
-                                    <img src="public/${item.foto}" alt="" width="80px"
-                                        class="justify-content-center align-items-center mx-auto d-block p-2"
-                                        id="menu_dalam" style="object-fit: cover;
-    height: 100px;">
-                                    <p class="m-0 text-center text-primary fw-bold" id="harga_menu">Rp
-                                        ${item.harga}</p>
-                                    <p class="m-0 text-center" id="nama_menu" onclick="namamakanan(this.value)">
-                                         ${item.nama}</p>
-                                    <p class="text-primary fw-bold m-0 text-center" id="id_kantin"><small> <i>Kantin ${item.id_kantin} </i>
-                                            </small></p>
-                                    </div>
-                                </div>`;
+    <div id="menu_luar" class="bungkus-menu bg-second bg-white" style="cursor: pointer; border-radius: 10px;" data-nama="${item.nama}" data-harga="${item.harga}" data-id="${item.id_menu}" onclick="showCart(this)">
+        <img src="public/${item.foto}" alt="" class="justify-content-center align-items-center mx-auto d-block p-2 img-fluid" style="object-fit: cover; width: 100%; height: 100px;">
+        <p class="m-0 text-center text-primary fw-bold" id="harga_menu">Rp ${item.harga}</p>
+        <p class="m-0 text-center" id="nama_menu" onclick="namamakanan(this.value)"> ${item.nama}</p>
+        <p class="text-primary fw-bold m-0 text-center" id="id_kantin"><small> <i>Kantin ${item.id_kantin} </i></small></p>
+    </div>
+</div>
+`;
                         });
 
                         $('#data-menu').html(html);
@@ -494,7 +489,7 @@
             $(document).ready(function() {
                 $('#id_customer').on('change', function() {
                     const value = $(this).val();
-               
+
                     idCus = value
                     console.log(idCus);
 
@@ -550,7 +545,7 @@
                         jumlah: parseInt($(cart[i]).find(`span.qty`).html()),
                         harga: parseInt($(cart[i]).find(`.item-price`).html()),
                         diskon: $(cart[i]).find(`input`).val(),
-                    catatan: $(cart[i]).find('textarea#keterangan').val()
+                        catatan: $(cart[i]).find('textarea#keterangan').val()
                     });
                 }
 
