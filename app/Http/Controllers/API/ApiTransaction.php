@@ -267,7 +267,7 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'proses')
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'proses')->orderBy('created_at', 'desc')
             ->get();
 
         if (sizeof($transaksi) != 0) {
@@ -334,7 +334,7 @@ class ApiTransaction extends Controller
             return $this->sendMassage('Token tidak valid', 401, false);
         }
 
-        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'kirim')
+        $transaksi = Transaksi::with('detail_transaksi.Menu')->where('id_customer', $user->id_customer)->where('status_pengiriman', 'kirim')->orderBy('created_at', 'desc')
             ->get();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -382,6 +382,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '2')
             ->where('transaksi.status_pesanan', '3')
             ->where('status_pengiriman', 'terima')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         if (sizeof($transaksi) != 0) {
@@ -430,6 +431,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '1')
             ->where('transaksi.status_pesanan', '3')
             ->where('transaksi.status_pengiriman', 'proses')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // return $this->sendMassage($transaksi, 200, true);
@@ -482,6 +484,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '2')
             ->where('transaksi.status_pesanan', '3')
             ->groupBy('transaksi.kode_tr')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // return $transaksi;
@@ -537,6 +540,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '3')
             ->where('transaksi.status_pesanan', '3')
             ->groupBy('transaksi.kode_tr')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // return $transaksi;
