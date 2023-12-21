@@ -53,7 +53,7 @@ class ApiTransaction extends Controller
                     ->where('transaksi.status_konfirm', '3')
                     ->where('transaksi.status_pesanan', '3')
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -69,7 +69,7 @@ class ApiTransaction extends Controller
                     ->where('transaksi.status_pesanan', '3')
                     ->whereDate('transaksi.created_at', $request->get('searchDate'))
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -85,7 +85,7 @@ class ApiTransaction extends Controller
                     ->where('transaksi.status_pesanan', '3')
                     ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
@@ -102,7 +102,7 @@ class ApiTransaction extends Controller
                     ->where('menu.nama', 'LIKE', $request->get('searchAll') . '%')
                     ->whereDate('transaksi.created_at', $request->get('searchDate'))
                     ->groupBy('transaksi.kode_tr', 'menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'menu.diskon', 'transaksi.created_at')
-                    ->orderBy('transaksi.created_at', 'ASC')
+                    ->orderBy('transaksi.created_at', 'desc')
                     // ->limit(10)
                     ->get();
 
