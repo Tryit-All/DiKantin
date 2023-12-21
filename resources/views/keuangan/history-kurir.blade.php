@@ -2,8 +2,11 @@
 @section('title', 'History Penarikan')
 
 @section('content')
-    
-    <input type="text" id="id_kantin" class="d-none" value="{{$id}}"></input>
+
+    @php
+        $jsonContent = json_encode($data);
+    @endphp
+    <input type="text" id="id_kantin" class="d-none" value="{{ $id }}"></input>
     <div class="row mb-3 mt-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -65,4 +68,43 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cetak Excel</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('export-kurir') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="format">Format Excel</label>
+                        <select class="form-select" id="format" aria-label="Default select example" name="type">
+                            <option value="xlsx">XLSX</option>
+                            <option value="csv">CSV</option>
+                            <input type="text" id="id_data" hidden name="data">
+
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Cetak Sekarang</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#table-menu').DataTable();
+            $(document).on('click', '.btn-cetak', function() {
+                var data = {!! json_encode($jsonContent) !!}
+                $('#id_data').val(data);
+                alert($data);
+            });
+        });
+    </script>
+
 @endsection

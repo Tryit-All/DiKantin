@@ -140,6 +140,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get("/keuangan/kantin/{id}/history/{start}/{end}", [KeuanganController::class, "procesHistoryKantin"]);
     Route::get("/keuangan/kurir/{id}/history/{start}/{end}", [KeuanganController::class, "procesHistoryKurir"]);
     Route::post("/keuangan/history/kantin/export", [KeuanganController::class, "exportHistoryKantin"])->name("export-kantin");
+    Route::post("/keuangan/history/kurir/export" , [KeuanganController::class , 'exportHistoryKurir'])->name('export-kurir');
 
 });
 Route::get('/kurirr', [LaporanKurirController::class, 'index']);
