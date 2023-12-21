@@ -10,6 +10,8 @@
     <meta content="Coderthemes" name="author">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('img/logo-kotak.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {{-- databale --}}
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
 
@@ -70,6 +72,12 @@
                             <a href="/kasir" class="side-nav-link text-white fw-bold">
                                 <i class="uil-receipt-alt"></i>
                                 <span> Kasir </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item text-white">
+                            <a href="{{ route('online') }}" class="side-nav-link text-white fw-bold">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span> Data Transaksi Online </span>
                             </a>
                         </li>
 
@@ -211,6 +219,12 @@
                             <a href="/kasir" class="side-nav-link text-white fw-bold">
                                 <i class="uil-receipt-alt"></i>
                                 <span> Kasir </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item text-white">
+                            <a href="{{ route('online') }}" class="side-nav-link text-white fw-bold">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span> Data Transaksi Online </span>
                             </a>
                         </li>
 
@@ -460,7 +474,9 @@
     <!-- demo app -->
     <script src="{{ URL::asset('assets/js/pages/demo.dashboard.js') }}"></script>
     <!-- end demo js-->
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
     <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <!-- Include library SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>

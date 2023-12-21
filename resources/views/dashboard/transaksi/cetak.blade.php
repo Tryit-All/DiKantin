@@ -23,7 +23,7 @@
         <div class="d-flex justify-content-between" style="font-size: 11px;">
             <div class="order">
                 <p style="margin-bottom: 1px;">{{ $penjualan->kode_tr }}</p>
-                <p style="margin-bottom: 1px;">No Meja : {{ $penjualan->no_meja }}</p>
+                <p style="margin-bottom: 1px;">Nama Customer : {{ $penjualan->Customer->nama }}</p>
             </div>
             <div class="value">
                 <p style="margin-bottom: 1px; text-align: right;">
