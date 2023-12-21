@@ -628,7 +628,6 @@ class ApiController extends Controller
             // return $kode_tr;
             $statusPesanan = $transaksi->status_pesanan;
             $statusKonfirm = $transaksi->status_konfirm;
-
             $idKurir = $transaksi->id_kurir;
             $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
             $kurirToken = Kurir::where('token', $kurir)->first();
