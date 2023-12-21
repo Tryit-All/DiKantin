@@ -645,6 +645,7 @@ class ApiController extends Controller
                     ]);
                     $kurirToken->total_saldo += 3000;
                     $kantindata->total_saldo += $subTotalHargaPokok;
+                    $kantinData->save();
                     $kurirToken->save();
                     if (isset($kantinData->fcm_token)) {
                         $this->service->sendNotifToSpesidicToken($kantinData->fcm_token, Notification::create("Pesanan Diterima", "Pesananmu Sudah diterima oleh customer"), [
