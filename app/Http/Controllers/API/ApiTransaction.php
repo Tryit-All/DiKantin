@@ -233,7 +233,7 @@ class ApiTransaction extends Controller
         $Transaksi->save();
 
         foreach ($dataOrderan as $key => $value) {
-            $kantinMenu = Menu::find($value['id_menu']);
+            $kantinMenu = Menu::find($value['kode_menu']);
             $userKantin = User::with('Kantin')->where('id_kantin', $kantinMenu->id_kantin)->first();
 
             $detail = new DetailTransaksi();
