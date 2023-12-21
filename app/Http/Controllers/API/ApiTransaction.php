@@ -8,6 +8,7 @@ use App\Models\Kurir;
 use App\Models\Kantin;
 use App\Models\Customer;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\DetailTransaksi;
@@ -15,10 +16,13 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
+use App\Service\NotificationService;
 use App\Http\Middleware\ApiKeyMiddleware;
+use Kreait\Firebase\Messaging\Notification;
 
 class ApiTransaction extends Controller
 {
+    private NotificationService $service;
     public function __construct()
     {
         $this->middleware(ApiKeyMiddleware::class);
@@ -229,6 +233,9 @@ class ApiTransaction extends Controller
         $Transaksi->save();
 
         foreach ($dataOrderan as $key => $value) {
+            $kantinMenu = Menu::find($value['id_menu']);
+            $userKantin = User::with('Kantin')->where('id_kantin', $kantinMenu->id_kantin)->first();
+
             $detail = new DetailTransaksi();
             $hargaPokokMenu = Menu::where('id_menu', $value['kode_menu'])->first();
             $detail->kode_tr = $kodeTr;
@@ -239,6 +246,11 @@ class ApiTransaction extends Controller
             $detail->catatan = $value['catatan'];
             $detail->status_konfirm = 'menunggu';
             $detail->save();
+            $this->service->sendNotifToSpesidicToken($userKantin->token_fcm,
+                Notification::create('Pesanan Baru', 'Ada Pesanan Baru nih')
+                , [
+                    'detail' => $detail
+                ]);
         }
         // send message to customer
         return $this->sendMassage("Data berhasil di tambahkan", 200, true);
