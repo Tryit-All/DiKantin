@@ -26,6 +26,7 @@ class ApiTransaction extends Controller
     public function __construct()
     {
         $this->middleware(ApiKeyMiddleware::class);
+        $this->service = new NotificationService();
     }
 
     // List Riwayat Pesanan Pada Setiap Customer
