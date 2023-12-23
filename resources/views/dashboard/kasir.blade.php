@@ -329,7 +329,7 @@
                                 </div>
                                 <div class="col-md-15 mt-1 mb-2">
                                     <p class="m-0 text-dark">Catatan Menu</p>
-                                    <textarea name="keterangan" id="keterangan" class="custom-textarea" cols="18" rows="1"></textarea>
+                                    <textarea name="keterangan" id="keterangan" style="width: 100%; resize: none;" cols="18" rows="1"></textarea>
                                 </div>
                                 <hr style="height: 2px">
                             </div>`

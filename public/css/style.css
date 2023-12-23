@@ -214,13 +214,6 @@ body {
     align-items: center !important;
 }
 
-.custom-textarea {
-    width: 100%;
-    /* Atur lebar textarea menjadi 100% dari parent */
-    resize: none;
-    /* Menghilangkan fungsi resize */
-}
-
 .input-field .input {
     background-color: #f2f2f28c;
     color: #343435;
