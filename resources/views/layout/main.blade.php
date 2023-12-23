@@ -355,7 +355,7 @@
                                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <span class="account-user-avatar">
 
-                                    <img src="{{ url('/') . '/profile/' . auth()->user()->foto }}" alt=""
+                                    <img src="{{ url('/') . '/' . auth()->user()->foto }}" alt=""
                                         class="rounded-circle" style="width: 30px; height: 30px; object-fit:cover;">
                                 </span>
                                 <span>
