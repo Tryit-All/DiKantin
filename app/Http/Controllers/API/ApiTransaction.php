@@ -540,7 +540,7 @@ class ApiTransaction extends Controller
             ->where('transaksi.status_konfirm', '3')
             ->where('transaksi.status_pesanan', '3')
             ->groupBy('transaksi.kode_tr')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('transaksi.created_at', 'desc')
             ->get();
 
         // return $transaksi;
