@@ -175,8 +175,8 @@
                             <button type="submit" class="btn btn-simpan form-control text-white fw-bold" id="btn_save"
                                 onclick="simpanAll()">Simpan</button>
                             <a href="javascript:void(0);" id="linkhapussemua"
-                                class="btn btn-clearall form-control mt-2  relative mt-0 text-white fw-bold"
-                                id="btn_clearAll" onclick="location.reload()">Hapus Semua</a>
+                                class="btn btn-clearall form-control mt-2  relative text-white fw-bold" id="btn_clearAll"
+                                onclick="location.reload()">Hapus Semua</a>
                         </div>
                     </div>
                 </div>
