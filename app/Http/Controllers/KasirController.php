@@ -20,6 +20,7 @@ class KasirController extends Controller
 
     public function index(Request $request)
     {
+        
         $pencarian = $request->q;
         $customer = Customer::where('nama', 'Customer Offline')->first();
         $kantin = Kantin::all();
