@@ -9,11 +9,12 @@
                         {{-- <input type="text" placeholder="ID Customer" class="form-control" name="id_customer"
                             style="border-radius: 10px;" id="id_customer"> --}}
 
-                        <select class="js-example-basic-single" name="id_customer" id="id_customer">
+                        <select class="form-select" style="border-radius: 10px;" name="id_customer" id="id_customer">
                             <option value="">Pilih Pelanggan</option>
-                            @foreach ($customer as $item => $value)
+                            <option value="{{ $customer->id_customer }}">{{ $customer->nama }}</option>
+                            {{-- @foreach ($customer as $item => $value)
                                 <option value="{{ $value->id_customer }}">{{ $value->nama }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
 
@@ -40,18 +41,30 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="btn-check-makanan" name="darkmode"
+                                value="something" onchange="getMenu()">
+                            <label class="form-check-label" for="tn-check-makanan">Makanan</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="btn-check-minuman" name="darkmode"
+                                value="something" onchange="getMenu()">
+                            <label class="form-check-label" for="tn-check-minuman">Minuman</label>
+                        </div>
+                    </div>
+                    {{-- <div class="col-md-2">
                         <input class="btn-check" type="checkbox" style="border-radius: 10px;" id="btn-check-makanan"
                             autocomplete="off" onchange="getMenu()">
                         <label class="btn btn-outline-primary ml-7" style="border-radius: 10px;"
                             for="btn-check-makanan">Makanan</label><br>
-                    </div>
-                    <div class="col-md-2">
+                    </div> --}}
+                    {{-- <div class="col-md-2">
                         <input class="btn-check" type="checkbox" style="border-radius: 10px;" id="btn-check-minuman"
                             autocomplete="off" onchange="getMenu()">
                         <label class="btn btn-outline-primary" style="border-radius: 10px;"
                             for="btn-check-minuman">Minuman</label><br>
-                    </div>
+                    </div> --}}
 
 
                 </div>
@@ -296,21 +309,14 @@
                 if (!isThere) {
                     let nama = $(element).data('nama')
                     let harga = $(element).data('harga')
-                    let html = `<div class="cart-menu row align-items-center mt-3" data-id="${id}">
-                                <div class="col-md-6">
+                    let html = `<div class="cart-menu row align-items-center mt-2" data-id="${id}">
+                                <div class="col-md-4">
                                     <p class="m-0 text-dark">${nama}</p>
                                     <p class="m-0 text-secondary subtotal-item">${harga}</p>
                                     <p class="d-none item-price">${harga}</p>
                                 </div>
-                                <div class="col-md-6 mt-3">
-                                    <p class="m-0 text-dark">Catatan Menu</p>
-                                    <textarea name="keterangan" id="keterangan" cols="12" rows="1"></textarea>
-                            
-                                </div>
                                 <div class="col-5 mb-2">
-                                
                                         <p class="m-0">x<span class="qty">1</span></p>
-                                
                                 </div>
                                 <div class="col-3">
                                     <div class="d-flex align-items-center justify-content-end gap-1">
@@ -320,6 +326,10 @@
                                             <i class="fa-solid fa-trash-can text-white"></i>
                                         </button>
                                     </div>
+                                </div>
+                                <div class="col-md-15 mt-1 mb-2">
+                                    <p class="m-0 text-dark">Catatan Menu</p>
+                                    <textarea name="keterangan" id="keterangan" class="custom-textarea" cols="18" rows="1"></textarea>
                                 </div>
                                 <hr style="height: 2px">
                             </div>`
@@ -467,14 +477,13 @@
                         html = ''
                         response.data.forEach((item) => {
                             html += `<div class="col-md-3 mt-2 pb-2">
-    <div id="menu_luar" class="bungkus-menu bg-second bg-white" style="cursor: pointer; border-radius: 10px;" data-nama="${item.nama}" data-harga="${item.harga}" data-id="${item.id_menu}" onclick="showCart(this)">
-        <img src="public/${item.foto}" alt="" class="justify-content-center align-items-center mx-auto d-block p-2 img-fluid" style="object-fit: cover; width: 100%; height: 100px;">
-        <p class="m-0 text-center text-primary fw-bold" id="harga_menu">Rp ${item.harga}</p>
-        <p class="m-0 text-center" id="nama_menu" onclick="namamakanan(this.value)"> ${item.nama}</p>
-        <p class="text-primary fw-bold m-0 text-center" id="id_kantin"><small> <i>Kantin ${item.id_kantin} </i></small></p>
-    </div>
-</div>
-`;
+                                        <div id="menu_luar" class="bungkus-menu bg-second bg-white" style="cursor: pointer; border-radius: 10px;" data-nama="${item.nama}" data-harga="${item.harga}" data-id="${item.id_menu}" onclick="showCart(this)">
+                                                <img src="public/${item.foto}" alt="" class="justify-content-center align-items-center mx-auto d-block p-2 img-fluid" style="object-fit: cover; width: 100%; height: 100px;">
+                                                <p class="m-0 text-center text-primary fw-bold" id="harga_menu">Rp ${item.harga}</p>
+                                                <p class="m-0 text-center" id="nama_menu" onclick="namamakanan(this.value)"> ${item.nama}</p>
+                                                <p class="text-primary fw-bold m-0 text-center" id="id_kantin"><small> <i>Kantin ${item.id_kantin} </i></small></p>
+                                        </div>
+                                    </div>`;
                         });
 
                         $('#data-menu').html(html);

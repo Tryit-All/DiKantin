@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('validate')->group(function () {
     // Customer
     Route::post('/login', [ApiController::class, 'loginUser']);
+    Route::post('/getTokenCustomer', [ApiController::class, 'getTokenCustomer']);
     Route::post('/register', [ApiController::class, 'registerUser']);
     Route::post('/forgotPassword', [ApiAuth::class, 'forgotPassword']);
     Route::post('/customerAccount', [ApiTransaction::class, 'editCustomer']);
@@ -38,6 +39,7 @@ Route::prefix('validate')->group(function () {
 
     // Kurir
     Route::post('/loginKurir', [ApiController::class, 'loginKurir']);
+    Route::post('/getTokenKurir', [ApiController::class, 'getTokenKurir']);
     Route::post('/kurirProfile', [ApiController::class, 'kurirImage']);
     Route::post('/editProfile', [ApiController::class, 'editProfile']);
     Route::get('/kurirShow', [ApiController::class, 'tampilKurir']);
@@ -46,6 +48,7 @@ Route::prefix('validate')->group(function () {
 
     // Kantin
     Route::post('/loginKantin', [ApiController::class, 'loginKantin']);
+    Route::post('/getTokenKantin', [ApiController::class, 'getTokenKantin']);
     Route::post('/logoutKantin', [ApiController::class, 'logout']);
     Route::post('/updateprofile', [ApiController::class, 'updateprofile']);
     Route::post('/editStatus', [ApiController::class, 'editStatus']);

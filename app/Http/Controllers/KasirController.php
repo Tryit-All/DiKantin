@@ -15,16 +15,17 @@ class KasirController extends Controller
     function __construct()
     {
         $this->middleware([KasirMiddleware::class]);
-     
+
     }
 
     public function index(Request $request)
     {
         $pencarian = $request->q;
-        $customer = Customer::all();
+        $customer = Customer::where('nama', 'Customer Offline')->first();
         $kantin = Kantin::all();
         $penjualan = Transaksi::all();
         $menu = Menu::where('nama', 'like', "%$pencarian%")->get();
+        // dd($customer);
         // $menu = Menu::orderBy('id_kantin', 'asc')->get();
 
         return view('dashboard.kasir', [

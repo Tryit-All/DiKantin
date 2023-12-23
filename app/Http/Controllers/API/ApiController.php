@@ -162,6 +162,25 @@ class ApiController extends Controller
         }
     }
 
+    public function getTokenCustomer(Request $request)
+    {
+        $idCustomer = $request->input('id_customer');
+        // dd($idCustomer);
+
+        if (!isset($idCustomer)) {
+            return $this->sendMassage("ID Customer tidak sesuai", 401, false);
+        }
+
+        $dataCustomer = Customer::where('id_customer', $idCustomer)->first();
+
+        if (!$dataCustomer) {
+            return $this->sendMassage("Data Customer tidak ditemukan", 404, false);
+        }
+
+        return $this->sendMassage($dataCustomer, 200, true);
+
+    }
+
     // Controller Kurir
     public function loginKurir(Request $request)
     {
@@ -193,6 +212,24 @@ class ApiController extends Controller
             return $this->sendMassage('Username tidak ditemukan', 400, false);
         }
     }
+
+    public function getTokenKurir(Request $request)
+    {
+        $idKurir = $request->input('id_kurir');
+
+        if (!isset($idKurir)) {
+            return $this->sendMassage("ID Kurir tidak sesuai", 401, false);
+        }
+
+        $dataKurir = Kurir::where('id_kurir', $idKurir)->first();
+
+        if (!$dataKurir) {
+            return $this->sendMassage("Data Kurir tidak ditemukan", 404, false);
+        }
+
+        return $this->sendMassage($dataKurir, 200, true);
+    }
+    // End Controller Kurir
 
     // Controller Kantin
     public function loginKantin(Request $request)
@@ -261,6 +298,24 @@ class ApiController extends Controller
                 return $this->sendMassage($selectStatus->status, 200, true);
             }
         }
+    }
+
+    public function getTokenKantin(Request $request)
+    {
+        $idKantin = $request->input('id_kantin');
+
+        if (!isset($idKantin)) {
+            return $this->sendMassage("ID Kantin tidak sesuai", 401, false);
+        }
+
+        $dataKantin = User::where('id_kantin', $idKantin)->first();
+
+        if (!$dataKantin) {
+            return $this->sendMassage("Data Kantin tidak ditemukan", 404, false);
+        }
+
+        return $this->sendMassage($dataKantin, 200, true);
+
     }
     // End Controller Kantin
 
