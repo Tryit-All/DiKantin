@@ -19,10 +19,14 @@ class DetailTransaksi extends Model
         return $this->belongsTo(Transaksi::class, 'kode_tr', 'kode_tr');
     }
 
-    public function Menu()
+    public function menu()
     {
-        return $this->hasOne(Menu::class, 'id_menu', 'kode_menu');
+        return $this->belongsTo(Menu::class, 'kode_menu');
     }
+
+    
+
+
 
     public static function getTotalMenuByTanggal($tanggal)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailTransaksi;
 use App\Models\Menu;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -28,14 +29,33 @@ class TransaksiController extends Controller
             'data' => $transaksi
         ]);
     }
+    public function order_online()
+    {
+        
+        $transaksi = Transaksi::with(['detail_transaksi','Customer','Kurir'])->where('status_pengiriman','kirim')
+        ->where('no_meja','=',0)->get();
+        return view('dashboard.transaksi.pesanan_online',compact('transaksi'));
+
+        // return $transaksi;
+    }
 
     public function detail($id)
     {
-        $penjualan = Transaksi::with(['detail_transaksi', 'detail_transaksi.Menu'])
+        $penjualan = Transaksi::with(['detail_transaksi', 'detail_transaksi','Customer'])
             ->where('kode_tr', $id)
             ->first();
         // return $penjualan;
         return view('dashboard.transaksi.cetak', [
+            'penjualan' => $penjualan
+        ]);
+    }
+    public function detail_tr($id)
+    {
+        $penjualan = DetailTransaksi::with(['Menu'])
+            ->where('kode_tr', $id)->get();
+          
+        // return $penjualan;
+        return view('dashboard.transaksi.detail_tranakasi', [
             'penjualan' => $penjualan
         ]);
     }
