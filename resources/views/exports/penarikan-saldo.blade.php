@@ -42,7 +42,6 @@
                 <p style="margin-bottom: 1px;">Penarikan Saldo Kantin / Kurir</p>
                 <p style="margin-bottom: 1px;">No Transaksi : {{$kode_penarikan}}</p>
                 <p style="margin-bottom: 1px;">Tanggal      : {{date('Y-m-d')}}</p>
-
             </div>
         </div>
         <hr class="mb-1 mt-0" style="border-top: 2px dotted rgb(0, 0, 0)">

@@ -19,6 +19,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SuccesController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\KasirMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,9 +69,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/trouble/{kode_tr}', [SuccesController::class, 'trouble_transaction']);
 
     // transaksi
-    Route::get('/transaksi', [TransaksiController::class, 'index']);
-    Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
-    Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
+
+        
+        Route::get('/transaksi', [TransaksiController::class, 'index']);
+        Route::get('/online', [TransaksiController::class,'order_online'])->name('online');
+        Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
+        Route::get('/detail_tr/{id}', [TransaksiController::class, 'detail_tr']);
+        Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
+    
+
 
     Route::get('/productAll', [MenuController::class, 'product']);
     Route::get('/searchProductAll', [MenuController::class, 'searchProduct']);
