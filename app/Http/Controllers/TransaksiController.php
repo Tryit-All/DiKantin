@@ -32,13 +32,11 @@ class TransaksiController extends Controller
     public function order_online()
     {
         
-        $transaksi = Transaksi::with(['detail_transaksi','Customer','Kurir'])->where('status_pengiriman','proses')
-        ->where('no_meja','=',null)->get();
+        $transaksi = Transaksi::with(['detail_transaksi','Customer','Kurir'])->where('status_pengiriman','kirim')
+        ->where('no_meja','=',0)->get();
         return view('dashboard.transaksi.pesanan_online',compact('transaksi'));
 
         // return $transaksi;
-
-      
     }
 
     public function detail($id)

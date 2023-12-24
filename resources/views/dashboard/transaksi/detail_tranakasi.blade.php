@@ -27,9 +27,9 @@
                              <td>{{ $m->kode_tr}}</td>
                             <td>{{ $m->Menu->nama }}</td>
                             <td>Rp {{ number_format($m->Menu->harga) }}</td>
-                            <td>Rp {{ $m->QTY }}</td>
+                            <td>{{ $m->QTY }}</td>
                             <td>Rp {{ number_format($m->subtotal_bayar) }}</td>
-                            <td>Rp {{ $m->catatan }}</td>
+                            <td>{{ $m->catatan }}</td>
                             <td>{{ $m->Menu->Kantin->nama }}</td> 
                           
                         </tr>

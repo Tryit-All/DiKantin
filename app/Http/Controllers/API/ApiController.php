@@ -438,12 +438,18 @@ class ApiController extends Controller
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
                         ]);
+                        $detailTransaksi = DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->get();
+                        foreach ($detailTransaksi as $key => $value) {
+                            # code...
+                            $subTotal = $value->subtotal_hargapokok;
+                            $kantinData = $value->menu->kantin;
+                            $kantinData->total_saldo += $subTotal;
+                            $kantinData->save();
+                        }
                     } else {
                         return $this->sendMassage('Anda sudah memproses pesanan', 400, false);
                     }
                 }
-                // return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
-
             }
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
@@ -678,18 +684,16 @@ class ApiController extends Controller
             }
             // return $this->sendMassage('status konfirm = 2, status pesanan = 3, status pengiriman = kirim', 400, true);
         } elseif ($kode == '4') {
-
             $kode_tr = $transaksi->kode_tr;
             // return $kode_tr;
             $statusPesanan = $transaksi->status_pesanan;
             $statusKonfirm = $transaksi->status_konfirm;
             $idKurir = $transaksi->id_kurir;
+
             $idKurir2 = Kurir::select('id_kurir')->where('token', $kurir)->first(); // sementara bolo
             $kurirToken = Kurir::where('token', $kurir)->first();
             $kurir2 = $idKurir2->id_kurir; // sementara bolo
             $kantinData = User::where('id_kantin', $kantin)->first();
-            $subTotalHargaPokok = DetailTransaksi::where('kode_tr', $kodeTransaksi)->sum('subtotal_hargapokok');
-            $kantindata = Kantin::find($kantin);
             if ($kode_tr == $kodeTransaksi) {
                 if ($idKurir == $kurir2 && $statusKonfirm == '2' && $statusPesanan == '3') {
                     Transaksi::where('kode_tr', $kodeTransaksi)->update([
@@ -697,10 +701,17 @@ class ApiController extends Controller
                         'status_pengiriman' => 'terima',
                         'bukti_pengiriman' => 'Done'
                     ]);
+                    $detailTransaksiKantin = DetailTransaksi::where('kode_tr', $kodeTransaksi)->with('menu')->get();
+                    foreach ($detailTransaksiKantin as $key => $value) {
+                        # code...
+                        $subTotal = $value->subtotal_hargapokok;
+                        $kantinData = $value->menu->kantin;
+                        $kantinData->total_saldo += $subTotal;
+                        $kantinData->save();
+                    }
                     $kurirToken->total_saldo += 3000;
-                    $kantindata->total_saldo += $subTotalHargaPokok;
-                    $kantinData->save();
                     $kurirToken->save();
+
                     if (isset($kantinData->fcm_token)) {
                         $this->service->sendNotifToSpesidicToken($kantinData->fcm_token, Notification::create("Pesanan Diterima", "Pesananmu Sudah diterima oleh customer"), [
                             'kode_tr' => $kodeTransaksi,
@@ -730,7 +741,6 @@ class ApiController extends Controller
             }
             // return $this->sendMassage('status konfirm = 3, status pesanan = 3, status pengiriman = terima', 400, true);
         } elseif ($kode == '6') {
-
             if (isset($kantin, $kodeMenu, $kodeTransaksi)) {
                 $statusKonfirm = DetailTransaksi::join('menu', 'detail_transaksi.kode_menu', '=', 'menu.id_menu')
                     ->select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu', 'menu.id_kantin')
@@ -739,25 +749,20 @@ class ApiController extends Controller
                     ->where('detail_transaksi.kode_menu', $kodeMenu)
                     ->first();
 
-                $subTotalHargaPokok = DetailTransaksi::where('kode_tr', $kodeTransaksi)->sum('subtotal_hargapokok');
-
                 if (isset($statusKonfirm)) {
                     $kodeIdKantin = $statusKonfirm->id_kantin;
                     $kodeMenu = $statusKonfirm->kode_menu;
                     $status = $statusKonfirm->status_konfirm;
-                    $kantindata = Kantin::find($kantin);
+                  
                     if ($status == "memasak" && $kodeIdKantin == $kantin) {
                         $konfirm_status = "selesai";
                         DetailTransaksi::where('kode_menu', $kodeMenu)->where('kode_tr', $kodeTransaksi)->update([
                             'status_konfirm' => $konfirm_status,
                         ]);
-                        $kantindata->total_saldo += $subTotalHargaPokok;
-                        $kantindata->save();
                     } else {
                         return $this->sendMassage('Anda sudah memproses pesanan', 400, false);
                     }
                 }
-                // return $this->sendMassage('Kode transaksi tidak sesuai', 404, false);
             }
 
             $validatePesanan = DetailTransaksi::select('detail_transaksi.status_konfirm', 'detail_transaksi.kode_menu')->where('detail_transaksi.kode_tr', $kodeTransaksi)->get()->toArray();
@@ -788,12 +793,18 @@ class ApiController extends Controller
                     'status_konfirm' => '3',
                     'status_pengiriman' => 'terima'
                 ]);
+                $dataTransaksi = Transaksi::where('kode_tr' , $kodeTransaksi)->with('detail_transaksi' , 'detail_transaksi.menu.kantin')->first();
+                foreach ($dataTransaksi->detail_transaksi as $key => $value) {
+                    # code...
+                    $currentCanteen = $value->menu->kantin;
+                    $currentCanteen->total_saldo += $value->subtotal_hargapokok;
+                    $currentCanteen->save();
+                }
             }
-
             return $validatePesanan;
             // return $this->sendMassage('status konfirm = 3, status pesanan = 3, status pengiriman = terima', 400, true);
         }
-    }
+    }   
 
     public function editCustomer(Request $request)
     {
