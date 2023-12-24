@@ -869,10 +869,18 @@ class ApiController extends Controller
         $user = Customer::where('token', $token)->first();
 
         if (!$token) {
-            return $this->sendMassage('Tolong masukkan token', 200, false);
+            return $this->sendMassage('Tolong masukkan token', 401, false);
         }
 
         if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+
+            // Check if the file size is greater than 2MB
+            $maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+            if ($file->getSize() > $maxFileSize) {
+                return $this->sendMassage('Ukuran file tidak boleh lebih dari 2MB', 200, false);
+            }
+
             $oldFilePath = public_path($user->foto);
             if (File::exists($oldFilePath)) {
                 File::delete($oldFilePath);
