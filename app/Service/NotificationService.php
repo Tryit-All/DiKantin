@@ -16,8 +16,9 @@ class NotificationService
     {
 
 
-        $serviceAccountPath = storage_path(env('FIREBASE_CREDENTIALS'));
-  
+        $serviceAccountPath = storage_path(env('FIREBASE_CREDENTIALS', 'app/firebase/dikantin-a64ad-firebase-adminsdk-a5ew5-fe6bd89a2a.json'));
+
+
 
 
         $factory = (new Factory)
@@ -28,7 +29,7 @@ class NotificationService
     }
 
 
-    
+
 
     public function sendNotifToSpesidicToken($token, Notification $data, $content)
     {

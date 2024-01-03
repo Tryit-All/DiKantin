@@ -98,6 +98,8 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
+
+
         $totalBiayaKurir = $request->input('total_biaya_kurir');
         $dataDetailOrderan = $request->details;
         $idCust = $request->id_customer;
@@ -123,6 +125,7 @@ class PenjualanController extends Controller
         $Transaksi->no_meja = $noMeja;
         $Transaksi->expired_at = now()->addMinutes(1);
         $Transaksi->total_biaya_kurir = $totalBiayaKurir;
+
         $Transaksi->save();
         foreach ($dataDetailOrderan as $key => $value) {
             $kantinMenu = Menu::find($value['id_menu']);
@@ -141,12 +144,16 @@ class PenjualanController extends Controller
             $detail->status_konfirm = 'menunggu';
             $detail->subtotal_bayar = $subTotal;
             $detail->subtotal_hargapokok = $subTotalPokok;
+
             $detail->save();
-            $this->service->sendNotifToSpesidicToken($userKantin->token_fcm,
+            $this->service->sendNotifToSpesidicToken(
+                $userKantin->token_fcmv ?? null,
                 Notification::create('Pesanan Baru', 'Ada Pesanan Baru nih')
-                , [
+                ,
+                [
                     'detail' => $detail
-                ]);
+                ]
+            );
         }
 
         return response()->json([

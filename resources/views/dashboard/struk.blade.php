@@ -9,8 +9,19 @@
     <title>DiKantin | Nota</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <style>
+        .truncate {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 7em;
+            /* Sesuaikan dengan panjang maksimal yang diinginkan */
+        }
+    </style>
+
 </head>
-</head>
+
 
 <body style="width: 250px">
     <div class="container">
@@ -37,7 +48,7 @@
             <div class="nama-product">
                 <p class="fw-bold mb-0">Menu</p>
                 @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0">{{ $item->menu->nama }}</p>
+                    <p class="mb-0 truncate">{{ $item->menu->nama }}</p>
                 @endforeach
             </div>
             <div class="qty">
@@ -49,7 +60,7 @@
             <div class="keterangan">
                 <p class="fw-bold mb-0">Keterangan</p>
                 @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->catatan }}</p>
+                    <p class="mb-0 truncate" style="text-align: center;">{{ $item->catatan }}</p>
                 @endforeach
             </div>
             <div class="diskon">
