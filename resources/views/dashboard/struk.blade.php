@@ -21,7 +21,7 @@
     </style>
 
 </head>
-@dd($penjualan)
+
 
 <body style="width: 250px">
     <div class="container">
