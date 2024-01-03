@@ -15,7 +15,7 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            max-width: 17em;
+            max-width: 7em;
             /* Sesuaikan dengan panjang maksimal yang diinginkan */
         }
     </style>
@@ -60,7 +60,7 @@
             <div class="keterangan">
                 <p class="fw-bold mb-0">Keterangan</p>
                 @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->catatan }}</p>
+                    <p class="mb-0 truncate" style="text-align: center;">{{ $item->catatan }}</p>
                 @endforeach
             </div>
             <div class="diskon">
