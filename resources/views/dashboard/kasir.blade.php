@@ -610,38 +610,42 @@
                         url: "/api/kon/save",
                         type: "POST",
                         method: "POST",
-                        data: {
-                            id_customer: idCus,
-                            id_kasir: '{{ Auth::user()->id }}',
-                            subtotal: $('#subtotal').attr('data-value'),
-                            diskon: $('#diskon').val(),
-                            total: $('#total').attr('data-value'),
-                            bayar: $('#bayar').attr('data-value'),
-                            kembalian: $('#kembali').attr('data-value'),
-                            model_pembayaran: $('select[name="model_pembayaran"] option:selected').val(),
-                            no_meja: $('input[name="no_meja"]').val(),
-                            details: details
+                        data: data,
+                        beforeSend: function() {
+                            // Show loading indicator here
+                            // You can use a library like SweetAlert or any other method to show a loading spinner
+                            // Example using SweetAlert
+                            Swal.fire({
+                                title: 'Please wait...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
                         },
-
                         success: function(response) {
+                            console.log("success response");
                             console.log(response);
                             if (response.status == true) {
                                 Swal.fire({
-                                        icon: 'success',
-                                        title: 'Transaksi Berhasil',
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 1200,
-                                    })
-                                    .then(function() {
-
-                                        window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
-                                        location.reload();
-                                    });
+                                    icon: 'success',
+                                    title: 'Transaksi Berhasil',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1200,
+                                }).then(function() {
+                                    window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
+                                    location.reload();
+                                });
                             }
+                        },
+                        complete: function(response) {
+                            console.log("success response " + response.message);
+                            // Hide loading indicator here
+                            Swal.close();
                         }
-
                     });
+
                 } else if (parseInt($('#subtotal').attr('data-value')) > parseInt($('#total').attr('data-value'))) {
 
                     const data = {
@@ -664,24 +668,38 @@
                         type: "POST",
                         method: "POST",
                         data: data,
+                        beforeSend: function() {
+                            // Show loading indicator here
+                            // You can use a library like SweetAlert or any other method to show a loading spinner
+                            // Example using SweetAlert
+                            Swal.fire({
+                                title: 'Please wait...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        },
                         success: function(response) {
                             if (response.status == true) {
                                 Swal.fire({
-                                        icon: 'success',
-                                        title: 'Transaksi Berhasil',
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 1200,
-                                    })
-                                    .then(function() {
-
-                                        window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
-                                        location.reload();
-                                    });
+                                    icon: 'success',
+                                    title: 'Transaksi Berhasil',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1200,
+                                }).then(function() {
+                                    window.open("{{ url('/') }}/kasir/" + response.data.id, "_blank");
+                                    location.reload();
+                                });
                             }
+                        },
+                        complete: function() {
+                            // Hide loading indicator here
+                            Swal.close();
                         }
-
                     });
+
 
                 }
             }

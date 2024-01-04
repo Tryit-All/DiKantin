@@ -23,6 +23,7 @@
 </head>
 
 
+
 <body style="width: 250px">
     <div class="container">
         <div class="identitas">
@@ -44,38 +45,29 @@
         </div>
         <hr class="mb-1 mt-0" style="border-top: 2px dotted rgb(0, 0, 0)">
 
-        <div class="d-flex justify-content-between" style="font-size: 11px;">
-            <div class="nama-product">
-                <p class="fw-bold mb-0">Menu</p>
+        <table style="width: 230px">
+            <thead>
+                <tr style="font-size: 11px">
+                    <th>Menu</th>
+                    <th>Qty</th>
+                    <th>Keterangan</th>
+                    <th>kantin</th>
+                    <th>Harga</th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0 truncate">{{ $item->menu->nama }}</p>
+                    <tr>
+                        <td style="font-size: 11px">{{ $item->menu->nama }}</td>
+                        <td style="font-size: 11px">{{ $item->QTY }}</td>
+                        <td style="font-size: 11px">{{ $item->detail_transaksi->catatan ?? '' }}</td>
+                        <td style="font-size: 11px">{{ $item->menu->id_kantin ?? '' }}</td>
+                        <td style="font-size: 11px">{{ number_format($item->menu->harga) }}</td>
+                    </tr>
                 @endforeach
-            </div>
-            <div class="qty">
-                <p class="fw-bold mb-0">Qty</p>
-                @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->QTY }}</p>
-                @endforeach
-            </div>
-            <div class="keterangan">
-                <p class="fw-bold mb-0">Keterangan</p>
-                @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0 truncate" style="text-align: center;">{{ $item->catatan }}</p>
-                @endforeach
-            </div>
-            <div class="diskon">
-                <p class="fw-bold mb-0">Kantin</p>
-                @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: center;">{{ $item->menu->id_kantin }}</p>
-                @endforeach
-            </div>
-            <div class="harga">
-                <p class="fw-bold mb-0">Harga</p>
-                @foreach ($penjualan->detail_transaksi as $item)
-                    <p class="mb-0" style="text-align: right;">{{ number_format($item->menu->harga) }}</p>
-                @endforeach
-            </div>
-        </div>
+            </tbody>
+        </table>
+
 
 
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mb-2 mt-2">

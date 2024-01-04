@@ -147,7 +147,7 @@ class PenjualanController extends Controller
 
             $detail->save();
             $this->service->sendNotifToSpesidicToken(
-                $userKantin->token_fcmv ?? null,
+                $userKantin->token_fcm ?? null,
                 Notification::create('Pesanan Baru', 'Ada Pesanan Baru nih')
                 ,
                 [
