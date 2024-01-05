@@ -58,9 +58,9 @@
             <tbody>
                 @foreach ($penjualan->detail_transaksi as $item)
                     <tr>
-                        <td style="font-size: 11px">{{ $item->menu->nama }}</td>
-                        <td style="font-size: 11px">{{ $item->QTY }}</td>
-                        <td style="font-size: 11px">{{ $item->detail_transaksi->catatan ?? '' }}</td>
+                        <td style="font-size: 11px;width:150px;">{{ $item->menu->nama }}</td>
+                        <td style="font-size: 11px; ">{{ $item->QTY }}</td>
+                        <td style="font-size: 11px">{{ $item->catatan }}</td>
                         <td style="font-size: 11px">{{ $item->menu->id_kantin ?? '' }}</td>
                         <td style="font-size: 11px">{{ number_format($item->menu->harga) }}</td>
                     </tr>

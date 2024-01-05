@@ -9,6 +9,7 @@ use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanKurirController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MenuPublicController;
 use App\Http\Controllers\NotificationCotroller;
 use App\Http\Controllers\orderController;
 use App\Http\Controllers\OrderDetailTransaksiController;
@@ -70,13 +71,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     // transaksi
 
-        
-        Route::get('/transaksi', [TransaksiController::class, 'index']);
-        Route::get('/online', [TransaksiController::class,'order_online'])->name('online');
-        Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
-        Route::get('/detail_tr/{id}', [TransaksiController::class, 'detail_tr']);
-        Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
-    
+
+    Route::get('/transaksi', [TransaksiController::class, 'index']);
+    Route::get('/online', [TransaksiController::class, 'order_online'])->name('online');
+    Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
+    Route::get('/detail_tr/{id}', [TransaksiController::class, 'detail_tr']);
+    Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
+
 
 
     Route::get('/productAll', [MenuController::class, 'product']);
@@ -147,7 +148,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get("/keuangan/kantin/{id}/history/{start}/{end}", [KeuanganController::class, "procesHistoryKantin"]);
     Route::get("/keuangan/kurir/{id}/history/{start}/{end}", [KeuanganController::class, "procesHistoryKurir"]);
     Route::post("/keuangan/history/kantin/export", [KeuanganController::class, "exportHistoryKantin"])->name("export-kantin");
-    Route::post("/keuangan/history/kurir/export" , [KeuanganController::class , 'exportHistoryKurir'])->name('export-kurir');
+    Route::post("/keuangan/history/kurir/export", [KeuanganController::class, 'exportHistoryKurir'])->name('export-kurir');
 
 });
 Route::get('/kurirr', [LaporanKurirController::class, 'index']);
@@ -157,5 +158,8 @@ Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirControll
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
+
+
+Route::get("/public/menu/list", [MenuPublicController::class, "findAll"]);
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

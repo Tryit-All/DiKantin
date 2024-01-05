@@ -42,9 +42,9 @@ class KantinController extends Controller
         $kantin = Kantin::orderBy('created_at', 'asc')->get();
         Kantin::create([
             'nama' => $request->input('nama'),
-            'id_kantin' => $kantin->last()->id_kantin  + 1
+            'id_kantin' => $kantin->last()->id_kantin + 1
         ]);
-        
+
         return redirect('/kantin');
     }
 
@@ -96,7 +96,9 @@ class KantinController extends Controller
             return $this->success('Sukses memperbarui fcm token');
         }
         return response()->json([
-            'data' => null, 'message' => 'kantin tidak ditemukan', 'code' => 4 - 4
+            'data' => null,
+            'message' => 'kantin tidak ditemukan',
+            'code' => 4 - 4
         ], 404);
     }
 
@@ -104,7 +106,9 @@ class KantinController extends Controller
     private function success($message)
     {
         return response()->json([
-            'data' => true, 'message' => $message, 'code' => 200
+            'data' => true,
+            'message' => $message,
+            'code' => 200
         ], 200);
     }
 
@@ -113,14 +117,18 @@ class KantinController extends Controller
     private function badRequest($message)
     {
         return response()->json([
-            'data' => null, 'message' => $message, 'code' => 400
+            'data' => null,
+            'message' => $message,
+            'code' => 400
         ], 400);
     }
 
     private function unauthorized($message)
     {
         return response()->json([
-            'data' => null, 'message' => $message, 'code' => 401
+            'data' => null,
+            'message' => $message,
+            'code' => 401
         ], 401);
     }
 
