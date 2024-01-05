@@ -160,6 +160,6 @@ Route::get('/cekOnkirKurir/cetak/{tglMulai}/{tglSelesai}', [LaporanKurirControll
 Auth::routes();
 
 
-Route::get("/public/menu/list", [MenuPublicController::class, "findAll"]);
+Route::get("/menus/all", [MenuPublicController::class, "findAll"]);
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
