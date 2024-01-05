@@ -57,10 +57,10 @@
             <!-- Card 1 -->
             @foreach ($menus as $item)
                 <div class="col-md-4 mb-4">
-                    <div class="card" style="height: 250px">
+                    <div class="card">
                         <img src="{{ url($item->foto) }}" alt="foto-menu"
                             class="justify-content-center align-items-center mx-auto d-block p-2 img-fluid"
-                            style="object-fit: cover; width: 100%; height: 100px;">
+                            style="object-fit: cover; width: 100%; height: 200px;">
 
                         <div class="card-body">
                             <h5 class="card-title">{{ $item->nama }}</h5>
