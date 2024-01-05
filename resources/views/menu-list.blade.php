@@ -92,6 +92,8 @@
             const searchTerm = searchInput.value.toLowerCase();
             const selectedKantin = selectKantin.value;
 
+            console.log("");
+
 
             // Saring menu berdasarkan nama, kantin, dan status stok
             const filteredMenus = @json($menus)
@@ -113,12 +115,11 @@
         // Fungsi untuk memperbarui tampilan menu
         function updateMenuView(menus) {
             menuList.innerHTML = '';
-
             menus.forEach(menu => {
                 const cardHtml = `
                     <div class="col-md-4 mb-4">
                         <div class="card" style="height: 250px">
-                            <img src="${menu.foto}" alt="foto-menu"
+                            <img src="{{ url('/') }}/${menu.foto}" alt="foto-menu"
                                 class="justify-content-center align-items-center mx-auto d-block p-2 img-fluid"
                                 style="object-fit: cover; width: 100%; height: 100px;">
 
