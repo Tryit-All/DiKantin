@@ -459,7 +459,7 @@ class ApiDikantinOld extends Controller
 
             $dataRiwayat = Transaksi::select(
                 'transaksi.kode_tr',
-                DB::raw('DATE(detail_transaksi.created_at) as tanggal_transaksi'),
+                DB::raw('DATE_FORMAT(detail_transaksi.created_at, "%Y-%m-%d %H:%i:%s") as tanggal_transaksi'),
                 'menu.nama',
                 'menu.harga_pokok as harga',
                 'detail_transaksi.QTY',
