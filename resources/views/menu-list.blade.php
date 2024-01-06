@@ -48,7 +48,7 @@
                 <select class="form-select" aria-label="Default select example" id="selectKantin">
                     <option selected>Semua Kantin</option>
                     @foreach ($kantins as $item)
-                        <option value="{{ $item->id_kantin }}">{{ $item->nama }}</option>
+                        <option value="{{ $item['id_kantin'] }}">{{ $item['nama'] }}</option>
                     @endforeach
                 </select>
             </div>
@@ -58,14 +58,14 @@
             @foreach ($menus as $item)
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="{{ url($item->foto) }}" alt="foto-menu"
+                        <img src="{{ url($item['foto']) }}" alt="foto-menu"
                             class="justify-content-center align-items-center mx-auto d-block p-2 img-fluid"
                             style="object-fit: cover; width: 100%; height: 200px;">
 
                         <div class="card-body">
-                            <h5 class="card-title">{{ $item->nama }}</h5>
-                            <p class="card-text">{{ $item->kantin->nama ?? 'kantin' }}</p>
-                            <p class="card-text">Rp.{{ number_format($item->harga) }}</p>
+                            <h5 class="card-title">{{ $item['nama'] }}</h5>
+                            <p class="card-text">{{ $item['kantin']['nama'] ?? 'kantin' }}</p>
+                            <p class="card-text">Rp.{{ number_format($item['harga']) }}</p>
                         </div>
                     </div>
                 </div>

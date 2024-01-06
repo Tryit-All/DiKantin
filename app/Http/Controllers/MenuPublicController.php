@@ -17,7 +17,8 @@ class MenuPublicController extends Controller
             'kantin' => function ($query) {
                 $query->where('status', true);
             }
-        ])->where('status_stok', 'ada')->get();
+        ])->where('status_stok', 'ada')->get()->toArray();
+        shuffle($menus);
         return view("menu-list", ['kantins' => $kantins, 'menus' => $menus]);
     }
 }
