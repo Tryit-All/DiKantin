@@ -31,10 +31,8 @@
                             <td>Rp {{ number_format($m->subtotal_bayar) }}</td>
                             <td>{{ $m->catatan }}</td>
                             <td>{{ $m->Menu->Kantin->nama }}</td> 
-                          
                         </tr>
                     @endforeach
-                  
                 </tbody>
             </table>
 
