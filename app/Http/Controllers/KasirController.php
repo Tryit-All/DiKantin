@@ -23,7 +23,7 @@ class KasirController extends Controller
 
         $pencarian = $request->q;
         $customer = Customer::where('nama', 'Customer Offline')->first();
-        $kantin = Kantin::all();
+        $kantin = Kantin::where('status', 1)->get();
         $penjualan = Transaksi::all();
         $menu = Menu::where('nama', 'like', "%$pencarian%")->get();
         // dd($customer);
