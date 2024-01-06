@@ -100,6 +100,7 @@ class PenjualanController extends Controller
     {
 
 
+
         $totalBiayaKurir = $request->input('total_biaya_kurir');
         $dataDetailOrderan = $request->details;
         $idCust = $request->id_customer;
@@ -108,6 +109,19 @@ class PenjualanController extends Controller
         $kembalian = $request->kembalian;
         $model_pembayaran = $request->model_pembayaran;
         $noMeja = $request->no_meja;
+
+        $checkNoMeja = Transaksi::where('no_meja', $noMeja)->get();
+        foreach ($checkNoMeja as $key => $value) {
+            # code...
+            if ($value->status_konfirm != 3 && $value->status_pesanan != 3) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "Transaksi Meja Pada meja belum selesai gunakan meja yang lain!",
+                    'data' => null,
+                ], 400)
+                    ->header('Content-Type', 'application/json');
+            }
+        }
         $today = Carbon::now();
         $RandomNumber = rand(1000, 9999);
         $kodeTr = "TRDKN" . $RandomNumber;

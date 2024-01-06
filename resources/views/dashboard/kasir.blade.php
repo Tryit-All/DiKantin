@@ -639,12 +639,24 @@
                                 });
                             }
                         },
+                        error: function(xhr, status, error) {
+                            console.log("error response");
+                            console.log(xhr.responseText);
+                            // Hide loading indicator here
+                            Swal.close();
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            var errorMessage = errorResponse.message;
+                            // Show error alert
+                            alert(errorMessage);
+
+                        },
                         complete: function(response) {
-                            console.log("success response " + response.message);
+                            console.log("complete response " + response.message);
                             // Hide loading indicator here
                             Swal.close();
                         }
                     });
+
 
                 } else if (parseInt($('#subtotal').attr('data-value')) > parseInt($('#total').attr('data-value'))) {
 
@@ -664,7 +676,7 @@
 
 
                     $.ajax({
-                        url: "api/kon/save",
+                        url: "/api/kon/save",
                         type: "POST",
                         method: "POST",
                         data: data,
@@ -681,6 +693,8 @@
                             });
                         },
                         success: function(response) {
+                            console.log("success response");
+                            console.log(response);
                             if (response.status == true) {
                                 Swal.fire({
                                     icon: 'success',
@@ -694,11 +708,23 @@
                                 });
                             }
                         },
-                        complete: function() {
+                        error: function(xhr, status, error) {
+                            console.log("error response");
+                            console.log(xhr.responseText);
+                            // Hide loading indicator here
+                            Swal.close();
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            var errorMessage = errorResponse.message;
+                            // Show error alert
+                            alert(errorMessage);
+                        },
+                        complete: function(response) {
+                            console.log("complete response " + response.message);
                             // Hide loading indicator here
                             Swal.close();
                         }
                     });
+
 
 
                 }

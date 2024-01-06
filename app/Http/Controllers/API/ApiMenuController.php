@@ -97,16 +97,22 @@ class ApiMenuController extends Controller
     public function product(Request $request)
     {
         if ($request->segment(4)) {
-            $product = Menu::select('id_menu', 'nama', 'harga', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at')
-                ->where('nama', 'LIKE', $request->segment(4) . '%')
-                ->where('status_stok', 'ada')
-                ->where('diskon', null)
+            $product = Menu::leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'kantin.nama as nama_kantin', 'menu.diskon', 'menu.created_at', 'menu.updated_at')
+                ->where('menu.nama', 'LIKE', $request->segment(4) . '%')
+                ->where('menu.status_stok', 'ada')
+                ->where('menu.diskon', null)
                 ->get()->toArray();
 
             shuffle($product);
             return $this->sendMassage($product, 200, true);
         } else {
-            $product = Menu::where('status_stok', 'ada')->where('diskon', null)->get()->toArray();
+            $product = Menu::leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'kantin.nama as nama_kantin', 'menu.diskon', 'menu.created_at', 'menu.updated_at')
+                ->where('menu.status_stok', 'ada')
+                ->where('menu.diskon', null)
+                ->get()
+                ->toArray();
 
             shuffle($product);
             return $this->sendMassage($product, 200, true);
@@ -117,7 +123,8 @@ class ApiMenuController extends Controller
     {
         // dd($request->segment(3));
         if ($request->segment(4)) {
-            $menu_food = Menu::select('id_menu', 'nama', 'harga', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at')
+            $menu_food = Menu::leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'kantin.nama as nama_kantin', 'menu.diskon', 'menu.created_at', 'menu.updated_at')
                 ->where('nama', 'LIKE', '%' . $request->segment(4) . '%')
                 ->where('kategori', 'makanan')
                 ->where('status_stok', 'ada')
@@ -127,7 +134,9 @@ class ApiMenuController extends Controller
             shuffle($menu_food);
             return $this->sendMassage($menu_food, 200, true);
         } else {
-            $menu_food = Menu::where('status_stok', 'ada')->where('kategori', 'makanan')->where('diskon', null)->get()->toArray();
+            $menu_food = Menu::leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'kantin.nama as nama_kantin', 'menu.diskon', 'menu.created_at', 'menu.updated_at')
+                ->where('status_stok', 'ada')->where('kategori', 'makanan')->where('diskon', null)->get()->toArray();
 
             shuffle($menu_food);
             return $this->sendMassage($menu_food, 200, true);
@@ -138,7 +147,8 @@ class ApiMenuController extends Controller
     {
         // dd($request->segment(4));
         if ($request->segment(4)) {
-            $menu_drink = Menu::select('id_menu', 'nama', 'harga', 'foto', 'status_stok', 'kategori', 'id_kantin', 'diskon', 'created_at', 'updated_at')
+            $menu_drink = Menu::leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'kantin.nama as nama_kantin', 'menu.diskon', 'menu.created_at', 'menu.updated_at')
                 ->where('nama', 'LIKE', $request->segment(4) . '%')
                 ->where('kategori', 'minuman')
                 ->where('status_stok', 'ada')
@@ -148,7 +158,9 @@ class ApiMenuController extends Controller
             shuffle($menu_drink);
             return $this->sendMassage($menu_drink, 200, true);
         } else {
-            $menu_drink = Menu::where('status_stok', 'ada')->where('kategori', 'minuman')->where('diskon', null)->get()->toArray();
+            $menu_drink = Menu::leftJoin('kantin', 'kantin.id_kantin', '=', 'menu.id_kantin')
+                ->select('menu.id_menu', 'menu.nama', 'menu.harga', 'menu.foto', 'menu.status_stok', 'menu.kategori', 'menu.id_kantin', 'kantin.nama as nama_kantin', 'menu.diskon', 'menu.created_at', 'menu.updated_at')
+                ->where('status_stok', 'ada')->where('kategori', 'minuman')->where('diskon', null)->get()->toArray();
 
             shuffle($menu_drink);
             return $this->sendMassage($menu_drink, 200, true);
