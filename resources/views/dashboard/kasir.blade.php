@@ -357,6 +357,7 @@
             }
 
             function reduceQty(element) {
+
                 let id = $(element).data('id');
                 let qty = $(`.cart-menu[data-id="${id}"]`).find(`span.qty`).html()
 
@@ -374,6 +375,8 @@
                 let id = $(element).data('id');
                 $(`.cart-menu[data-id="${id}"]`).remove();
                 total()
+                var bayar = document.getElementById('bayar');
+                hitungPembayaran(bayar);
             }
 
             function subtotalPerItem(element, quantity) {
