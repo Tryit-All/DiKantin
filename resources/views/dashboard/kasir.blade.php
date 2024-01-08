@@ -526,9 +526,11 @@
 
             function simpanAll() {
                 var inputNoMeja = document.querySelector('input[name=no_meja]');
+
                 if (!inputNoMeja.value) {
                     inputNoMeja.setCustomValidity('Isi No Meja');
                     inputNoMeja.reportValidity();
+                    return;
                 } else {
                     inputNoMeja.setCustomValidity('');
                 }
@@ -640,10 +642,9 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.log("error response");
-                            console.log(xhr.responseText);
                             // Hide loading indicator here
                             Swal.close();
+
                             var errorResponse = JSON.parse(xhr.responseText);
                             var errorMessage = errorResponse.message;
                             // Show error alert
