@@ -193,7 +193,7 @@
 
     @push('script')
         <script>
-            let idCus = 1;
+            let idCus = "";
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -291,10 +291,10 @@
                         showCart(response.orderid)
                     }
                 })
+
             }
 
             function showCart(element) {
-
                 // console.log(element);
                 let id = $(element).data('id');
                 console.log(id);
@@ -335,7 +335,9 @@
                             </div>`
 
                     $('#cart').append(html)
-                    total()
+                    total();
+                    var bayar = document.getElementById('bayar');
+                    hitungPembayaran(bayar);
                 } else {
                     let qty = $(`.cart-menu[data-id="${id}"]`).find(`span.qty`).html()
                     $(`.cart-menu[data-id="${id}"]`).find(`span.qty`).html(parseInt(qty) + 1)
@@ -526,7 +528,16 @@
 
             function simpanAll() {
                 var inputNoMeja = document.querySelector('input[name=no_meja]');
-
+                var totalBayar = document.getElementById('bayar');
+                if (totalBayar.value == '') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Informasi',
+                        text: 'Harap masukan total bayar terlebih dahulu !!...',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    }).then(function() {});
+                }
                 if (!inputNoMeja.value) {
                     inputNoMeja.setCustomValidity('Isi No Meja');
                     inputNoMeja.reportValidity();
@@ -537,7 +548,7 @@
 
                 console.log(idCus + "aaa");
 
-                if (idCus == "1") {
+                if (idCus == "") {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Informasi',
@@ -562,10 +573,12 @@
 
                 // console.log(anu);
                 console.log($('#total').attr('data-value'));
-                console.log(details);
+                // console.log(details);
 
                 console.log($('#inputid').val() +
                     " aasdd");
+
+
 
                 if (details.length === 0) {
                     Swal.fire({
@@ -643,18 +656,25 @@
                         },
                         error: function(xhr, status, error) {
                             // Hide loading indicator here
-                            Swal.close();
+                            // Swal.close();
 
                             var errorResponse = JSON.parse(xhr.responseText);
                             var errorMessage = errorResponse.message;
                             // Show error alert
-                            alert(errorMessage);
+                            // alert(errorMessage);
 
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Informasi',
+                                text: errorMessage,
+                                showConfirmButton: false,
+                                timer: 1200
+                            }).then(function() {});
                         },
                         complete: function(response) {
                             console.log("complete response " + response.message);
                             // Hide loading indicator here
-                            Swal.close();
+                            // Swal.close();
                         }
                     });
 
@@ -717,7 +737,14 @@
                             var errorResponse = JSON.parse(xhr.responseText);
                             var errorMessage = errorResponse.message;
                             // Show error alert
-                            alert(errorMessage);
+                            // alert(errorMessage);
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Informasi',
+                                text: errorMessage,
+                                showConfirmButton: false,
+                                timer: 1200,
+                            }).then(function() {});
                         },
                         complete: function(response) {
                             console.log("complete response " + response.message);
