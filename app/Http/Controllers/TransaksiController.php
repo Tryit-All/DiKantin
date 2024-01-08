@@ -29,19 +29,32 @@ class TransaksiController extends Controller
             'data' => $transaksi
         ]);
     }
+    public function riwayat_trs()
+    {
+        $transaksi = Transaksi::with(['detail_transaksi'])->where('status_konfirm', "<>", 3)->where("status_pesanan", '<>', 3)
+            ->groupBy('kode_tr')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // return $transaksi;
+
+        return view('dashboard.transaksi.riwayat_trns', [
+            'data' => $transaksi
+        ]);
+    }
     public function order_online()
     {
-        
-        $transaksi = Transaksi::with(['detail_transaksi','Customer','Kurir'])->where('status_pengiriman','kirim')
-        ->where('no_meja','=',0)->get();
-        return view('dashboard.transaksi.pesanan_online',compact('transaksi'));
+
+        $transaksi = Transaksi::with(['detail_transaksi', 'Customer', 'Kurir'])->where('status_pengiriman', 'kirim')
+            ->where('no_meja', '=', 0)->get();
+        return view('dashboard.transaksi.pesanan_online', compact('transaksi'));
 
         // return $transaksi;
     }
 
     public function detail($id)
     {
-        $penjualan = Transaksi::with(['detail_transaksi', 'detail_transaksi','Customer'])
+        $penjualan = Transaksi::with(['detail_transaksi', 'detail_transaksi', 'Customer'])
             ->where('kode_tr', $id)
             ->first();
         // return $penjualan;
@@ -49,11 +62,21 @@ class TransaksiController extends Controller
             'penjualan' => $penjualan
         ]);
     }
+    public function cetak($id)
+    {
+        $penjualan = Transaksi::with(['detail_transaksi', 'detail_transaksi', 'Customer'])
+            ->where('kode_tr', $id)
+            ->first();
+        // return $penjualan;
+        return view('dashboard.transaksi.cetak_riwayat', [
+            'penjualan' => $penjualan
+        ]);
+    }
     public function detail_tr($id)
     {
         $penjualan = DetailTransaksi::with(['Menu'])
             ->where('kode_tr', $id)->get();
-          
+
         // return $penjualan;
         return view('dashboard.transaksi.detail_tranakasi', [
             'penjualan' => $penjualan
