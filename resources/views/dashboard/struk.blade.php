@@ -58,7 +58,8 @@
             <tbody>
                 @foreach ($penjualan->detail_transaksi as $item)
                     <tr>
-                        <td style="font-size: 11px;width:150px;">{{ $item->menu->nama }}</td>
+                        <td style="font-size: 11px; max-width: 150px; width : 150px; word-break: break-all">
+                            {{ $item->menu->nama }}</td>
                         <td style="font-size: 11px; ">{{ $item->QTY }}</td>
                         <td style="font-size: 11px">{{ $item->catatan }}</td>
                         <td style="font-size: 11px">{{ $item->menu->id_kantin ?? '' }}</td>
@@ -99,6 +100,7 @@
         </div>
 
         <hr style="border-top: 2px dotted rgb(0, 0, 0)" class="mt-1 mb-2">
+        <p style="font-size:11px">Note : <strong><i>Jangan buang struk pembayaran !</i></strong></p>
         <p class="text-center fw-bold mb-0 mt-1" style="font-size: 11px;">Terima Kasih</p>
         <p class="text-center fw-bold" style="font-size: 11px;">Atas Kunjungan Anda</p>
 

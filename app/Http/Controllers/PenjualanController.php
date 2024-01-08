@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Service\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Kreait\Firebase\Messaging\Notification;
 
 class PenjualanController extends Controller
@@ -100,6 +101,22 @@ class PenjualanController extends Controller
     {
 
 
+        $validator = Validator::make($request->all(), [
+            'id_customer' => 'required',
+            'no_meja' => 'required',
+            'bayar' => 'required'
+        ], [
+            'id_customer.required' => 'Customer tidak boleh kosong',
+            'no_meja.required' => 'No Meja tidak boleh kosoong'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first(),
+                'code' => 400,
+                'status' => false
+            ], 400);
+        }
 
         $totalBiayaKurir = $request->input('total_biaya_kurir');
         $dataDetailOrderan = $request->details;
