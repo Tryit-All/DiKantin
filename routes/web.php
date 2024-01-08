@@ -73,8 +73,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/transaksi', [TransaksiController::class, 'index']);
+    Route::get('/riwayat_trs', [TransaksiController::class, 'riwayat_trs'])->name('riwayat');
     Route::get('/online', [TransaksiController::class, 'order_online'])->name('online');
     Route::get('/transaksi/{id}', [TransaksiController::class, 'detail']);
+    Route::get('/transaksiriwayat/{id}', [TransaksiController::class, 'cetak']);
     Route::get('/detail_tr/{id}', [TransaksiController::class, 'detail_tr']);
     Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy']);
 

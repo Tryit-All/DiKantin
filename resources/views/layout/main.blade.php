@@ -227,6 +227,12 @@
                                 <span> Data Transaksi Online </span>
                             </a>
                         </li>
+                        <li class="side-nav-item text-white">
+                            <a href="{{ route('riwayat') }}" class="side-nav-link text-white fw-bold">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span> Data Transaksi </span>
+                            </a>
+                        </li>
 
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false"
